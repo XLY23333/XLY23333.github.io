@@ -5,6 +5,7 @@
     <url>/test/b01-test/</url>
     <content><![CDATA[<h3 id="TestDoc">TestDoc</h3>
 <p>这是一篇测试文章，选用的内容为数学建模插值的内容：</p>
+<iframe src="//player.bilibili.com/player.html?aid=824706868&bvid=BV1ig4y1M7z6&cid=1088440765&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
 <h1>插值</h1>
 <p>[toc]</p>
 <h2 id="一、插值定义">一、插值定义</h2>
