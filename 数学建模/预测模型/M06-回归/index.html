@@ -1,0 +1,577 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>数模M06-回归 | XLY23333 Blog</title><meta name="author" content="XLY23333"><meta name="copyright" content="XLY23333"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="回归 用于在难以选择建模模型时，分析自变量和因变量的关系  一、多元线性回归（一）原理理论1. 模型多元线性回归分析的模型为  \begin{cases} y&#x3D;\beta_0+\beta_1x_1+\cdots+\beta_mx_m+\varepsilon\\ \varepsilon \sim N(0,\sigma^2) \end{cases}其中$\beta_0,\beta_1,\cdots,\">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数模M06-回归">
+<meta property="og:url" content="https://xly23333.xyz/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E9%A2%84%E6%B5%8B%E6%A8%A1%E5%9E%8B/M06-%E5%9B%9E%E5%BD%92/index.html">
+<meta property="og:site_name" content="XLY23333 Blog">
+<meta property="og:description" content="回归 用于在难以选择建模模型时，分析自变量和因变量的关系  一、多元线性回归（一）原理理论1. 模型多元线性回归分析的模型为  \begin{cases} y&#x3D;\beta_0+\beta_1x_1+\cdots+\beta_mx_m+\varepsilon\\ \varepsilon \sim N(0,\sigma^2) \end{cases}其中$\beta_0,\beta_1,\cdots,\">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/XLY23333/picture01/main/img01/MaMd.jpg">
+<meta property="article:published_time" content="2024-02-14T19:10:00.000Z">
+<meta property="article:modified_time" content="2024-02-15T17:28:41.650Z">
+<meta property="article:author" content="XLY23333">
+<meta property="article:tag" content="MATLAB">
+<meta property="article:tag" content="预测">
+<meta property="article:tag" content="回归">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/XLY23333/picture01/main/img01/MaMd.jpg"><link rel="shortcut icon" href="https://raw.githubusercontent.com/XLY23333/picture01/main/img01/MetE-XLY.png"><link rel="canonical" href="https://xly23333.xyz/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E9%A2%84%E6%B5%8B%E6%A8%A1%E5%9E%8B/M06-%E5%9B%9E%E5%BD%92/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.12.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '数模M06-回归',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-02-16 01:28:41'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.1.1"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://raw.githubusercontent.com/XLY23333/picture01/main/img01/Met-XLY.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">7</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">14</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://raw.githubusercontent.com/XLY23333/picture01/main/img01/MaMd.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="XLY23333 Blog"><span class="site-name">XLY23333 Blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">数模M06-回归</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-02-14T19:10:00.000Z" title="发表于 2024-02-15 03:10:00">2024-02-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-02-15T17:28:41.650Z" title="更新于 2024-02-16 01:28:41">2024-02-16</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/">数学建模</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E9%A2%84%E6%B5%8B%E6%A8%A1%E5%9E%8B/">预测模型</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="数模M06-回归"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="回归"><a href="#回归" class="headerlink" title="回归"></a>回归</h1><blockquote>
+<p>用于在难以选择建模模型时，分析自变量和因变量的关系</p>
+</blockquote>
+<h2 id="一、多元线性回归"><a href="#一、多元线性回归" class="headerlink" title="一、多元线性回归"></a>一、多元线性回归</h2><h3 id="（一）原理理论"><a href="#（一）原理理论" class="headerlink" title="（一）原理理论"></a>（一）原理理论</h3><h4 id="1-模型"><a href="#1-模型" class="headerlink" title="1. 模型"></a>1. 模型</h4><p>多元线性回归分析的模型为</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+y=\beta_0+\beta_1x_1+\cdots+\beta_mx_m+\varepsilon\\
+\varepsilon \sim N(0,\sigma^2)
+\end{cases}</script><p>其中$\beta_0,\beta_1,\cdots,\beta_m,\sigma^2$都是与$x_1,x_2,\cdots,x_m$无关的位置参数，其中$\beta_0,\beta_1,\cdots,\beta_m,$称为回归系数</p>
+<p>现得到$n$个独立观测数据$[b<em>i,a{\small i1},\cdots,a</em>{i2}]$，其中$b<em>i$为$y$的观察值，$a{\small i1},\cdots,a</em>{im}$分别是$x_1,x_2,\cdots,x_m$的观测值，$i=1,\cdots,n\quad,n&gt;m$，即</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+b_i=\beta_0+\beta_1a_{i1}+\cdots+\beta_ma_{im}+\varepsilon_i\\
+\varepsilon_i \sim N(0,\sigma^2)\quad,i=1,\cdots,n
+\end{cases}</script><p>记</p>
+<script type="math/tex; mode=display">
+X = 
+\begin{bmatrix}
+1 & a_{11} & \cdots & a_{1m} \\
+\vdots & \vdots & \ddots & \vdots\\
+1 & a_{n1} & \cdots & a_{nm} \\
+\end{bmatrix}\ ,\quad
+Y=\begin{bmatrix}
+b_1\\\vdots\\b_n
+\end{bmatrix}\ ,\quad
+\varepsilon=[\varepsilon_1,\cdots,\varepsilon_n]^{\rm T}\ ,\quad
+\beta=[\beta_0,\beta_1,\cdots,\beta_m]^{\rm T}</script><p>则上式可表示为</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+Y=X\beta+\varepsilon\\
+\varepsilon\sim N(0,\sigma^2E_n)
+\end{cases}</script><p>其中$E_n$为$n$阶单位矩阵</p>
+<h4 id="2-参数估计"><a href="#2-参数估计" class="headerlink" title="2. 参数估计"></a>2. 参数估计</h4><p>模型式中的参数$\beta_0,\beta_1,\cdots,\beta_m$<strong>用最小二乘法进行估计</strong>，即应选取估计值$\hat{\beta}{\small j}$，使当$\beta_j=\hat{\beta}{\small j}\quad j=0,1,\cdots,m$时，误差平方和</p>
+<script type="math/tex; mode=display">
+Q = \sum^n_{i=1}\varepsilon_i^2=\sum^n_{i=1}(b_i-\hat{b}_i)^2=\sum^n_{i=1}(b_i-\beta_0-\beta_1a_{i1}-\cdots-\beta_ma_{im})^2</script><p>达到最小，为此，令</p>
+<script type="math/tex; mode=display">
+\frac{\partial Q}{\partial\beta_i}=0\quad,j=0,1,2,\cdots,n</script><p>得</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+\dfrac{\partial Q}{\partial\beta_0}-2\sum\limits^n_{i=1}(b_i-\beta_0-\beta_1a_{i1}-\cdots-\beta_ma_{im})=0\\
+\dfrac{\partial Q}{\partial\beta_i}-2\sum\limits^n_{i=1}(b_i-\beta_0-\beta_1a_{i1}-\cdots-\beta_ma_{im})a_{ij}=0\quad j=1 ,2,\cdots,m
+\end{cases}</script><p>经整理化为以下正规方程组</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+\beta_0n+\beta_1\sum\limits^n_{i=1}a_{i1}+\beta_2\sum\limits^n_{i=1}a_{i2}+\cdots+\beta_m\sum\limits^n_{i=1}a_{im}&=\sum\limits^n_{i=1}b_i\\
+\beta_0\sum\limits^n_{i=1}a_{i1}+\beta_1\sum\limits^n_{i=1}a^2_{i1}+\beta_2\sum\limits^n_{i=1}a_{i1}a_{i2}+\cdots+\beta_m\sum\limits^n_{i=1}a_{i1}a_{im}&=\sum\limits^n_{i=1}a_{i1}b_i\\
+\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\vdots\\
+\beta_0\sum\limits^n_{i=1}a_{im}+\beta_1\sum\limits^n_{i=1}a^2_{im}+\beta_2\sum\limits^n_{i=1}a_{im}a_{i2}+\cdots+\beta_m\sum\limits^n_{i=1}a^2_{im}&=\sum\limits^n_{i=1}a_{im}b_i\\
+\end{cases}</script><p>正规方程组的矩阵形式为：$X^{\rm T}X\beta=X^{\rm T}Y$</p>
+<p>当矩阵$X$列满秩时，$X^{\rm T}X$为可逆方阵，$X^{\rm T}X\beta=X^{\rm T}Y$的解为：</p>
+<script type="math/tex; mode=display">
+\hat{\beta}=(X^{\rm T}X)^{-1}X^{\rm T}Y</script><p>将$\hat{\beta}$代回原模型得到y的估计值</p>
+<script type="math/tex; mode=display">
+\hat{y} = \hat{\beta}_0+\hat{\beta}_1x_1+\cdots+\hat{\beta}_mx_m</script><p>而这组数据的拟合值为</p>
+<script type="math/tex; mode=display">
+\hat{b}_i = \hat{\beta}_0+\hat{\beta}_1a_{i1}+\cdots+\hat{\beta}_ma_{im}\quad(i=1,2,\cdots,n)</script><p>记$\hat{Y}=X\hat{\beta}=[\hat{b}_1,\cdots,\hat{b}{\small n}]^{\rm T}$，拟合误差$e=Y-\hat{Y}$称为残差，可作为随机误差$\varepsilon$的估计，</p>
+<p>而 </p>
+<script type="math/tex; mode=display">
+Q=\sum\limits^n_{i=1}e_i^2=\sum\limits^n_{i=1}(b_i-\hat{b}_i)^2</script><p>为残差平方和（或剩余平方和）</p>
+<h4 id="3-统计分析"><a href="#3-统计分析" class="headerlink" title="3. 统计分析"></a>3. 统计分析</h4><p>不加证明的给出以下结果</p>
+<p>（1）$\hat{\beta}$是$\beta$的线性无偏最小方差估计，$\hat{\beta}$的期望=$\beta$，在$\beta$的线性无偏估计中,$\hat{\beta}$的方差最小</p>
+<p>（2）$\hat{\beta}$服从正态分布： $\hat{\beta}\sim N(\beta,\sigma^2(X^{\rm T}X)^{-1})$  ,记$(X^{\rm T}X)^{-1} = (c{\small ij})_{n\times n}$</p>
+<p>（3）对残差平方和$Q$，$EQ=(n-m-1)\sigma^2$，且 $\dfrac{Q}{\sigma^2}\sim \chi^2(n-m-1)$，由此得到$\sigma^2$的无偏估计</p>
+<script type="math/tex; mode=display">
+s^2=\frac{Q}{n-m-1}=\hat{\sigma}^2</script><p>其中$s^2$是剩余方差（残差的方差）,$s$称为剩余标准差</p>
+<p>（4）对总平方和$SST$进行分解，有</p>
+<script type="math/tex; mode=display">
+SST=Q+U\\</script><p>其中，</p>
+<script type="math/tex; mode=display">
+\bar{b}=\dfrac{1}{n}\sum\limits^n_{i=1}b_i</script><script type="math/tex; mode=display">
+Q=\sum\limits^n_{i=1}e_i^2=\sum\limits^n_{i=1}(b_i-\hat{b}_i)^2</script><p>为残差平方和，反应随机误差对$y$的影响；</p>
+<script type="math/tex; mode=display">
+U=\sum\limits^n_{i=1}(\hat{b}_i-\bar{b})^2</script><p>称为回归平方和，反应自变量对$y$的影响。上述的分解利用了正规方程组。</p>
+<h4 id="4-回归模型的假设检验"><a href="#4-回归模型的假设检验" class="headerlink" title="4. 回归模型的假设检验"></a>4. 回归模型的假设检验</h4><p>因变量$y$和自变量$x_1,\cdots,x_m$之间是否存在模型所示的线性关系是需要检验的</p>
+<p>显然，如果所有的$|\hat{\beta}{\small j}|\ (j=1,\cdots,m)$都很小，则$y$与$x_1,\cdots,x_m$的线性关系就不明显了，所以可以令原假设为：</p>
+<script type="math/tex; mode=display">
+H_0:\beta_j=0,\ j=1,\cdots,m</script><p>当$H_0$成立时由分解式$SST=Q+U$定义的$Q、U$满足</p>
+<script type="math/tex; mode=display">
+F = \frac{U/m}{Q/(n-m-1)}\sim F(m,n-m-1)</script><p>在显著性水平$\alpha$下，对于上$\alpha$分位数$F{\small \alpha}(m,n-m-1)$，若$F&lt;F{\small \alpha}(m,n-m-1)$，接受$H_0$，否则拒绝</p>
+<blockquote>
+<p>接受$H_0$只能说明$y$与$x_1,\cdots,x_m$的线性关系不明显，可能存在非线性关系，如：平方关系</p>
+</blockquote>
+<p>其他用于衡量$y$与$x_1,\cdots,x_m$相关程度的指标：回归平方和在总平方和中的比值定义复判定系数</p>
+<script type="math/tex; mode=display">
+R^2=\frac{U}{SST}=\frac{U}{Q+U}</script><p>其中$R=\sqrt{R^2}$称为复相关系数，$R$越大，$y$与$x_1,\cdots,x_m$相关关系越密切。通常$R&gt;0.8$或$R&gt;0.9$才认为相关关系成立</p>
+<h4 id="5-利用回归模型进行预测"><a href="#5-利用回归模型进行预测" class="headerlink" title="5. 利用回归模型进行预测"></a>5. 利用回归模型进行预测</h4><p>当回归模型和系数通过检验后，可由给定$[x<em>1,\cdots,x_m]$的取值$[a{\small 01},\cdots,a</em>{0m}]$预测$y$的取值$b_0$，$b_0$是随机的，显然其预测值（点估计）为</p>
+<script type="math/tex; mode=display">
+\hat{b}_0=\hat{\beta}_0+\hat{\beta}_1a_{01}+\cdots+\hat{\beta}_ma_{0m}</script><p>给定$\alpha$可以算出$b_0$的预测区间(区间估计)，结果较复杂，但当$n$较大且$a{\small 0i}$接近平均值$\barx_i$时，$b_0$的预测区间可简化为</p>
+<script type="math/tex; mode=display">
+[\hat{b}_0-z_{\frac{\alpha}{2}}s,\ \hat{b}_0+z_{\frac{\alpha}{2}}s]</script><p>其中$z{\small {\frac{\alpha}{2}}}$是标准正态分布的上$\dfrac{\alpha}{2}$分位数</p>
+<p>对$b_0$的区间估计方法可用于给出已知数据残差$e_i=b_i-\hat{b}_i\ (i=1,\cdots,n)$的置信区间，$e_i$服从均值为0的正态分布（$e_i\sim N(0,\sigma^2)$），所以若某个$e_i$的置信区间不包含零点，则认为这个数据是异常的，可予以剔除</p>
+<h3 id="（二）MATLAB中的多元线性回归分析"><a href="#（二）MATLAB中的多元线性回归分析" class="headerlink" title="（二）MATLAB中的多元线性回归分析"></a>（二）MATLAB中的多元线性回归分析</h3><p>MATLAB统计工具箱中有一个实现多元线性回归的函数<code>regress</code></p>
+<p>Code : <code>b = regress(Y, X)</code></p>
+<p>其中，Y和X为按(22)式排列的数据，b为回归系数估计值 </p>
+<script type="math/tex; mode=display">
+\hat{\beta}_0,\hat{\beta}_1,\cdots,\hat{\beta}_m</script><p>Code : <code>[b, bint, r, rint, stats] = regress(Y, X, alpha)</code></p>
+<p>其中，Y和X为按(22)式排列的数据，alpha为显著性水平（缺省值为0.05），b和bint为回归系数估计值和它们的置信区间，r和rint为残差(向量)及其置信区间</p>
+<p>stats是用于检验回归模型的统计量，有四个数值：</p>
+<p>第一个是$R^2$；第二个是$F$；第三个是与$F$对应的概率$p\ \ ,p&lt;\alpha$拒绝$H_0$，回归模型成立；第四个是残差的方差$s^2$</p>
+<p>残差及其置信区间可以用<code>rcoplot(r, rint)</code>画图</p>
+<h2 id="二、多元二项式回归"><a href="#二、多元二项式回归" class="headerlink" title="二、多元二项式回归"></a>二、多元二项式回归</h2><p>MATLAB统计工具箱提供了一个作多元二项式回归的命令<code>rstool</code>，它能够产生一个交互式画面，并输出有关信息</p>
+<p>Code : <code>rstool(X, Y, medol, alpha)</code></p>
+<p>其中<code>alpha</code>为显著性水平  $\alpha$（缺省值为0.05），<code>model</code>可以选择如下四种模型，缺省值为<code>&#39;linear&#39;</code>线性模型</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img01/image-20240216012623970.png" alt="image-20240216012623970"></p>
+<p>$[y,x<em>1,\cdots,x_m]$的$n$个独立观测数据仍然记为。。$[b_i,a{\small i1},\cdots,a</em>{im}]\quad i=1,\cdots,n$</p>
+<p>Y,XX分别为n维列向量和$n\times m$的矩阵</p>
+<script type="math/tex; mode=display">
+Y=\begin{bmatrix}
+b_1\\\vdots\\b_n
+\end{bmatrix}\quad\quad
+XX=\begin{bmatrix}
+a_{11} & \cdots & a_{1m}\\
+\vdots & & \vdots\\
+a_{n1} & \cdots & a_{nm}
+\end{bmatrix}_{n\times m}</script><blockquote>
+<p>注意！</p>
+<p>（1）此处的XX数据矩阵与线性回归分析中的数据矩阵X不同，X是构建的表达式系数矩阵，其第一列为全1列，XX是列向量观测值横向拼接成的矩阵</p>
+<p>（2）在完全二次多项式回归中，二次项系数的排列次序<strong>是先交叉项的系数</strong>，<strong>最后是纯二次项的系数</strong></p>
+</blockquote>
+<p>在交互式图像界面可以通过键选或输入相应值来得出其预测值和置信区间</p>
+<p>并且可以通过<kbd>导出</kbd>按钮导出显影的拟合系数到变量beta，RMSE到变量rmse，残差保存到变量residuals中</p>
+<p>RMSE(Root Mean Squared Error)是<strong>均方根误差</strong>，是一种衡量预测值与实际值之间误差的方法，通常用于评估模型的预测性能，计算公式为：</p>
+<script type="math/tex; mode=display">
+RMSE = \sqrt{\frac{1}{n}\sum\limits^n_{i=1}(y_{pred(i)}-y_{actual(i)})^2}</script><p>外部实现代码为</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">y_actual = [actual values];</span><br><span class="line">y_predicted = [predicted values];</span><br><span class="line"><span class="comment">% 计算残差</span></span><br><span class="line">residuals = y_actual - y_predicted;</span><br><span class="line"><span class="comment">% 计算 RMSE</span></span><br><span class="line">rmse = <span class="built_in">sqrt</span>(<span class="built_in">mean</span>(residuals.^<span class="number">2</span>));</span><br></pre></td></tr></table></figure>
+<p>但是rstool方法内置了数据标准化、添加截距项等步骤，所以外部实现的rmse不能直接同rstool输出的rmse进行比对的</p>
+<h2 id="三、非线性回归"><a href="#三、非线性回归" class="headerlink" title="三、非线性回归"></a>三、非线性回归</h2><p>非线性回归是指因变量$y$对应系数$\beta_1,\cdots,\beta_m$（而不是自变量）是非线性的</p>
+<p>MATLAB统计工具箱中提供了四个命令用于非线性回归问题</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nlinfit</code></td>
+<td>计算回归系数</td>
+</tr>
+<tr>
+<td><code>nlparci</code></td>
+<td>计算回归系数的置信区间</td>
+</tr>
+<tr>
+<td><code>nlpredci</code></td>
+<td>计算预测值及其置信区间</td>
+</tr>
+<tr>
+<td><code>nlintool</code></td>
+<td>得到交互式画面</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>命令方法解析</p>
+<ul>
+<li>非线性回归：<code>[beta, r, j] = nlinfit(xr, yr, &lt;xfx&gt;, beta0)</code><ul>
+<li>其中beta、r和j分别承接回归系数beta，残差r和jacobian矩阵</li>
+<li>xr、yr为x和y的原始数据，y为列向量，x为列向量横向拼接成的矩阵，</li>
+<li><code>&lt;xfx&gt;</code>是匿名函数构建的目标拟合公式，beta0为beta的初始值，若未给可以自由选择</li>
+</ul>
+</li>
+<li><p>回归系数的置信区间：<code>&lt;ValName&gt; = nlparci(beta, r, &#39;jacobian&#39;, j)</code></p>
+<ul>
+<li>这里使用最常见的jacobian矩阵方法进行拟合构建，所以Model选择’jacobian’</li>
+<li>其他的条件由<code>nlinfit</code>命令得到</li>
+</ul>
+</li>
+<li><p>预测值及其置信区间半径：<code>[Val_pred, delta] = nlpredci(&lt;xfx&gt;, Xt, beta, r, &#39;jacobian&#39;, j)</code></p>
+<ul>
+<li>val_pred和delta承接预测值及其置信区间半径</li>
+<li>xt为预测值所需的自变量，构建方法同xr</li>
+<li>这里同样使用最常见的jacobian矩阵方法进行拟合构建，所以Model选择’jacobian’</li>
+</ul>
+</li>
+<li><p><em>tool</em> 交互式非线性拟合：<code>nlintool(xr, yr, &lt;xfx&gt;, beta0)</code></p>
+<ul>
+<li><p>交互式方法可以直接列用交互式图像完成上面的部分，只需要导入初始数据，默认使用’jacobian’模式</p>
+</li>
+<li><p>利用‘导出’功能，可以直接导出下面的参数：</p>
+<p>  | 参数 | 参数CI | 预测  | 预测CI  | RMSE | 残差      |<br>  | —— | ——— | ——- | ———- | —— | ————- |<br>  | beta | betaci | ypred | ypredci | rmse | residuals |</p>
+<blockquote>
+<p>注意，这里的ypred和ypredci是交互式界面键入所得的值，而不能直接将其与实际结果的预测输出</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<p>所以<code>nlintool</code>交互式画面更容易求解基础的问题和RMSE等没有确定函数的问题</p>
+<p><code>nlinfit</code> \ <code>nlparci</code> \ <code>nlpredci</code>更适合建立一个复杂问题的模型，也更方面对大量的数据进行预测</p>
+<h2 id="四、实战例题"><a href="#四、实战例题" class="headerlink" title="四、实战例题"></a>四、实战例题</h2><h3 id="Eg-s1-合金强度拟合的回归分析"><a href="#Eg-s1-合金强度拟合的回归分析" class="headerlink" title="Eg.s1 合金强度拟合的回归分析"></a>Eg.s1 合金强度拟合的回归分析</h3><blockquote>
+<p>合金强度y与其中的碳含量x有比较密切的关系，今从生产中收集了一批数据如下表，试先拟合一个函数y(x)，再用回归分析对它进行检验</p>
+</blockquote>
+<p>Data:</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>x</th>
+<th>0.10</th>
+<th>0.11</th>
+<th>0.12</th>
+<th>0.13</th>
+<th>0.14</th>
+<th>0.15</th>
+<th>0.16</th>
+<th>0.17</th>
+<th>0.18</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>y</strong></td>
+<td>42.0</td>
+<td>41.5</td>
+<td>45.0</td>
+<td>45.5</td>
+<td>45.0</td>
+<td>47.5</td>
+<td>49.0</td>
+<td>55.0</td>
+<td>50.0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">clear</span><br><span class="line">clc</span><br><span class="line"><span class="comment">%% Data</span></span><br><span class="line">x1 = [<span class="number">0.10</span>:<span class="number">0.01</span>:<span class="number">0.18</span>]&#x27;; <span class="comment">% 仅有一个变量，尝试一元线性模型</span></span><br><span class="line">y1 = [<span class="number">42.0</span> <span class="number">41.5</span> <span class="number">45.0</span> <span class="number">45.5</span> <span class="number">45.0</span> <span class="number">47.5</span> <span class="number">49.0</span> <span class="number">55.0</span> <span class="number">50.0</span>]&#x27;;</span><br><span class="line"><span class="built_in">plot</span>(x1,y1,<span class="string">&#x27;+&#x27;</span>) <span class="comment">% 大致预览数据</span></span><br><span class="line"><span class="comment">%% 拟合</span></span><br><span class="line">a = [<span class="built_in">ones</span>(<span class="built_in">size</span>(x1)),x1];</span><br><span class="line">[b,bint,r,rint,stats] = regress(y1,a);</span><br><span class="line">b,bint <span class="comment">% 查看b值是否在置信区间内</span></span><br><span class="line">stats <span class="comment">%</span></span><br><span class="line">subplot(<span class="number">2</span>,<span class="number">2</span>,<span class="number">1</span>)</span><br><span class="line">rcoplot(r, rint) <span class="comment">% 第8个数据出现问题，删除该数据</span></span><br><span class="line"><span class="comment">%% ReData</span></span><br><span class="line">clear</span><br><span class="line">x1 = [<span class="number">0.10</span>:<span class="number">0.01</span>:<span class="number">0.18</span>]&#x27;; <span class="comment">% 仅有一个变量，尝试一元线性模型</span></span><br><span class="line">y1 = [<span class="number">42.0</span> <span class="number">41.5</span> <span class="number">45.0</span> <span class="number">45.5</span> <span class="number">45.0</span> <span class="number">47.5</span> <span class="number">49.0</span> <span class="number">55.0</span> <span class="number">50.0</span>]&#x27;;</span><br><span class="line">x1(<span class="number">8</span>)=[];</span><br><span class="line">y1(<span class="number">8</span>)=[];</span><br><span class="line"><span class="comment">%% Re拟合</span></span><br><span class="line">a = [<span class="built_in">ones</span>(<span class="built_in">size</span>(x1)),x1];</span><br><span class="line">[b,bint,r,rint,stats] = regress(y1,a);</span><br><span class="line">b,bint <span class="comment">% 查看b值是否在置信区间内</span></span><br><span class="line">stats <span class="comment">%</span></span><br><span class="line">subplot(<span class="number">2</span>,<span class="number">2</span>,<span class="number">2</span>)</span><br><span class="line">rcoplot(r, rint) <span class="comment">% 第8个数据出现问题(异常点)，删除该数据</span></span><br><span class="line"><span class="comment">%% Others</span></span><br><span class="line">clc</span><br><span class="line"><span class="comment">% CalTest最小二乘计算相应值</span></span><br><span class="line">b1 = a\y1</span><br><span class="line"><span class="comment">% 拟合图像</span></span><br><span class="line">x = <span class="built_in">min</span>(x1):<span class="number">0.001</span>:<span class="built_in">max</span>(x1);</span><br><span class="line">y = b(<span class="number">1</span>)+b(<span class="number">2</span>)*x;</span><br><span class="line">subplot(<span class="number">2</span>,<span class="number">2</span>,<span class="number">4</span>)</span><br><span class="line"><span class="built_in">plot</span>(x,y,x1,y1,<span class="string">&#x27;r+&#x27;</span>)</span><br><span class="line"><span class="comment">% MSE</span></span><br><span class="line">y1_fit = b(<span class="number">1</span>)+b(<span class="number">2</span>)*x1;</span><br><span class="line"><span class="built_in">disp</span>([<span class="string">&#x27;MSE: &#x27;</span> num2str(mse(y1-y1_fit))])</span><br></pre></td></tr></table></figure>
+<p><strong><em>output</em></strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">b =</span><br><span class="line">   27.4722</span><br><span class="line">  137.5000</span><br><span class="line">bint =</span><br><span class="line">   18.6851   36.2594</span><br><span class="line">   75.7755  199.2245</span><br><span class="line">stats =</span><br><span class="line"></span><br><span class="line">    0.7985   27.7469    0.0012    4.0883</span><br><span class="line">    </span><br><span class="line">b =</span><br><span class="line">   30.7820</span><br><span class="line">  109.3985</span><br><span class="line">bint =</span><br><span class="line">   26.2805   35.2834</span><br><span class="line">   76.9014  141.8955</span><br><span class="line">stats =</span><br><span class="line">    0.9188   67.8534    0.0002    0.8797</span><br><span class="line"></span><br><span class="line">b1 =</span><br><span class="line">   30.7820</span><br><span class="line">  109.3985</span><br><span class="line">MSE: 0.65977</span><br></pre></td></tr></table></figure>
+<p><strong><em>Pic</em></strong></p>
+<p><img src="./output/egs1.jpg" style="zoom: 67%;" /></p>
+<h3 id="Eg-s2-电器的销售量预测"><a href="#Eg-s2-电器的销售量预测" class="headerlink" title="Eg.s2 电器的销售量预测"></a>Eg.s2 电器的销售量预测</h3><blockquote>
+<p>某厂生产的一种电器的销售量y与竞争对手的价格x1和本厂的价格x2有关。下表是该商品在10个城市的销售记录。试根据这些数据建立y与x1和x2的关系式，对得到的模型和系数进行检验。若某市本厂产品售价160 (元)，竞争对手售价170(元)，预测商品在该市的销售量。</p>
+</blockquote>
+<p>Data:</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>$x_1$元</th>
+<th>120</th>
+<th>140</th>
+<th>190</th>
+<th>130</th>
+<th>155</th>
+<th>175</th>
+<th>125</th>
+<th>145</th>
+<th>180</th>
+<th>150</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>$x_2$元</strong></td>
+<td>100</td>
+<td>110</td>
+<td>90</td>
+<td>150</td>
+<td>210</td>
+<td>150</td>
+<td>250</td>
+<td>270</td>
+<td>300</td>
+<td>250</td>
+</tr>
+<tr>
+<td><strong>$y$个</strong></td>
+<td>102</td>
+<td>100</td>
+<td>120</td>
+<td>77</td>
+<td>46</td>
+<td>93</td>
+<td>26</td>
+<td>69</td>
+<td>65</td>
+<td>85</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>分别用多元线性回归 和 多元二项式回归进行预测</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">clear,clc</span><br><span class="line"><span class="comment">%% Data:</span></span><br><span class="line">x1 = [<span class="number">120</span> <span class="number">140</span> <span class="number">190</span> <span class="number">130</span> <span class="number">155</span> <span class="number">175</span> <span class="number">125</span> <span class="number">145</span> <span class="number">180</span> <span class="number">150</span>]&#x27;;</span><br><span class="line">x2 = [<span class="number">100</span> <span class="number">110</span> <span class="number">90</span> <span class="number">150</span> <span class="number">210</span> <span class="number">150</span> <span class="number">250</span> <span class="number">270</span> <span class="number">300</span> <span class="number">250</span>]&#x27;;</span><br><span class="line">y = [<span class="number">102</span> <span class="number">100</span> <span class="number">120</span> <span class="number">77</span> <span class="number">46</span> <span class="number">93</span> <span class="number">26</span> <span class="number">69</span> <span class="number">65</span> <span class="number">85</span>]&#x27;;</span><br><span class="line"><span class="comment">%% ShowRawData</span></span><br><span class="line">subplot(<span class="number">1</span>,<span class="number">3</span>,<span class="number">1</span>)</span><br><span class="line"><span class="built_in">plot</span>(x1,y,<span class="string">&#x27;r+&#x27;</span>)</span><br><span class="line">subplot(<span class="number">1</span>,<span class="number">3</span>,<span class="number">2</span>)</span><br><span class="line"><span class="built_in">plot</span>(x2,y,<span class="string">&#x27;r+&#x27;</span>)</span><br><span class="line"><span class="comment">%% FitRegressAnalysis 拟合回归分析</span></span><br><span class="line">a = [<span class="built_in">ones</span>(<span class="built_in">size</span>(x1)), x1, x2];</span><br><span class="line">[b,bint,r,rint,stats] = regress(y,a);</span><br><span class="line">b,bint,stats</span><br><span class="line">subplot(<span class="number">1</span>,<span class="number">3</span>,<span class="number">3</span>)</span><br><span class="line">rcoplot(r,rint)</span><br><span class="line"><span class="comment">% 如果计算RMSE，其值将不与rstool得出的结果相同</span></span><br><span class="line"><span class="comment">% 原因是没有进行rstool内置的数据标准化、添加截距项等</span></span><br><span class="line"><span class="comment">% 所以regress得出的方法不能跟rstool得出的RMSE直接比对</span></span><br><span class="line"><span class="comment">%% x1:170 x2:160 y?</span></span><br><span class="line">y_pred_1716 = b(<span class="number">1</span>) + b(<span class="number">2</span>)*<span class="number">170</span> + b(<span class="number">3</span>)*<span class="number">160</span></span><br><span class="line"><span class="comment">%% Rstool 多元二项式回归</span></span><br><span class="line">rstool([x1,x2],y,<span class="string">&#x27;purequadratic&#x27;</span>)</span><br><span class="line">rstool([x1,x2],y,<span class="string">&#x27;linear&#x27;</span>)</span><br><span class="line"><span class="comment">% beta</span></span><br><span class="line"><span class="comment">% rmse</span></span><br></pre></td></tr></table></figure>
+<p><strong><em>output</em></strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">b =</span><br><span class="line">   66.5176</span><br><span class="line">    0.4139</span><br><span class="line">   -0.2698</span><br><span class="line">bint =</span><br><span class="line">  -32.5060  165.5411</span><br><span class="line">   -0.2018    1.0296</span><br><span class="line">   -0.4611   -0.0785</span><br><span class="line">stats =</span><br><span class="line">    0.6527    6.5786    0.0247  351.0445</span><br><span class="line"></span><br><span class="line">y_pred =</span><br><span class="line">   93.7182</span><br><span class="line">   </span><br><span class="line">--------</span><br><span class="line">beta =</span><br><span class="line"></span><br><span class="line"> -312.5871</span><br><span class="line">    7.2701</span><br><span class="line">   -1.7337</span><br><span class="line">   -0.0228</span><br><span class="line">    0.0037</span><br><span class="line">rmse =</span><br><span class="line">   16.6436</span><br></pre></td></tr></table></figure>
+<p><strong><em>Pic</em></strong></p>
+<p><img src="./output/egs21.jpg" style="zoom:67%;" /></p>
+<p><img src="./output/egs22.jpg" style="zoom:67%;" /></p>
+<h3 id="Eg-s3-运动员问题"><a href="#Eg-s3-运动员问题" class="headerlink" title="Eg.s3 运动员问题"></a>Eg.s3 运动员问题</h3><blockquote>
+<p>将17至29岁的运动员每两岁一组分为7组,每组两人测量其旋转定向能力,以考察年龄对这种运动能力的影响。现得到一-组数据如下，试建立两者之间的关系</p>
+</blockquote>
+<p>Data:</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Age</th>
+<th>17</th>
+<th>19</th>
+<th>21</th>
+<th>23</th>
+<th>25</th>
+<th>27</th>
+<th>29</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Person1</strong></td>
+<td>20.48</td>
+<td>25.13</td>
+<td>26.15</td>
+<td>30.0</td>
+<td>26.1</td>
+<td>20.3</td>
+<td>19.35</td>
+</tr>
+<tr>
+<td><strong>Person2</strong></td>
+<td>24.35</td>
+<td>28.11</td>
+<td>26.3</td>
+<td>31.4</td>
+<td>26.92</td>
+<td>25.7</td>
+<td>21.3</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>注意当前问题，虽然看似是含有两个自变量的多元问题，实际上是一个Age对应两个Person的值，所以在此处尝试使用多项式拟合poly的方法进行建模</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">clc,clear</span><br><span class="line"><span class="comment">%% Data</span></span><br><span class="line">age = [<span class="number">17</span>:<span class="number">2</span>:<span class="number">29</span>];</span><br><span class="line">ages = [age,age];</span><br><span class="line">h1 = [<span class="number">20.48</span> <span class="number">25.13</span> <span class="number">26.15</span> <span class="number">30.0</span> <span class="number">26.1</span> <span class="number">20.3</span> <span class="number">19.35</span>];</span><br><span class="line">h2 = [<span class="number">24.35</span> <span class="number">28.11</span> <span class="number">26.3</span> <span class="number">31.4</span> <span class="number">26.92</span> <span class="number">25.7</span> <span class="number">21.3</span>];</span><br><span class="line">h0 = [h1,h2];</span><br><span class="line"><span class="comment">%% poly</span></span><br><span class="line">[p, s] = polyfit(ages, h0, <span class="number">2</span>);</span><br><span class="line">p</span><br><span class="line">[y, delta] = polyconf(p,age,s); <span class="comment">% 带入模型进行预测</span></span><br><span class="line">y <span class="comment">% 拟合值</span></span><br><span class="line">delta; <span class="comment">% 预测区间的半径</span></span><br><span class="line"></span><br><span class="line">polytool(ages, h0, <span class="number">2</span>) <span class="comment">%  预测模型交互式图像</span></span><br></pre></td></tr></table></figure>
+<p><strong><em>output</em></strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">p =</span><br><span class="line">   -0.2003    8.9782  -72.2150</span><br><span class="line"></span><br><span class="line">y =</span><br><span class="line">   22.5243   26.0582   27.9896   28.3186   27.0450   24.1689   19.6904</span><br></pre></td></tr></table></figure>
+<p><strong><em>Pic</em></strong></p>
+<p><img src="./output/egs3.jpg" style="zoom:67%;" /></p>
+<h3 id="Eg7-20-化学动力反应模型"><a href="#Eg7-20-化学动力反应模型" class="headerlink" title="Eg7.20 化学动力反应模型"></a>Eg7.20 化学动力反应模型</h3><blockquote>
+<p>在研究化学动力学反应过程中，建立了一个反应速度和反应物含量的数学模型，形式为</p>
+<script type="math/tex; mode=display">
+y=\frac{\beta_4x_2-\dfrac{x_3}{\beta_5}}{1+\beta_1x_1+\beta_2x_2+\beta_3x_3}</script><p>其中$\beta_1,\cdots,\beta_5$是位置的参数，$x_1,x_2,x_3$是三种反应物(氢、n戊烷，异构戊烷)的含量，$y$是反应速度。</p>
+<p>今测得一组数据入下表，试由此确定参数$\beta_1,\cdots,\beta_5$，并给出其置信区间</p>
+<p>$\beta_1,\cdots,\beta_5$的参考值为$[0.1,0.05,0.02,1,2]$</p>
+<blockquote>
+<p>此处可以看作给出了回归系数的初始值，若没有提供则可以随机取</p>
+</blockquote>
+</blockquote>
+<p>Data:</p>
+<p>序号 反应速度  氢  戊烷  异构戊烷<br>1    8.55    470    300    10<br>2    3.79    285    80    10<br>3    4.82    470    300    120<br>4    0.02    470    80    120<br>5    2.75    470    80    10<br>6    14.39    100    190    10<br>7    2.54    100    80    65<br>8    4.35    470    190    65<br>9    13.00    100    300    54<br>10    8.50    100    300    120<br>11    0.05    100    80    120<br>12    11.32    285    300    10<br>13    3.13    285    190    120</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">clear,clc</span><br><span class="line"><span class="comment">%% Data</span></span><br><span class="line">yr = [<span class="number">8.55</span> <span class="number">3.79</span> <span class="number">4.82</span> <span class="number">0.02</span> <span class="number">2.75</span> <span class="number">14.39</span> ...</span><br><span class="line">      <span class="number">2.54</span> <span class="number">4.35</span> <span class="number">13.00</span> <span class="number">8.50</span> <span class="number">0.05</span> <span class="number">11.32</span> <span class="number">3.13</span>]&#x27;;</span><br><span class="line">x1 = [<span class="number">470</span> <span class="number">285</span> <span class="number">470</span> <span class="number">470</span> <span class="number">470</span> <span class="number">100</span> <span class="number">100</span> ...</span><br><span class="line">      <span class="number">470</span> <span class="number">100</span> <span class="number">100</span> <span class="number">100</span> <span class="number">285</span> <span class="number">285</span>]&#x27;;</span><br><span class="line">x2 = [<span class="number">300</span> <span class="number">80</span> <span class="number">300</span> <span class="number">80</span> <span class="number">80</span> <span class="number">190</span> <span class="number">80</span> <span class="number">190</span> ...</span><br><span class="line">      <span class="number">300</span> <span class="number">300</span> <span class="number">80</span> <span class="number">300</span> <span class="number">190</span>]&#x27;;</span><br><span class="line">x3 = [<span class="number">10</span> <span class="number">10</span> <span class="number">120</span> <span class="number">120</span> <span class="number">10</span> <span class="number">10</span> <span class="number">65</span> ...</span><br><span class="line">      <span class="number">65</span> <span class="number">54</span> <span class="number">120</span> <span class="number">120</span> <span class="number">10</span> <span class="number">120</span>]&#x27;;</span><br><span class="line">xr = [x1, x2, x3];</span><br><span class="line">beta0 = [<span class="number">0.1</span>,<span class="number">0.05</span>,<span class="number">0.02</span>,<span class="number">1</span>,<span class="number">2</span>]&#x27;;</span><br><span class="line"><span class="comment">%% Regress</span></span><br><span class="line"><span class="comment">% 用匿名函数定义拟合函数</span></span><br><span class="line">x = xr;</span><br><span class="line">hs = @(<span class="built_in">beta</span>,x) ((<span class="built_in">beta</span>(<span class="number">4</span>)*x(:,<span class="number">2</span>)-(x(:,<span class="number">3</span>))/(<span class="built_in">beta</span>(<span class="number">5</span>))) ...</span><br><span class="line">               ./(<span class="number">1</span>+<span class="built_in">beta</span>(<span class="number">1</span>)*x(:,<span class="number">1</span>)+<span class="built_in">beta</span>(<span class="number">2</span>)*x(:,<span class="number">2</span>)+<span class="built_in">beta</span>(<span class="number">3</span>)*x(:,<span class="number">3</span>)));</span><br><span class="line"><span class="comment">% 引入初始值</span></span><br><span class="line">beta0;</span><br><span class="line"><span class="comment">% [nlinfit]非线性回归计算回归系数beta，其中r和j是后续命令所需的中间量</span></span><br><span class="line">[<span class="built_in">beta</span>, r, <span class="built_in">j</span>] = nlinfit(xr,yr,hs,beta0)</span><br><span class="line"><span class="comment">% [nlparci]计算回归系数的置信区间</span></span><br><span class="line">betaci = nlparci(<span class="built_in">beta</span>,r,<span class="string">&quot;jacobian&quot;</span>,<span class="built_in">j</span>)</span><br><span class="line"><span class="comment">% [nlpredci]计算预测y值及其置信区间半径</span></span><br><span class="line">[y_pred, delta] = nlpredci(hs,xr,<span class="built_in">beta</span>,r,<span class="string">&#x27;jacobian&#x27;</span>,<span class="built_in">j</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">%% Disp</span></span><br><span class="line"><span class="comment">% [nlintool]展示拟合图像结果的交互式画面</span></span><br><span class="line">nlintool(xr,yr,hs,beta0)</span><br><span class="line"><span class="comment">% rmse</span></span><br></pre></td></tr></table></figure>
+<p><strong><em>output</em></strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">beta =</span><br><span class="line">    0.0628</span><br><span class="line">    0.0400</span><br><span class="line">    0.1124</span><br><span class="line">    1.2526</span><br><span class="line">    1.1914</span><br><span class="line">betaci =</span><br><span class="line">   -0.0377    0.1632</span><br><span class="line">   -0.0312    0.1113</span><br><span class="line">   -0.0609    0.2857</span><br><span class="line">   -0.7467    3.2519</span><br><span class="line">   -0.7381    3.1208</span><br><span class="line">r =</span><br><span class="line">    0.1321</span><br><span class="line">   -0.1642</span><br><span class="line">   -0.0909</span><br><span class="line">    0.0310</span><br><span class="line">    0.1142</span><br><span class="line">    0.0498</span><br><span class="line">   -0.0262</span><br><span class="line">    0.3115</span><br><span class="line">   -0.0292</span><br><span class="line">    0.1096</span><br><span class="line">    0.0716</span><br><span class="line">   -0.1501</span><br><span class="line">   -0.3026</span><br><span class="line">y_pred =</span><br><span class="line">    8.4179</span><br><span class="line">    3.9542</span><br><span class="line">    4.9109</span><br><span class="line">   -0.0110</span><br><span class="line">    2.6358</span><br><span class="line">   14.3402</span><br><span class="line">    2.5662</span><br><span class="line">    4.0385</span><br><span class="line">   13.0292</span><br><span class="line">    8.3904</span><br><span class="line">   -0.0216</span><br><span class="line">   11.4701</span><br><span class="line">    3.4326</span><br><span class="line">delta =</span><br><span class="line">    0.2805</span><br><span class="line">    0.2474</span><br><span class="line">    0.1766</span><br><span class="line">    0.1875</span><br><span class="line">    0.1578</span><br><span class="line">    0.4236</span><br><span class="line">    0.2424</span><br><span class="line">    0.1638</span><br><span class="line">    0.3426</span><br><span class="line">    0.3281</span><br><span class="line">    0.3699</span><br><span class="line">    0.3237</span><br><span class="line">    0.1749</span><br></pre></td></tr></table></figure>
+<p><strong><em>Pic</em></strong></p>
+<p><img src="./output/eg720.jpg" style="zoom: 50%;" /></p>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/MATLAB/">MATLAB</a><a class="post-meta__tags" href="/tags/%E9%A2%84%E6%B5%8B/">预测</a><a class="post-meta__tags" href="/tags/%E5%9B%9E%E5%BD%92/">回归</a></div><div class="post_share"><div class="social-share" data-image="https://raw.githubusercontent.com/XLY23333/picture01/main/img01/MaMd.jpg" data-sites="twitter, wechat"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E9%A2%84%E6%B5%8B%E6%A8%A1%E5%9E%8B/M05-%E6%8B%9F%E5%90%88/" title="数模M05-拟合"><img class="cover" src="https://raw.githubusercontent.com/XLY23333/picture01/main/img01/MaMd.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">数模M05-拟合</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E9%A2%84%E6%B5%8B%E6%A8%A1%E5%9E%8B/M05-%E6%8B%9F%E5%90%88/" title="数模M05-拟合"><img class="cover" src="https://raw.githubusercontent.com/XLY23333/picture01/main/img01/MaMd.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-02-15</div><div class="title">数模M05-拟合</div></div></a></div><div><a href="/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E9%A2%84%E6%B5%8B%E6%A8%A1%E5%9E%8B/M04-%E6%8F%92%E5%80%BC/" title="数模M04-插值"><img class="cover" src="https://raw.githubusercontent.com/XLY23333/picture01/main/img01/MaMd.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-02-15</div><div class="title">数模M04-插值</div></div></a></div><div><a href="/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E8%AF%84%E4%BB%B7%E6%A8%A1%E5%9E%8B/M01-%E8%AF%84%E4%BB%B7%E6%A8%A1%E5%9E%8B/" title="数模M01-评价模型"><img class="cover" src="https://raw.githubusercontent.com/XLY23333/picture01/main/img01/MaMd.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-02-14</div><div class="title">数模M01-评价模型</div></div></a></div><div><a href="/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E8%81%9A%E7%B1%BB%E5%88%86%E6%9E%90/M02-Kmeans/" title="数模M02-Kmeans聚类"><img class="cover" src="https://raw.githubusercontent.com/XLY23333/picture01/main/img01/MaMd.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-02-15</div><div class="title">数模M02-Kmeans聚类</div></div></a></div><div><a href="/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E8%81%9A%E7%B1%BB%E5%88%86%E6%9E%90/M03-KmeansPaper/" title="数模M03-Kmeans聚类论文可使用部分"><img class="cover" src="https://raw.githubusercontent.com/XLY23333/picture01/main/img01/MaMd.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-02-15</div><div class="title">数模M03-Kmeans聚类论文可使用部分</div></div></a></div></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://raw.githubusercontent.com/XLY23333/picture01/main/img01/Met-XLY.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">XLY23333</div><div class="author-info__description">一大黑耗子的个人博客</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">7</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">14</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://space.bilibili.com/18752589"><i class="https://i0.hdslb.com/bfs/archive/c8fd97a40bf79f03e7b76cbc87236f612caef7b2.png"></i><span>Follow Me [Bilibili]</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9E%E5%BD%92"><span class="toc-number">1.</span> <span class="toc-text">回归</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%A4%9A%E5%85%83%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92"><span class="toc-number">1.1.</span> <span class="toc-text">一、多元线性回归</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%88%E4%B8%80%EF%BC%89%E5%8E%9F%E7%90%86%E7%90%86%E8%AE%BA"><span class="toc-number">1.1.1.</span> <span class="toc-text">（一）原理理论</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.1.1.1.</span> <span class="toc-text">1. 模型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%8F%82%E6%95%B0%E4%BC%B0%E8%AE%A1"><span class="toc-number">1.1.1.2.</span> <span class="toc-text">2. 参数估计</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E7%BB%9F%E8%AE%A1%E5%88%86%E6%9E%90"><span class="toc-number">1.1.1.3.</span> <span class="toc-text">3. 统计分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E5%9B%9E%E5%BD%92%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%81%87%E8%AE%BE%E6%A3%80%E9%AA%8C"><span class="toc-number">1.1.1.4.</span> <span class="toc-text">4. 回归模型的假设检验</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-%E5%88%A9%E7%94%A8%E5%9B%9E%E5%BD%92%E6%A8%A1%E5%9E%8B%E8%BF%9B%E8%A1%8C%E9%A2%84%E6%B5%8B"><span class="toc-number">1.1.1.5.</span> <span class="toc-text">5. 利用回归模型进行预测</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%88%E4%BA%8C%EF%BC%89MATLAB%E4%B8%AD%E7%9A%84%E5%A4%9A%E5%85%83%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90"><span class="toc-number">1.1.2.</span> <span class="toc-text">（二）MATLAB中的多元线性回归分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%A4%9A%E5%85%83%E4%BA%8C%E9%A1%B9%E5%BC%8F%E5%9B%9E%E5%BD%92"><span class="toc-number">1.2.</span> <span class="toc-text">二、多元二项式回归</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E9%9D%9E%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92"><span class="toc-number">1.3.</span> <span class="toc-text">三、非线性回归</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%AE%9E%E6%88%98%E4%BE%8B%E9%A2%98"><span class="toc-number">1.4.</span> <span class="toc-text">四、实战例题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Eg-s1-%E5%90%88%E9%87%91%E5%BC%BA%E5%BA%A6%E6%8B%9F%E5%90%88%E7%9A%84%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90"><span class="toc-number">1.4.1.</span> <span class="toc-text">Eg.s1 合金强度拟合的回归分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Eg-s2-%E7%94%B5%E5%99%A8%E7%9A%84%E9%94%80%E5%94%AE%E9%87%8F%E9%A2%84%E6%B5%8B"><span class="toc-number">1.4.2.</span> <span class="toc-text">Eg.s2 电器的销售量预测</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Eg-s3-%E8%BF%90%E5%8A%A8%E5%91%98%E9%97%AE%E9%A2%98"><span class="toc-number">1.4.3.</span> <span class="toc-text">Eg.s3 运动员问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Eg7-20-%E5%8C%96%E5%AD%A6%E5%8A%A8%E5%8A%9B%E5%8F%8D%E5%BA%94%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.4.4.</span> <span class="toc-text">Eg7.20 化学动力反应模型</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E9%A2%84%E6%B5%8B%E6%A8%A1%E5%9E%8B/M06-%E5%9B%9E%E5%BD%92/" title="数模M06-回归"><img src="https://raw.githubusercontent.com/XLY23333/picture01/main/img01/MaMd.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="数模M06-回归"/></a><div class="content"><a class="title" href="/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E9%A2%84%E6%B5%8B%E6%A8%A1%E5%9E%8B/M06-%E5%9B%9E%E5%BD%92/" title="数模M06-回归">数模M06-回归</a><time datetime="2024-02-14T19:10:00.000Z" title="发表于 2024-02-15 03:10:00">2024-02-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E9%A2%84%E6%B5%8B%E6%A8%A1%E5%9E%8B/M05-%E6%8B%9F%E5%90%88/" title="数模M05-拟合"><img src="https://raw.githubusercontent.com/XLY23333/picture01/main/img01/MaMd.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="数模M05-拟合"/></a><div class="content"><a class="title" href="/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E9%A2%84%E6%B5%8B%E6%A8%A1%E5%9E%8B/M05-%E6%8B%9F%E5%90%88/" title="数模M05-拟合">数模M05-拟合</a><time datetime="2024-02-14T18:10:00.000Z" title="发表于 2024-02-15 02:10:00">2024-02-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E9%A2%84%E6%B5%8B%E6%A8%A1%E5%9E%8B/M04-%E6%8F%92%E5%80%BC/" title="数模M04-插值"><img src="https://raw.githubusercontent.com/XLY23333/picture01/main/img01/MaMd.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="数模M04-插值"/></a><div class="content"><a class="title" href="/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E9%A2%84%E6%B5%8B%E6%A8%A1%E5%9E%8B/M04-%E6%8F%92%E5%80%BC/" title="数模M04-插值">数模M04-插值</a><time datetime="2024-02-14T17:10:00.000Z" title="发表于 2024-02-15 01:10:00">2024-02-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E8%81%9A%E7%B1%BB%E5%88%86%E6%9E%90/M03-KmeansPaper/" title="数模M03-Kmeans聚类论文可使用部分"><img src="https://raw.githubusercontent.com/XLY23333/picture01/main/img01/MaMd.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="数模M03-Kmeans聚类论文可使用部分"/></a><div class="content"><a class="title" href="/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E8%81%9A%E7%B1%BB%E5%88%86%E6%9E%90/M03-KmeansPaper/" title="数模M03-Kmeans聚类论文可使用部分">数模M03-Kmeans聚类论文可使用部分</a><time datetime="2024-02-14T16:10:00.000Z" title="发表于 2024-02-15 00:10:00">2024-02-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E8%81%9A%E7%B1%BB%E5%88%86%E6%9E%90/M02-Kmeans/" title="数模M02-Kmeans聚类"><img src="https://raw.githubusercontent.com/XLY23333/picture01/main/img01/MaMd.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="数模M02-Kmeans聚类"/></a><div class="content"><a class="title" href="/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E8%81%9A%E7%B1%BB%E5%88%86%E6%9E%90/M02-Kmeans/" title="数模M02-Kmeans聚类">数模M02-Kmeans聚类</a><time datetime="2024-02-14T16:00:00.000Z" title="发表于 2024-02-15 00:00:00">2024-02-15</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2024 By XLY23333</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, Welcome to XLY23333's <a href="https://XLY23333.xyz">Blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.12.0"></script><script src="/js/main.js?v=4.12.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script><script>(() => {
+  const initValine = () => {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'tdTnsvz0HCkxUmpWc1fqtXrY-gzGzoHsz',
+      appKey: 'v2FuCD4qOCL6S2QPqrCaPGhv',
+      avatar: 'monsterid',
+      serverURLs: 'https://tdtnsvz0.lc-cn-n1-shared.com',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  const loadValine = async () => {
+    if (typeof Valine === 'function') initValine()
+    else {
+      await getScript('https://cdn.jsdelivr.net/npm/valine@1.5.1/dist/Valine.min.js')
+      initValine()
+    }
+  }
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.12.0"></script></div></div></body></html>
