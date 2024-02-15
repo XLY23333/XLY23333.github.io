@@ -1,228 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>数模M01-评价模型</title>
-    <url>/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E8%AF%84%E4%BB%B7%E6%A8%A1%E5%9E%8B/M01-%E8%AF%84%E4%BB%B7%E6%A8%A1%E5%9E%8B/</url>
-    <content><![CDATA[<h1 id="评价模型"><a href="#评价模型" class="headerlink" title="评价模型"></a>评价模型</h1><h2 id="一、层次分析法-AHP"><a href="#一、层次分析法-AHP" class="headerlink" title="一、层次分析法 AHP"></a>一、层次分析法 AHP</h2><blockquote>
-<p>学习源Video:<a href="https://www.bilibili.com/video/BV1qy4y1a7JJ?p=23&amp;vd_source=1437b1798845fbcba4cf09d5a889e546">Bilibili-ln异教徒 <strong>AHP</strong></a></p>
-</blockquote>
-<p>作用：层次分析法用来进行决策，求指标的权重</p>
-<p>模型建立步骤：</p>
-<ul>
-<li><p>建立层次结构</p>
-<ul>
-<li>将决策问题分为三个部分：目标层、准则层和指标层/方案层</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img01/AHPeg01.png" style="zoom: 50%;" /></p>
-</li>
-<li><p>对准则层构建判断矩阵</p>
-<ul>
-<li><p>判断矩阵为两两指标重要性的判断，一般判别矩阵构造如下：</p>
-<script type="math/tex; mode=display">
-A=(a_{ij}) _{m\times n}=
-\begin{pmatrix}
-a_{11} & a_{12} & \cdots & a_{1n} \\
-a_{21} & a_{22} & \cdots & a_{2n} \\
-\vdots & \vdots & \ddots & \vdots \\
-a_{n1} & a_{n2} & \cdots & a_{nn}
-\end{pmatrix}</script></li>
-</ul>
-<p>九级标度法表格</p>
-<p>| 标度             | 含义                                      |<br>| ———————— | ————————————————————- |<br>| 1                | i和j具有<strong>相同</strong>的重要性(Eg:主对角线元素) |<br>| 3                | i比j<strong>稍微</strong>重要                          |<br>| 5                | i比j<strong>明显</strong>重要                          |<br>| 7                | i比j<strong>强烈</strong>重要                          |<br>| 9                | i比j<strong>极端</strong>重要                          |<br>| 2、4、6、8       | 上述标度的<strong>中间量</strong>                      |<br>| $\frac{1}{标度}$ | 矩阵下三角<strong>对称位置</strong>的值                |</p>
-</li>
-<li><p>一致性检验（特征根法）</p>
-<blockquote>
-<p>在通过主观想法确定两个属性之间的重要性差距标度时，可能出现不一致的情况，需要用一致性检验对所得的判断矩阵进行一致性的检验，确定所得的判断矩阵能够使用</p>
-<p>一致性的例子：A~12~=2, A~13~=2,那么说明1 对 2和3 的重要程度相同，可以推出2和3的重要程度相同，</p>
-<p>​                          即A~23~ = A~32~ =1，如果该值不为1则说明其不一致。</p>
-</blockquote>
-<p>用对应于A的最大特征根（记为$\lambda$）的特征向量（归一化后）作为权向量$w$，即$w$满足</p>
-<script type="math/tex; mode=display">
-A\lambda = \lambda w</script><p>当 $\lambda = n$ 时，该判断矩阵为一致阵，且任何判断矩阵的最大特征根 $\lambda\ge n$ 。因此，当最大特征根比 $n$ 大得多时，该判断矩阵的不一致程度越严重，所以可以用 $\lambda - n$ 的数值来衡量判断矩阵的不一致程度，并将</p>
-<script type="math/tex; mode=display">
-CI = \frac{\lambda_{\max}-n}{n-1}</script><p>作为一致性指标，当$CI=0$时判断矩阵为一致阵，并引入随机一致性指标$RI$，$RI$数值如下：</p>
-</li>
-</ul>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>$n$</th>
-<th>3</th>
-<th>4</th>
-<th>5</th>
-<th>6</th>
-<th>7</th>
-<th>8</th>
-<th>9</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>$RI$</td>
-<td>0.58</td>
-<td>0.9</td>
-<td>1.12</td>
-<td>1.24</td>
-<td>1.32</td>
-<td>1.41</td>
-<td>1.45</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>  将它的一致性指标$CI$与同阶（指$n$相同）的随机一致性指标$RI$之比称为一致性比率$CR$，当</p>
-<script type="math/tex; mode=display">
-  CR = \frac{CI}{RI}<0.1</script><p>  时，认为该判断矩阵的不一致程度在容许范围之内，可以用其特征向量作为权向量。最终得到每个指标的权重结果。</p>
-<ul>
-<li><ul>
-<li>方法一：使用MATLAB的<code>eig()</code>方法直接求得特征根 $v$和特征向量$d$，随后通过求取特征向量和特征值的所在列，计算<code>w = v(:,loc)/sum(v(:,loc));</code>得到转为行向量，即权向量res_A。</li>
-</ul>
-</li>
-</ul>
-<p>​    <strong><em>Matlab-ModelCode</em></strong></p>
-<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line">clear</span><br><span class="line">clc</span><br><span class="line"><span class="comment">%% 判断矩阵导入</span></span><br><span class="line">A = [<span class="number">1</span>   <span class="number">1</span>/<span class="number">4</span> <span class="number">1</span>/<span class="number">4</span> <span class="number">2</span> <span class="number">2</span></span><br><span class="line">     <span class="number">4</span>   <span class="number">1</span>   <span class="number">1</span>   <span class="number">6</span> <span class="number">6</span></span><br><span class="line">     <span class="number">4</span>   <span class="number">1</span>   <span class="number">1</span>   <span class="number">6</span> <span class="number">6</span></span><br><span class="line">     <span class="number">1</span>/<span class="number">2</span> <span class="number">1</span>/<span class="number">6</span> <span class="number">1</span>/<span class="number">6</span> <span class="number">1</span> <span class="number">1</span></span><br><span class="line">     <span class="number">1</span>/<span class="number">2</span> <span class="number">1</span>/<span class="number">6</span> <span class="number">1</span>/<span class="number">6</span> <span class="number">1</span> <span class="number">1</span>]</span><br><span class="line"><span class="comment">%% 一致性检验</span></span><br><span class="line">n = <span class="built_in">length</span>(A);</span><br><span class="line">[v, d] = eig(A); <span class="comment">% 计算特征根和特征向量</span></span><br><span class="line">[temp, loc] = <span class="built_in">max</span>(<span class="built_in">max</span>(d)); <span class="comment">% 返回loc为特征向量的所在列</span></span><br><span class="line">r = temp; <span class="comment">% 得到lambda_max的值</span></span><br><span class="line">CI = (r-n)/(n<span class="number">-1</span>); <span class="comment">% 计算一致性指标CI</span></span><br><span class="line">RI = [<span class="number">0</span> <span class="number">0</span> <span class="number">0.58</span> <span class="number">0.90</span> <span class="number">1.12</span> <span class="number">1.24</span> <span class="number">1.32</span> <span class="number">1.41</span> ... <span class="comment">% 换行输入</span></span><br><span class="line">      <span class="number">1.45</span> <span class="number">1.49</span> <span class="number">1.52</span> <span class="number">1.54</span> <span class="number">1.56</span> <span class="number">1.58</span> <span class="number">1.59</span>]; <span class="comment">% 引入随机一致性指标RI</span></span><br><span class="line">CR = CI/RI(n); <span class="comment">% 计算一致性比率CR</span></span><br><span class="line"><span class="keyword">if</span> CR &lt; <span class="number">0.1</span> || n == <span class="number">2</span> <span class="comment">% 确定其一致性比率&lt;0.1或只含有两个元素，两个元素一定一致</span></span><br><span class="line">    CR_Result = <span class="string">&#x27;Pass&#x27;</span>;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    CR_Result = <span class="string">&#x27;Nope&#x27;</span>;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="comment">%% 权向量计算</span></span><br><span class="line">w = v(:,loc)/sum(v(:,loc));</span><br><span class="line">w = w&#x27;;</span><br><span class="line"><span class="comment">%% DispResult</span></span><br><span class="line"><span class="built_in">disp</span>(<span class="string">&#x27;---------AHP---------&#x27;</span>)</span><br><span class="line"><span class="built_in">disp</span>([<span class="string">&#x27;CI: &#x27;</span> num2str(CI)]) <span class="comment">% 一致性指标</span></span><br><span class="line"><span class="built_in">disp</span>([<span class="string">&#x27;CR: &#x27;</span> num2str(CR)]) <span class="comment">% 一致性比率</span></span><br><span class="line"><span class="built_in">disp</span>([<span class="string">&#x27;CR_Result: &#x27;</span> num2str(CR_Result)]) <span class="comment">% 一致性检验结果</span></span><br><span class="line"><span class="keyword">if</span> CR_Result == <span class="string">&#x27;Pass&#x27;</span> <span class="comment">% 若一致性检验通过则输出特征值和权向量</span></span><br><span class="line">    <span class="built_in">disp</span>([<span class="string">&#x27;lambda: &#x27;</span> num2str(r)]) <span class="comment">% 特征值</span></span><br><span class="line">    <span class="built_in">disp</span>([<span class="string">&#x27;w: &#x27;</span> num2str(w)]) <span class="comment">% 权向量</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li><ul>
-<li>方法二：算术平均法求权重</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>将判断矩阵按照列归一化$\to$将归一化的结果按行求和$\to$每个元素除以n</p>
-</blockquote>
-<script type="math/tex; mode=display">
-w_i =  \frac{1}{n}\sum\limits_{j=1}^n\frac{a_{ij}}{\sum\limits^n_{k=1}a_{kj}}\quad\quad(i=1,2,\cdots,n)</script><ul>
-<li>对指标层/方案层的内容构建<ul>
-<li>每一个准则层性质中 多个指标间的判断矩阵并进行AHP（多个准则，每个准则指向多个指标）</li>
-<li>每一个准则层性质的 每个方案间的判断矩阵并进行AHP（多个准则，多个主责指向多个方案）</li>
-</ul>
-</li>
-<li>将准则层/方案层的每一个准则性质的$w$转成行向量<ul>
-<li>准则层的所有值$w$值构成权向量res_B</li>
-<li>方案层纵向拼接，所得的即为方案曾的权矩阵res_B，</li>
-</ul>
-</li>
-<li>计算最终得分/综合权重<ul>
-<li>指标：res_A(指标层集的大类准则)$\times$res_B所得结果</li>
-<li>方案：res_A$\times$res_B得到综合权重res_Z</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h2 id="二、熵权法-EWM"><a href="#二、熵权法-EWM" class="headerlink" title="二、熵权法 EWM"></a>二、熵权法 EWM</h2><blockquote>
-<p>学习源Video:<a href="https://www.bilibili.com/video/BV1qy4y1a7JJ?p=24&amp;vd_source=1437b1798845fbcba4cf09d5a889e546">Bilibili-ln异教徒 <strong>EWM</strong></a></p>
-</blockquote>
-<ul>
-<li><p>数据的归一化处理</p>
-<blockquote>
-<p>由于各项指标计量单位并不统一，因此在计算综合权重前先要对它进行标准化处理，即把指标的绝对值转化为相对值，并令 $x{\small ij} = |x{\small ij}|$ ，从而解决各项不同质指标的同质化问题。</p>
-</blockquote>
-<ul>
-<li><p>方法一：</p>
-<p>由于正向指标和负向指标数值代表的含义不同（正向指标数值越高越好，负向指标数值越低越好），因此对于高低需求指标应当采取不同的算法进行数据标准化处理，具体处理方法为 :</p>
-<p>对于正向指标：</p>
-<script type="math/tex; mode=display">
-x_{ij} = 0.998\frac{x_{ij}-\min\{x_{1j},\cdots,x_{nj}\}}{\max\{x_{1j},\cdots,x_{nj}\}-\min\{x_{1j},\cdots,x_{nj}\}}+0.002</script><p>对于负向指标：</p>
-<script type="math/tex; mode=display">
-x_{ij} = 0.998\frac{\max\{x_{1j},\cdots,x_{nj}\}-x_{ij}}{\max\{x_{1j},\cdots,x_{nj}\}-\min\{x_{1j},\cdots,x_{nj}\}}+0.002</script></li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>通常会采用一些稍微小一点的值来代替 0 和 1，以便更好地保留原始数据的分布特征。</p>
-<p>且直接使用 0 和 1 作为归一化后的极值，可能会导致数据过于集中在边界附近，失去了部分信息。</p>
-</blockquote>
-<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line"><span class="comment">% Matlab的归一化自定义函数 # Gy.m</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">y</span> = <span class="title">Gy</span><span class="params">(x,type,ymin,ymax)</span></span></span><br><span class="line"><span class="comment">% 实现正向或负向指标归一化，返回归一化后的数据矩阵</span></span><br><span class="line"><span class="comment">% x为原始数据矩阵，一行代表一个样本，每列代表一种指标</span></span><br><span class="line"><span class="comment">% type设定正向指标1，负向指标2</span></span><br><span class="line"><span class="comment">% ymin，ymax为归一化的区间端点</span></span><br><span class="line">[n, m] = <span class="built_in">size</span>(x);</span><br><span class="line">y = <span class="built_in">zeros</span>(n,m);</span><br><span class="line">xmin = <span class="built_in">min</span>(x);</span><br><span class="line">xmax = <span class="built_in">max</span>(x);</span><br><span class="line"><span class="keyword">switch</span> <span class="built_in">type</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> <span class="built_in">j</span>=<span class="number">1</span>:m</span><br><span class="line">            y(:,<span class="built_in">j</span>)=(ymax-ymin)*(x(:,<span class="built_in">j</span>)-xmin(<span class="built_in">j</span>))/(xmax(<span class="built_in">j</span>)-xmin(<span class="built_in">j</span>))+ymin;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    case2</span><br><span class="line">        <span class="keyword">for</span> <span class="built_in">j</span>=<span class="number">1</span>:m</span><br><span class="line">            y(:,<span class="built_in">j</span>)=(ymax-ymin)*(xmax(<span class="built_in">j</span>)-x(:,<span class="built_in">j</span>))/(xmax(<span class="built_in">j</span>)-xmin(<span class="built_in">j</span>))+ymin;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li><p>方法二：Python scikit-learn MinMaxScaler</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 数据归一化(sklearn)</span></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> MinMaxScaler</span><br><span class="line">data = [[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],</span><br><span class="line">        [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>],</span><br><span class="line">        [<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>],]</span><br><span class="line"><span class="comment"># 如果data为单列则需添加.values.reshape(-1,1)</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;data:&#x27;</span>,data[:<span class="number">5</span>]) <span class="comment"># 展示前五个数据</span></span><br><span class="line"></span><br><span class="line">MM_Scaler = MinMaxScaler(feature_range=(<span class="number">0</span>,<span class="number">1</span>)) <span class="comment"># 默认缩放范围(0,1)</span></span><br><span class="line">MMres = MM_Scaler.fit_transform(data)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;MMres:&#x27;</span>,np.<span class="built_in">round</span>(MMres[:<span class="number">5</span>,],<span class="number">2</span>)) <span class="comment"># 展示前五个数据,保留3位小数</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<ul>
-<li><p>计算第$j$项指标下第$i$方案指标值的比重$p_{ij}$</p>
-<script type="math/tex; mode=display">
-p_{ij} = \frac{x_{ij}}{\sum\limits^n_{i=1}x_{ij}}\quad(j=1,2,\cdots,m)</script></li>
-<li><p>计算第$j$项指标的熵值$e_j$</p>
-<script type="math/tex; mode=display">
-e_j = -k\sum^n_{i=1}p_{ij}\ln p_{ij}\quad(j=1,2,\cdots,m)</script><p>其中$k=\dfrac{1}{\ln(n)}$，满足$e_j\ge 0$</p>
-</li>
-<li><p>计算信息熵冗余度$g_{j}$</p>
-<script type="math/tex; mode=display">
-g_j = 1-e_j\quad(j=1,2,\cdots,m)</script></li>
-<li><p>计算各项指标权重$w_j$</p>
-</li>
-</ul>
-<script type="math/tex; mode=display">
-w_j =\frac{g_j}{\sum\limits^m_{j=1}g_j}\quad(j=1,2,\cdots,m)</script><ul>
-<li>计算综合评分$S_i$<script type="math/tex; mode=display">
-S_i = \sum^m_{j=1}w_jx_{ij}</script></li>
-</ul>
-<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line">clear</span><br><span class="line">clc</span><br><span class="line"><span class="comment">%% DataLoad</span></span><br><span class="line">data = xlsread(<span class="string">&#x27;./HouseData.xlsx&#x27;</span>);</span><br><span class="line"><span class="comment">%% 归一化</span></span><br><span class="line">ind = <span class="built_in">ones</span>(<span class="built_in">size</span>(data,<span class="number">2</span>),<span class="number">1</span>); <span class="comment">% data列数作为RowCount,ColCount=1</span></span><br><span class="line"><span class="comment">% indArr的建立，正向写1，负向写2，在此处默认都是正向指标，所以建立全一的纵向Arr</span></span><br><span class="line"></span><br><span class="line">[n, m] = <span class="built_in">size</span>(data); <span class="comment">% n个样本，m个指标</span></span><br><span class="line"><span class="keyword">for</span> <span class="built_in">j</span> = <span class="number">1</span>:m</span><br><span class="line">    <span class="keyword">if</span> ind(<span class="built_in">j</span>) == <span class="number">1</span> <span class="comment">% 正向指标的归一化</span></span><br><span class="line">        X(:,<span class="built_in">j</span>) = Gy(data(:,<span class="built_in">j</span>),<span class="number">1</span>,<span class="number">0.002</span>,<span class="number">1</span>); <span class="comment">% 归一化最低值范围不能为0</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">else</span> <span class="comment">% 负向指标的归一化</span></span><br><span class="line">        X(:,<span class="built_in">j</span>) = Gy(data(:,<span class="built_in">j</span>),<span class="number">2</span>,<span class="number">0.002</span>,<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="comment">%% 熵权法求取权向量</span></span><br><span class="line"><span class="comment">% 计算第j个指标下，第i个样本占该指标的比重p(i,j)</span></span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span>:n</span><br><span class="line">    <span class="keyword">for</span> <span class="built_in">j</span> = <span class="number">1</span>:m</span><br><span class="line">        p(<span class="built_in">i</span>,<span class="built_in">j</span>) = X(<span class="built_in">i</span>,<span class="built_in">j</span>)/sum(X(:,<span class="built_in">j</span>));</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="comment">% 计算第j个指标的熵值e(j)</span></span><br><span class="line">k = <span class="number">1</span>/<span class="built_in">log</span>(n);</span><br><span class="line"><span class="keyword">for</span> <span class="built_in">j</span> = <span class="number">1</span>:m</span><br><span class="line">    e(<span class="built_in">j</span>) = -k * sum(p(:,<span class="built_in">j</span>).*<span class="built_in">log</span>(p(:,<span class="built_in">j</span>)));</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line">g = <span class="built_in">ones</span>(<span class="number">1</span>,m)-e; <span class="comment">% 计算信息熵冗余度</span></span><br><span class="line">w = g./sum(g); <span class="comment">% 求权值w</span></span><br><span class="line">s = X*w&#x27;; <span class="comment">% 求综合评分</span></span><br><span class="line"><span class="comment">% DispPlot</span></span><br><span class="line"><span class="built_in">disp</span>(<span class="string">&#x27;Gyed_Data:&#x27;</span>);<span class="built_in">disp</span>(X)</span><br><span class="line"><span class="built_in">disp</span>(<span class="string">&#x27;p(i,j):&#x27;</span>);<span class="built_in">disp</span>(p)</span><br><span class="line"><span class="built_in">disp</span>(<span class="string">&#x27;e(j):&#x27;</span>);<span class="built_in">disp</span>(e)</span><br><span class="line"><span class="built_in">disp</span>(<span class="string">&#x27;g(j):&#x27;</span>);<span class="built_in">disp</span>(g)</span><br><span class="line"><span class="built_in">disp</span>(<span class="string">&#x27;w(j):&#x27;</span>);<span class="built_in">disp</span>(w)</span><br><span class="line"><span class="built_in">disp</span>(<span class="string">&#x27;s(j):&#x27;</span>);<span class="built_in">disp</span>(s)</span><br><span class="line"><span class="built_in">plot</span>(<span class="number">2017</span>:<span class="number">-1</span>:<span class="number">2010</span>,s)</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>数学建模</category>
-        <category>评价模型</category>
-      </categories>
-      <tags>
-        <tag>AHP层次分析法</tag>
-        <tag>EWM熵权法</tag>
-        <tag>MATLAB</tag>
-        <tag>评价模型</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>数模M02-Kmeans聚类</title>
-    <url>/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E8%81%9A%E7%B1%BB%E5%88%86%E6%9E%90/M02-Kmeans/</url>
-    <content><![CDATA[<h1 id="KMeans聚类法"><a href="#KMeans聚类法" class="headerlink" title="KMeans聚类法"></a>KMeans聚类法</h1><h2 id="一、Kmeans内容"><a href="#一、Kmeans内容" class="headerlink" title="一、Kmeans内容"></a>一、Kmeans内容</h2><blockquote>
-<p>Video:~<a href="https://www.bilibili.com/video/BV1qy4y1a7JJ?p=25&amp;vd_source=1437b1798845fbcba4cf09d5a889e546">Bilibili-ln异教徒 <strong>Kmeans</strong></a></p>
-</blockquote>
-<ul>
-<li><p>随机生成k个聚类中心点</p>
-<ul>
-<li><p>其中k值的确定可以采用“手肘法”，通过分析不同k值下误差平方和(SSE)的值的变化，选取其”肘部“作为合适的聚类数目</p>
-<script type="math/tex; mode=display">
-SSE = \sum_{i=1}^k\sum_{p\in C_i}|p-m_i|^2</script><p>其中$C_i$是第i个类，p是$C_i$中的样本点，$m_i$是$C_i$的质心($C_i$中所有样本点的均值)，SSE是所有样本的聚类误差，代表了聚类效果的好坏。通过找寻SSE的值的下降幅度剧烈减小的位置来判断合适的k取值</p>
-<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">SSE</span> = <span class="title">funcSSE</span><span class="params">(data,total)</span> % <span class="title">data</span>为数据,<span class="title">total</span>为要划分的类别总数</span></span><br><span class="line">n = <span class="built_in">size</span>(data,<span class="number">2</span>); <span class="comment">% data的ColCount</span></span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">2</span>:total</span><br><span class="line">    k = <span class="built_in">i</span>;</span><br><span class="line">    [label,c] = kmeans(data,k);</span><br><span class="line">    temp = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> <span class="built_in">j</span> = <span class="number">1</span>:<span class="built_in">i</span> <span class="comment">% 按照分类数量遍历</span></span><br><span class="line">        loc = <span class="built_in">find</span>(label == <span class="built_in">j</span>) <span class="comment">% 找到每个类别所对应的行标(Row)，形成一个Arr</span></span><br><span class="line">        <span class="keyword">for</span> j2 = <span class="number">1</span>:n <span class="comment">% 按照Col遍历</span></span><br><span class="line">            temp = temp + sum((data(loc,j2)-c(<span class="built_in">j</span>,j2)).^<span class="number">2</span>)</span><br><span class="line">            <span class="comment">% 通过loc得到一个row区域内的所有label与c索引相同的数据</span></span><br><span class="line">            <span class="comment">% 依次loc所对应数据块中的每一列与c同列的数据相减并求点成的平方</span></span><br><span class="line">            <span class="comment">% 随后sum求和处理后每一列loc数据的和并且与先前的其他列数据结果相加</span></span><br><span class="line">            <span class="comment">% 将每一个label相同的data和c的结果再相加，全部用temp承接数值</span></span><br><span class="line">            <span class="comment">% 实际上是将原本每一数据点同其c的减法求平方(距离)过程纵向化了</span></span><br><span class="line">            <span class="comment">% 用于矩阵运算的遍历，以及其最终得到的结果就是每个数据每个坐标的距离</span></span><br><span class="line">            <span class="comment">% 所以可以用这种简单的方法Coding</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    SSE(<span class="built_in">i</span><span class="number">-1</span>) = temp <span class="comment">% 令SSE这个Arr的数值仍然从Index=1开始</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>根据聚类中心点，将数据分为k类。分类的原则是数据离哪个中心点最近就将他分为哪一类别</p>
-<ul>
-<li><p>距离的判断采用欧式距离(欧几里得距离):</p>
-<p>令各类中心为 $\mu_j$ ,计算各个数据到各类中心点的距离为$(x-\mu_j)^2$</p>
-</li>
-</ul>
-</li>
-<li><p>根据分好的类别的数据，重新计算聚类的类别中心点</p>
-</li>
-<li><p>不断重复上述的两步，直到中心点不再变化，得到聚类结果</p>
-<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line">clear</span><br><span class="line">clc</span><br><span class="line"><span class="comment">%% 数据导入</span></span><br><span class="line">data = xlsread(<span class="string">&#x27;./k-means.xlsx&#x27;</span>);</span><br><span class="line"><span class="comment">%% SSE手肘法判断</span></span><br><span class="line">km = <span class="number">10</span>; <span class="comment">% 所需的k最大测试值</span></span><br><span class="line">SSE = funcSSE(data,km);</span><br><span class="line"><span class="built_in">plot</span>(<span class="number">2</span>:km,SSE)</span><br><span class="line">k = <span class="number">5</span>; <span class="comment">% 选择 k=5</span></span><br><span class="line"><span class="comment">%% Kmeans聚类</span></span><br><span class="line">[label,center] = kmeans(data,k)</span><br><span class="line"><span class="comment">%% DispPlot</span></span><br><span class="line"><span class="built_in">figure</span></span><br><span class="line"><span class="built_in">scatter</span>(<span class="number">0</span>,data(label==<span class="number">1</span>),<span class="string">&#x27;cyan&#x27;</span>)</span><br><span class="line"><span class="built_in">hold</span> on</span><br><span class="line"><span class="built_in">scatter</span>(<span class="number">0</span>,data(label==<span class="number">2</span>),<span class="string">&#x27;b&#x27;</span>)</span><br><span class="line"><span class="built_in">scatter</span>(<span class="number">0</span>,data(label==<span class="number">3</span>),<span class="string">&#x27;g&#x27;</span>)</span><br><span class="line"><span class="built_in">scatter</span>(<span class="number">0</span>,data(label==<span class="number">4</span>),<span class="string">&#x27;y&#x27;</span>)</span><br><span class="line"><span class="built_in">scatter</span>(<span class="number">0</span>,data(label==<span class="number">5</span>),<span class="string">&#x27;black&#x27;</span>)</span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span>:k</span><br><span class="line">    <span class="built_in">plot</span>([<span class="number">-0.1</span>,<span class="number">0.1</span>],[center(<span class="built_in">i</span>),center(<span class="built_in">i</span>)],<span class="string">&#x27;r&#x27;</span>)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line">xlim([<span class="number">-1</span>,<span class="number">1</span>])</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="二、Python可使用代码"><a href="#二、Python可使用代码" class="headerlink" title="二、Python可使用代码"></a>二、Python可使用代码</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> tqdm <span class="keyword">import</span> tqdm</span><br><span class="line"><span class="keyword">import</span> sklearn</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">plt.rcParams[<span class="string">&#x27;font.family&#x27;</span>] = <span class="string">&#x27;Consolas&#x27;</span></span><br><span class="line">plt.rcParams[<span class="string">&#x27;font.sans-serif&#x27;</span>] = [<span class="string">&#x27;Consolas&#x27;</span>]</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 随机数据</span></span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line">random.seed(<span class="number">66</span>)</span><br><span class="line">x = [random.randint(<span class="number">1</span>,<span class="number">100</span>) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">100</span>)]</span><br><span class="line">y = [random.randint(<span class="number">1</span>,<span class="number">100</span>) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">100</span>)]</span><br><span class="line">data=<span class="built_in">list</span>(<span class="built_in">zip</span>(x,y))</span><br><span class="line">df = pd.DataFrame(data)</span><br><span class="line">df.columns = [<span class="string">&#x27;v1&#x27;</span>, <span class="string">&#x27;v2&#x27;</span>]</span><br><span class="line">df.head()</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">plt.scatter(x, y)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;X&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;Y&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 手肘法判断图</span></span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> silhouette_score</span><br><span class="line"><span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> KMeans</span><br><span class="line"></span><br><span class="line">score01 = [ ]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">2</span>, <span class="number">7</span>):</span><br><span class="line">    km1 = KMeans(n_clusters=i, random_state=<span class="number">42</span>)</span><br><span class="line">    kcat1 = km1.fit_predict(df)</span><br><span class="line">    score = silhouette_score(df, kcat1)</span><br><span class="line">    score01.append(score)</span><br><span class="line">plt.plot(<span class="built_in">range</span>(<span class="number">2</span>, <span class="number">7</span>),score01)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> KMeans</span><br><span class="line">n = <span class="number">4</span></span><br><span class="line">km = KMeans(n_clusters=n, random_state=<span class="number">42</span>)</span><br><span class="line">km.fit(df)</span><br><span class="line">centers = km.cluster_centers_</span><br><span class="line"><span class="built_in">print</span>(centers)</span><br><span class="line">kcat = km.predict(df)</span><br><span class="line">df_cat = pd.concat([df,pd.DataFrame(kcat)],axis=<span class="number">1</span>)</span><br><span class="line">df_cat.columns = <span class="built_in">list</span>(df.columns) + [<span class="string">&#x27;Cate&#x27;</span>]</span><br><span class="line">df_cat.head()</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">colorg1 = [<span class="string">&#x27;#1f77b4&#x27;</span>, <span class="string">&#x27;#2ca02c&#x27;</span>, <span class="string">&#x27;#ff7f0e&#x27;</span>, <span class="string">&#x27;#7f7f7f&#x27;</span>, <span class="string">&#x27;#9467bd&#x27;</span>]</span><br><span class="line">colorg2 = [<span class="string">&#x27;#2ecc71&#x27;</span>, <span class="string">&#x27;#3498db&#x27;</span>, <span class="string">&#x27;#e74c3c&#x27;</span>, <span class="string">&#x27;#9b59b6&#x27;</span>, <span class="string">&#x27;#f39c12&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">    plt.scatter(df_cat[df_cat[<span class="string">&#x27;Cate&#x27;</span>] == i].iloc[:,<span class="number">0</span>],</span><br><span class="line">                df_cat[df_cat[<span class="string">&#x27;Cate&#x27;</span>] == i].iloc[:,<span class="number">1</span>],</span><br><span class="line">                label = <span class="string">f&#x27;Cate<span class="subst">&#123;i&#125;</span>&#x27;</span>,color = colorg1[i],)</span><br><span class="line">    <span class="keyword">for</span> index, row <span class="keyword">in</span> df_cat[df_cat[<span class="string">&#x27;Cate&#x27;</span>] == i].iterrows():</span><br><span class="line">        plt.plot([row[<span class="string">&#x27;v1&#x27;</span>], centers[i, <span class="number">0</span>]], [row[<span class="string">&#x27;v2&#x27;</span>], centers[i, <span class="number">1</span>]], color=colorg1[i])</span><br><span class="line"></span><br><span class="line">plt.scatter(centers[:,<span class="number">0</span>],centers[:,<span class="number">1</span>],color = <span class="string">&#x27;r&#x27;</span>, s = <span class="number">100</span>, zorder = <span class="number">5</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;KMeans Result&#x27;</span>,size = <span class="number">20</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;V1&#x27;</span>, size = <span class="number">15</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;V2&#x27;</span>, size = <span class="number">15</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.savefig(<span class="string">r&#x27;./PIC.svg&#x27;</span>,dpi=<span class="number">500</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df_cat.to_csv(<span class="string">r&#x27;./kmoutput.csv&#x27;</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="三、Python展开Kmeans聚类"><a href="#三、Python展开Kmeans聚类" class="headerlink" title="三、Python展开Kmeans聚类"></a>三、Python展开Kmeans聚类</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 生成测试数据</span></span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt </span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line">random.seed(<span class="number">1</span>)</span><br><span class="line">kdatax = [random.randint(<span class="number">1</span>,<span class="number">30</span>) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">30</span>)]</span><br><span class="line">kdatay = [random.randint(<span class="number">1</span>,<span class="number">30</span>) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">30</span>)]</span><br><span class="line">kdata = pd.DataFrame([kdatax,kdatay]).transpose()</span><br><span class="line">plt.plot(kdata.iloc[:,<span class="number">0</span>], kdata.iloc[:,<span class="number">1</span>], <span class="string">&#x27;ro&#x27;</span>)</span><br><span class="line">kdata.head()</span><br><span class="line"></span><br><span class="line">colorg1 = [<span class="string">&#x27;#1f77b4&#x27;</span>, <span class="string">&#x27;#2ca02c&#x27;</span>, <span class="string">&#x27;#ff7f0e&#x27;</span>, <span class="string">&#x27;#7f7f7f&#x27;</span>, <span class="string">&#x27;#9467bd&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">show</span>(<span class="params">kdata, cen, ax, k</span>):</span><br><span class="line">    plt.plot()</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">Dep</span>(<span class="params">ax, t, cen,</span>):</span><br><span class="line">    pls = [ ]</span><br><span class="line">    <span class="keyword">for</span> d <span class="keyword">in</span> t:</span><br><span class="line">        dval = [ ]</span><br><span class="line">        dsum = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(cen)):</span><br><span class="line">            dval.append(np.sqrt(<span class="built_in">sum</span>((cen[i] - d)**<span class="number">2</span>)))</span><br><span class="line">        place =  dval.index(<span class="built_in">min</span>(dval))</span><br><span class="line">        pls.append(place)</span><br><span class="line">    <span class="keyword">return</span> pls</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">Init_cen</span>(<span class="params">kdata, k, ax</span>):</span><br><span class="line">    centers = [ ]</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(k):</span><br><span class="line">        subcenters = [ ]</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(ax):</span><br><span class="line">            maxval = (kdata.iloc[:,i].<span class="built_in">max</span>())</span><br><span class="line">            minval = (kdata.iloc[:,i].<span class="built_in">min</span>())</span><br><span class="line">            subcenters.append(random.randint(minval,maxval))</span><br><span class="line">        centers.append(subcenters)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Init:&#x27;</span>,centers)</span><br><span class="line">    <span class="keyword">return</span> centers</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">KmeansH</span>(<span class="params">kdata, k, seed = <span class="number">0</span>,centers= [<span class="number">0</span>],co = <span class="number">0</span>, ax = <span class="number">0</span>, karray = <span class="number">0</span></span>):</span><br><span class="line">    <span class="keyword">if</span> ax ==<span class="number">0</span>:</span><br><span class="line">        ax = <span class="built_in">len</span>(kdata.columns)</span><br><span class="line">        karray = np.array(kdata)</span><br><span class="line">        <span class="keyword">if</span> seed !=<span class="number">0</span>:</span><br><span class="line">            random.seed(seed)</span><br><span class="line">    <span class="keyword">if</span> co == <span class="number">0</span>:</span><br><span class="line">        centers = Init_cen(kdata, k, ax)</span><br><span class="line">        co = <span class="number">1</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        co += <span class="number">1</span></span><br><span class="line">    label = Dep(ax, karray, centers)</span><br><span class="line">    kdatanew = pd.concat((kdata,pd.DataFrame(label)),axis=<span class="number">1</span>)</span><br><span class="line">    </span><br><span class="line">    cn1 = [ ]     </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(k):</span><br><span class="line">        cn2 = [ ]</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(ax):</span><br><span class="line">            cn2.append(np.mean(kdatanew[kdatanew.iloc[:,ax]==i].iloc[:,j]))</span><br><span class="line">        cn1.append(cn2)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(co,centers)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">abs</span>((np.array(cn1) - np.array(centers)).<span class="built_in">sum</span>()) &lt;= <span class="number">1e-9</span>:</span><br><span class="line">        random.seed()</span><br><span class="line">        <span class="keyword">return</span> kdatanew</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> KmeansH(kdata, k, seed,cn1 , co, ax, karray)</span><br><span class="line">    </span><br><span class="line">k=<span class="number">4</span></span><br><span class="line">kdatak = KmeansH(kdata,k,<span class="number">42</span>)</span><br><span class="line"></span><br><span class="line">centers = pd.DataFrame([[<span class="number">25.0</span>, <span class="number">10.416666666666666</span>], [<span class="number">9.555555555555555</span>, <span class="number">24.666666666666668</span>], [<span class="number">14.166666666666666</span>, <span class="number">10.0</span>], [<span class="number">3.0</span>, <span class="number">5.333333333333333</span>]])</span><br><span class="line">centers</span><br><span class="line"></span><br><span class="line">colorg1 = [<span class="string">&#x27;#1f77b4&#x27;</span>, <span class="string">&#x27;#2ca02c&#x27;</span>, <span class="string">&#x27;#ff7f0e&#x27;</span>, <span class="string">&#x27;#7f7f7f&#x27;</span>, <span class="string">&#x27;#9467bd&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(k):</span><br><span class="line"></span><br><span class="line">    plt.plot(kdatak[kdatak.iloc[:,<span class="number">2</span>]==i].iloc[:,<span class="number">0</span>],</span><br><span class="line">             kdatak[kdatak.iloc[:,<span class="number">2</span>]==i].iloc[:,<span class="number">1</span>],</span><br><span class="line">             <span class="string">&#x27;o&#x27;</span>,color = colorg1[i])</span><br><span class="line"></span><br><span class="line">plt.plot(centers.iloc[:,<span class="number">0</span>],centers.iloc[:,<span class="number">1</span>],<span class="string">&#x27;r*&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>数学建模</category>
-        <category>聚类分析</category>
-      </categories>
-      <tags>
-        <tag>MATLAB</tag>
-        <tag>聚类</tag>
-        <tag>Kmeans</tag>
-        <tag>Kmeans++</tag>
-        <tag>Python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>TestDoc</title>
     <url>/test/b01-test/</url>
     <content><![CDATA[<h3 id="TestDoc"><a href="#TestDoc" class="headerlink" title="TestDoc"></a>TestDoc</h3><p>这是一篇测试文章，选用的内容为数学建模插值的内容：</p>
@@ -543,6 +321,177 @@ S = \int_{0.15}^{0.18}v(t)\,{\rm d}t</script></blockquote>
       </tags>
   </entry>
   <entry>
+    <title>数模M01-评价模型</title>
+    <url>/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E8%AF%84%E4%BB%B7%E6%A8%A1%E5%9E%8B/M01-%E8%AF%84%E4%BB%B7%E6%A8%A1%E5%9E%8B/</url>
+    <content><![CDATA[<h1 id="评价模型"><a href="#评价模型" class="headerlink" title="评价模型"></a>评价模型</h1><h2 id="一、层次分析法-AHP"><a href="#一、层次分析法-AHP" class="headerlink" title="一、层次分析法 AHP"></a>一、层次分析法 AHP</h2><blockquote>
+<p>学习源Video:<a href="https://www.bilibili.com/video/BV1qy4y1a7JJ?p=23&amp;vd_source=1437b1798845fbcba4cf09d5a889e546">Bilibili-ln异教徒 <strong>AHP</strong></a></p>
+</blockquote>
+<p>作用：层次分析法用来进行决策，求指标的权重</p>
+<p>模型建立步骤：</p>
+<ul>
+<li><p>建立层次结构</p>
+<ul>
+<li>将决策问题分为三个部分：目标层、准则层和指标层/方案层</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img01/AHPeg01.png" style="zoom: 50%;" /></p>
+</li>
+<li><p>对准则层构建判断矩阵</p>
+<ul>
+<li><p>判断矩阵为两两指标重要性的判断，一般判别矩阵构造如下：</p>
+<script type="math/tex; mode=display">
+A=(a_{ij}) _{m\times n}=
+\begin{pmatrix}
+a_{11} & a_{12} & \cdots & a_{1n} \\
+a_{21} & a_{22} & \cdots & a_{2n} \\
+\vdots & \vdots & \ddots & \vdots \\
+a_{n1} & a_{n2} & \cdots & a_{nn}
+\end{pmatrix}</script></li>
+</ul>
+<p>九级标度法表格</p>
+<p>| 标度             | 含义                                      |<br>| ———————— | ————————————————————- |<br>| 1                | i和j具有<strong>相同</strong>的重要性(Eg:主对角线元素) |<br>| 3                | i比j<strong>稍微</strong>重要                          |<br>| 5                | i比j<strong>明显</strong>重要                          |<br>| 7                | i比j<strong>强烈</strong>重要                          |<br>| 9                | i比j<strong>极端</strong>重要                          |<br>| 2、4、6、8       | 上述标度的<strong>中间量</strong>                      |<br>| $\frac{1}{标度}$ | 矩阵下三角<strong>对称位置</strong>的值                |</p>
+</li>
+<li><p>一致性检验（特征根法）</p>
+<blockquote>
+<p>在通过主观想法确定两个属性之间的重要性差距标度时，可能出现不一致的情况，需要用一致性检验对所得的判断矩阵进行一致性的检验，确定所得的判断矩阵能够使用</p>
+<p>一致性的例子：A~12~=2, A~13~=2,那么说明1 对 2和3 的重要程度相同，可以推出2和3的重要程度相同，</p>
+<p>​                          即A~23~ = A~32~ =1，如果该值不为1则说明其不一致。</p>
+</blockquote>
+<p>用对应于A的最大特征根（记为$\lambda$）的特征向量（归一化后）作为权向量$w$，即$w$满足</p>
+<script type="math/tex; mode=display">
+A\lambda = \lambda w</script><p>当 $\lambda = n$ 时，该判断矩阵为一致阵，且任何判断矩阵的最大特征根 $\lambda\ge n$ 。因此，当最大特征根比 $n$ 大得多时，该判断矩阵的不一致程度越严重，所以可以用 $\lambda - n$ 的数值来衡量判断矩阵的不一致程度，并将</p>
+<script type="math/tex; mode=display">
+CI = \frac{\lambda_{\max}-n}{n-1}</script><p>作为一致性指标，当$CI=0$时判断矩阵为一致阵，并引入随机一致性指标$RI$，$RI$数值如下：</p>
+</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>$n$</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$RI$</td>
+<td>0.58</td>
+<td>0.9</td>
+<td>1.12</td>
+<td>1.24</td>
+<td>1.32</td>
+<td>1.41</td>
+<td>1.45</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>  将它的一致性指标$CI$与同阶（指$n$相同）的随机一致性指标$RI$之比称为一致性比率$CR$，当</p>
+<script type="math/tex; mode=display">
+  CR = \frac{CI}{RI}<0.1</script><p>  时，认为该判断矩阵的不一致程度在容许范围之内，可以用其特征向量作为权向量。最终得到每个指标的权重结果。</p>
+<ul>
+<li><ul>
+<li>方法一：使用MATLAB的<code>eig()</code>方法直接求得特征根 $v$和特征向量$d$，随后通过求取特征向量和特征值的所在列，计算<code>w = v(:,loc)/sum(v(:,loc));</code>得到转为行向量，即权向量res_A。</li>
+</ul>
+</li>
+</ul>
+<p>​    <strong><em>Matlab-ModelCode</em></strong></p>
+<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line">clear</span><br><span class="line">clc</span><br><span class="line"><span class="comment">%% 判断矩阵导入</span></span><br><span class="line">A = [<span class="number">1</span>   <span class="number">1</span>/<span class="number">4</span> <span class="number">1</span>/<span class="number">4</span> <span class="number">2</span> <span class="number">2</span></span><br><span class="line">     <span class="number">4</span>   <span class="number">1</span>   <span class="number">1</span>   <span class="number">6</span> <span class="number">6</span></span><br><span class="line">     <span class="number">4</span>   <span class="number">1</span>   <span class="number">1</span>   <span class="number">6</span> <span class="number">6</span></span><br><span class="line">     <span class="number">1</span>/<span class="number">2</span> <span class="number">1</span>/<span class="number">6</span> <span class="number">1</span>/<span class="number">6</span> <span class="number">1</span> <span class="number">1</span></span><br><span class="line">     <span class="number">1</span>/<span class="number">2</span> <span class="number">1</span>/<span class="number">6</span> <span class="number">1</span>/<span class="number">6</span> <span class="number">1</span> <span class="number">1</span>]</span><br><span class="line"><span class="comment">%% 一致性检验</span></span><br><span class="line">n = <span class="built_in">length</span>(A);</span><br><span class="line">[v, d] = eig(A); <span class="comment">% 计算特征根和特征向量</span></span><br><span class="line">[temp, loc] = <span class="built_in">max</span>(<span class="built_in">max</span>(d)); <span class="comment">% 返回loc为特征向量的所在列</span></span><br><span class="line">r = temp; <span class="comment">% 得到lambda_max的值</span></span><br><span class="line">CI = (r-n)/(n<span class="number">-1</span>); <span class="comment">% 计算一致性指标CI</span></span><br><span class="line">RI = [<span class="number">0</span> <span class="number">0</span> <span class="number">0.58</span> <span class="number">0.90</span> <span class="number">1.12</span> <span class="number">1.24</span> <span class="number">1.32</span> <span class="number">1.41</span> ... <span class="comment">% 换行输入</span></span><br><span class="line">      <span class="number">1.45</span> <span class="number">1.49</span> <span class="number">1.52</span> <span class="number">1.54</span> <span class="number">1.56</span> <span class="number">1.58</span> <span class="number">1.59</span>]; <span class="comment">% 引入随机一致性指标RI</span></span><br><span class="line">CR = CI/RI(n); <span class="comment">% 计算一致性比率CR</span></span><br><span class="line"><span class="keyword">if</span> CR &lt; <span class="number">0.1</span> || n == <span class="number">2</span> <span class="comment">% 确定其一致性比率&lt;0.1或只含有两个元素，两个元素一定一致</span></span><br><span class="line">    CR_Result = <span class="string">&#x27;Pass&#x27;</span>;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    CR_Result = <span class="string">&#x27;Nope&#x27;</span>;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="comment">%% 权向量计算</span></span><br><span class="line">w = v(:,loc)/sum(v(:,loc));</span><br><span class="line">w = w&#x27;;</span><br><span class="line"><span class="comment">%% DispResult</span></span><br><span class="line"><span class="built_in">disp</span>(<span class="string">&#x27;---------AHP---------&#x27;</span>)</span><br><span class="line"><span class="built_in">disp</span>([<span class="string">&#x27;CI: &#x27;</span> num2str(CI)]) <span class="comment">% 一致性指标</span></span><br><span class="line"><span class="built_in">disp</span>([<span class="string">&#x27;CR: &#x27;</span> num2str(CR)]) <span class="comment">% 一致性比率</span></span><br><span class="line"><span class="built_in">disp</span>([<span class="string">&#x27;CR_Result: &#x27;</span> num2str(CR_Result)]) <span class="comment">% 一致性检验结果</span></span><br><span class="line"><span class="keyword">if</span> CR_Result == <span class="string">&#x27;Pass&#x27;</span> <span class="comment">% 若一致性检验通过则输出特征值和权向量</span></span><br><span class="line">    <span class="built_in">disp</span>([<span class="string">&#x27;lambda: &#x27;</span> num2str(r)]) <span class="comment">% 特征值</span></span><br><span class="line">    <span class="built_in">disp</span>([<span class="string">&#x27;w: &#x27;</span> num2str(w)]) <span class="comment">% 权向量</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><ul>
+<li>方法二：算术平均法求权重</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>将判断矩阵按照列归一化$\to$将归一化的结果按行求和$\to$每个元素除以n</p>
+</blockquote>
+<script type="math/tex; mode=display">
+w_i =  \frac{1}{n}\sum\limits_{j=1}^n\frac{a_{ij}}{\sum\limits^n_{k=1}a_{kj}}\quad\quad(i=1,2,\cdots,n)</script><ul>
+<li>对指标层/方案层的内容构建<ul>
+<li>每一个准则层性质中 多个指标间的判断矩阵并进行AHP（多个准则，每个准则指向多个指标）</li>
+<li>每一个准则层性质的 每个方案间的判断矩阵并进行AHP（多个准则，多个主责指向多个方案）</li>
+</ul>
+</li>
+<li>将准则层/方案层的每一个准则性质的$w$转成行向量<ul>
+<li>准则层的所有值$w$值构成权向量res_B</li>
+<li>方案层纵向拼接，所得的即为方案曾的权矩阵res_B，</li>
+</ul>
+</li>
+<li>计算最终得分/综合权重<ul>
+<li>指标：res_A(指标层集的大类准则)$\times$res_B所得结果</li>
+<li>方案：res_A$\times$res_B得到综合权重res_Z</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="二、熵权法-EWM"><a href="#二、熵权法-EWM" class="headerlink" title="二、熵权法 EWM"></a>二、熵权法 EWM</h2><blockquote>
+<p>学习源Video:<a href="https://www.bilibili.com/video/BV1qy4y1a7JJ?p=24&amp;vd_source=1437b1798845fbcba4cf09d5a889e546">Bilibili-ln异教徒 <strong>EWM</strong></a></p>
+</blockquote>
+<ul>
+<li><p>数据的归一化处理</p>
+<blockquote>
+<p>由于各项指标计量单位并不统一，因此在计算综合权重前先要对它进行标准化处理，即把指标的绝对值转化为相对值，并令 $x{\small ij} = |x{\small ij}|$ ，从而解决各项不同质指标的同质化问题。</p>
+</blockquote>
+<ul>
+<li><p>方法一：</p>
+<p>由于正向指标和负向指标数值代表的含义不同（正向指标数值越高越好，负向指标数值越低越好），因此对于高低需求指标应当采取不同的算法进行数据标准化处理，具体处理方法为 :</p>
+<p>对于正向指标：</p>
+<script type="math/tex; mode=display">
+x_{ij} = 0.998\frac{x_{ij}-\min\{x_{1j},\cdots,x_{nj}\}}{\max\{x_{1j},\cdots,x_{nj}\}-\min\{x_{1j},\cdots,x_{nj}\}}+0.002</script><p>对于负向指标：</p>
+<script type="math/tex; mode=display">
+x_{ij} = 0.998\frac{\max\{x_{1j},\cdots,x_{nj}\}-x_{ij}}{\max\{x_{1j},\cdots,x_{nj}\}-\min\{x_{1j},\cdots,x_{nj}\}}+0.002</script></li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>通常会采用一些稍微小一点的值来代替 0 和 1，以便更好地保留原始数据的分布特征。</p>
+<p>且直接使用 0 和 1 作为归一化后的极值，可能会导致数据过于集中在边界附近，失去了部分信息。</p>
+</blockquote>
+<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line"><span class="comment">% Matlab的归一化自定义函数 # Gy.m</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">y</span> = <span class="title">Gy</span><span class="params">(x,type,ymin,ymax)</span></span></span><br><span class="line"><span class="comment">% 实现正向或负向指标归一化，返回归一化后的数据矩阵</span></span><br><span class="line"><span class="comment">% x为原始数据矩阵，一行代表一个样本，每列代表一种指标</span></span><br><span class="line"><span class="comment">% type设定正向指标1，负向指标2</span></span><br><span class="line"><span class="comment">% ymin，ymax为归一化的区间端点</span></span><br><span class="line">[n, m] = <span class="built_in">size</span>(x);</span><br><span class="line">y = <span class="built_in">zeros</span>(n,m);</span><br><span class="line">xmin = <span class="built_in">min</span>(x);</span><br><span class="line">xmax = <span class="built_in">max</span>(x);</span><br><span class="line"><span class="keyword">switch</span> <span class="built_in">type</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> <span class="built_in">j</span>=<span class="number">1</span>:m</span><br><span class="line">            y(:,<span class="built_in">j</span>)=(ymax-ymin)*(x(:,<span class="built_in">j</span>)-xmin(<span class="built_in">j</span>))/(xmax(<span class="built_in">j</span>)-xmin(<span class="built_in">j</span>))+ymin;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    case2</span><br><span class="line">        <span class="keyword">for</span> <span class="built_in">j</span>=<span class="number">1</span>:m</span><br><span class="line">            y(:,<span class="built_in">j</span>)=(ymax-ymin)*(xmax(<span class="built_in">j</span>)-x(:,<span class="built_in">j</span>))/(xmax(<span class="built_in">j</span>)-xmin(<span class="built_in">j</span>))+ymin;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>方法二：Python scikit-learn MinMaxScaler</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 数据归一化(sklearn)</span></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> MinMaxScaler</span><br><span class="line">data = [[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],</span><br><span class="line">        [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>],</span><br><span class="line">        [<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>],]</span><br><span class="line"><span class="comment"># 如果data为单列则需添加.values.reshape(-1,1)</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;data:&#x27;</span>,data[:<span class="number">5</span>]) <span class="comment"># 展示前五个数据</span></span><br><span class="line"></span><br><span class="line">MM_Scaler = MinMaxScaler(feature_range=(<span class="number">0</span>,<span class="number">1</span>)) <span class="comment"># 默认缩放范围(0,1)</span></span><br><span class="line">MMres = MM_Scaler.fit_transform(data)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;MMres:&#x27;</span>,np.<span class="built_in">round</span>(MMres[:<span class="number">5</span>,],<span class="number">2</span>)) <span class="comment"># 展示前五个数据,保留3位小数</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>计算第$j$项指标下第$i$方案指标值的比重$p_{ij}$</p>
+<script type="math/tex; mode=display">
+p_{ij} = \frac{x_{ij}}{\sum\limits^n_{i=1}x_{ij}}\quad(j=1,2,\cdots,m)</script></li>
+<li><p>计算第$j$项指标的熵值$e_j$</p>
+<script type="math/tex; mode=display">
+e_j = -k\sum^n_{i=1}p_{ij}\ln p_{ij}\quad(j=1,2,\cdots,m)</script><p>其中$k=\dfrac{1}{\ln(n)}$，满足$e_j\ge 0$</p>
+</li>
+<li><p>计算信息熵冗余度$g_{j}$</p>
+<script type="math/tex; mode=display">
+g_j = 1-e_j\quad(j=1,2,\cdots,m)</script></li>
+<li><p>计算各项指标权重$w_j$</p>
+</li>
+</ul>
+<script type="math/tex; mode=display">
+w_j =\frac{g_j}{\sum\limits^m_{j=1}g_j}\quad(j=1,2,\cdots,m)</script><ul>
+<li>计算综合评分$S_i$<script type="math/tex; mode=display">
+S_i = \sum^m_{j=1}w_jx_{ij}</script></li>
+</ul>
+<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line">clear</span><br><span class="line">clc</span><br><span class="line"><span class="comment">%% DataLoad</span></span><br><span class="line">data = xlsread(<span class="string">&#x27;./HouseData.xlsx&#x27;</span>);</span><br><span class="line"><span class="comment">%% 归一化</span></span><br><span class="line">ind = <span class="built_in">ones</span>(<span class="built_in">size</span>(data,<span class="number">2</span>),<span class="number">1</span>); <span class="comment">% data列数作为RowCount,ColCount=1</span></span><br><span class="line"><span class="comment">% indArr的建立，正向写1，负向写2，在此处默认都是正向指标，所以建立全一的纵向Arr</span></span><br><span class="line"></span><br><span class="line">[n, m] = <span class="built_in">size</span>(data); <span class="comment">% n个样本，m个指标</span></span><br><span class="line"><span class="keyword">for</span> <span class="built_in">j</span> = <span class="number">1</span>:m</span><br><span class="line">    <span class="keyword">if</span> ind(<span class="built_in">j</span>) == <span class="number">1</span> <span class="comment">% 正向指标的归一化</span></span><br><span class="line">        X(:,<span class="built_in">j</span>) = Gy(data(:,<span class="built_in">j</span>),<span class="number">1</span>,<span class="number">0.002</span>,<span class="number">1</span>); <span class="comment">% 归一化最低值范围不能为0</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">else</span> <span class="comment">% 负向指标的归一化</span></span><br><span class="line">        X(:,<span class="built_in">j</span>) = Gy(data(:,<span class="built_in">j</span>),<span class="number">2</span>,<span class="number">0.002</span>,<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="comment">%% 熵权法求取权向量</span></span><br><span class="line"><span class="comment">% 计算第j个指标下，第i个样本占该指标的比重p(i,j)</span></span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span>:n</span><br><span class="line">    <span class="keyword">for</span> <span class="built_in">j</span> = <span class="number">1</span>:m</span><br><span class="line">        p(<span class="built_in">i</span>,<span class="built_in">j</span>) = X(<span class="built_in">i</span>,<span class="built_in">j</span>)/sum(X(:,<span class="built_in">j</span>));</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="comment">% 计算第j个指标的熵值e(j)</span></span><br><span class="line">k = <span class="number">1</span>/<span class="built_in">log</span>(n);</span><br><span class="line"><span class="keyword">for</span> <span class="built_in">j</span> = <span class="number">1</span>:m</span><br><span class="line">    e(<span class="built_in">j</span>) = -k * sum(p(:,<span class="built_in">j</span>).*<span class="built_in">log</span>(p(:,<span class="built_in">j</span>)));</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line">g = <span class="built_in">ones</span>(<span class="number">1</span>,m)-e; <span class="comment">% 计算信息熵冗余度</span></span><br><span class="line">w = g./sum(g); <span class="comment">% 求权值w</span></span><br><span class="line">s = X*w&#x27;; <span class="comment">% 求综合评分</span></span><br><span class="line"><span class="comment">% DispPlot</span></span><br><span class="line"><span class="built_in">disp</span>(<span class="string">&#x27;Gyed_Data:&#x27;</span>);<span class="built_in">disp</span>(X)</span><br><span class="line"><span class="built_in">disp</span>(<span class="string">&#x27;p(i,j):&#x27;</span>);<span class="built_in">disp</span>(p)</span><br><span class="line"><span class="built_in">disp</span>(<span class="string">&#x27;e(j):&#x27;</span>);<span class="built_in">disp</span>(e)</span><br><span class="line"><span class="built_in">disp</span>(<span class="string">&#x27;g(j):&#x27;</span>);<span class="built_in">disp</span>(g)</span><br><span class="line"><span class="built_in">disp</span>(<span class="string">&#x27;w(j):&#x27;</span>);<span class="built_in">disp</span>(w)</span><br><span class="line"><span class="built_in">disp</span>(<span class="string">&#x27;s(j):&#x27;</span>);<span class="built_in">disp</span>(s)</span><br><span class="line"><span class="built_in">plot</span>(<span class="number">2017</span>:<span class="number">-1</span>:<span class="number">2010</span>,s)</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>数学建模</category>
+        <category>评价模型</category>
+      </categories>
+      <tags>
+        <tag>AHP层次分析法</tag>
+        <tag>EWM熵权法</tag>
+        <tag>MATLAB</tag>
+        <tag>评价模型</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>数模M03-Kmeans聚类论文可使用部分</title>
     <url>/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E8%81%9A%E7%B1%BB%E5%88%86%E6%9E%90/M03-KmeansPaper/</url>
     <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
@@ -568,6 +517,57 @@ S = \int_{0.15}^{0.18}v(t)\,{\rm d}t</script></blockquote>
         <tag>Kmeans++</tag>
         <tag>Python</tag>
         <tag>Paper</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数模M02-Kmeans聚类</title>
+    <url>/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E8%81%9A%E7%B1%BB%E5%88%86%E6%9E%90/M02-Kmeans/</url>
+    <content><![CDATA[<h1 id="KMeans聚类法"><a href="#KMeans聚类法" class="headerlink" title="KMeans聚类法"></a>KMeans聚类法</h1><h2 id="一、Kmeans内容"><a href="#一、Kmeans内容" class="headerlink" title="一、Kmeans内容"></a>一、Kmeans内容</h2><blockquote>
+<p>Video:~<a href="https://www.bilibili.com/video/BV1qy4y1a7JJ?p=25&amp;vd_source=1437b1798845fbcba4cf09d5a889e546">Bilibili-ln异教徒 <strong>Kmeans</strong></a></p>
+</blockquote>
+<ul>
+<li><p>随机生成k个聚类中心点</p>
+<ul>
+<li><p>其中k值的确定可以采用“手肘法”，通过分析不同k值下误差平方和(SSE)的值的变化，选取其”肘部“作为合适的聚类数目</p>
+<script type="math/tex; mode=display">
+SSE = \sum_{i=1}^k\sum_{p\in C_i}|p-m_i|^2</script><p>其中$C_i$是第i个类，p是$C_i$中的样本点，$m_i$是$C_i$的质心($C_i$中所有样本点的均值)，SSE是所有样本的聚类误差，代表了聚类效果的好坏。通过找寻SSE的值的下降幅度剧烈减小的位置来判断合适的k取值</p>
+<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">SSE</span> = <span class="title">funcSSE</span><span class="params">(data,total)</span> % <span class="title">data</span>为数据,<span class="title">total</span>为要划分的类别总数</span></span><br><span class="line">n = <span class="built_in">size</span>(data,<span class="number">2</span>); <span class="comment">% data的ColCount</span></span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">2</span>:total</span><br><span class="line">    k = <span class="built_in">i</span>;</span><br><span class="line">    [label,c] = kmeans(data,k);</span><br><span class="line">    temp = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> <span class="built_in">j</span> = <span class="number">1</span>:<span class="built_in">i</span> <span class="comment">% 按照分类数量遍历</span></span><br><span class="line">        loc = <span class="built_in">find</span>(label == <span class="built_in">j</span>) <span class="comment">% 找到每个类别所对应的行标(Row)，形成一个Arr</span></span><br><span class="line">        <span class="keyword">for</span> j2 = <span class="number">1</span>:n <span class="comment">% 按照Col遍历</span></span><br><span class="line">            temp = temp + sum((data(loc,j2)-c(<span class="built_in">j</span>,j2)).^<span class="number">2</span>)</span><br><span class="line">            <span class="comment">% 通过loc得到一个row区域内的所有label与c索引相同的数据</span></span><br><span class="line">            <span class="comment">% 依次loc所对应数据块中的每一列与c同列的数据相减并求点成的平方</span></span><br><span class="line">            <span class="comment">% 随后sum求和处理后每一列loc数据的和并且与先前的其他列数据结果相加</span></span><br><span class="line">            <span class="comment">% 将每一个label相同的data和c的结果再相加，全部用temp承接数值</span></span><br><span class="line">            <span class="comment">% 实际上是将原本每一数据点同其c的减法求平方(距离)过程纵向化了</span></span><br><span class="line">            <span class="comment">% 用于矩阵运算的遍历，以及其最终得到的结果就是每个数据每个坐标的距离</span></span><br><span class="line">            <span class="comment">% 所以可以用这种简单的方法Coding</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    SSE(<span class="built_in">i</span><span class="number">-1</span>) = temp <span class="comment">% 令SSE这个Arr的数值仍然从Index=1开始</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>根据聚类中心点，将数据分为k类。分类的原则是数据离哪个中心点最近就将他分为哪一类别</p>
+<ul>
+<li><p>距离的判断采用欧式距离(欧几里得距离):</p>
+<p>令各类中心为 $\mu_j$ ,计算各个数据到各类中心点的距离为$(x-\mu_j)^2$</p>
+</li>
+</ul>
+</li>
+<li><p>根据分好的类别的数据，重新计算聚类的类别中心点</p>
+</li>
+<li><p>不断重复上述的两步，直到中心点不再变化，得到聚类结果</p>
+<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line">clear</span><br><span class="line">clc</span><br><span class="line"><span class="comment">%% 数据导入</span></span><br><span class="line">data = xlsread(<span class="string">&#x27;./k-means.xlsx&#x27;</span>);</span><br><span class="line"><span class="comment">%% SSE手肘法判断</span></span><br><span class="line">km = <span class="number">10</span>; <span class="comment">% 所需的k最大测试值</span></span><br><span class="line">SSE = funcSSE(data,km);</span><br><span class="line"><span class="built_in">plot</span>(<span class="number">2</span>:km,SSE)</span><br><span class="line">k = <span class="number">5</span>; <span class="comment">% 选择 k=5</span></span><br><span class="line"><span class="comment">%% Kmeans聚类</span></span><br><span class="line">[label,center] = kmeans(data,k)</span><br><span class="line"><span class="comment">%% DispPlot</span></span><br><span class="line"><span class="built_in">figure</span></span><br><span class="line"><span class="built_in">scatter</span>(<span class="number">0</span>,data(label==<span class="number">1</span>),<span class="string">&#x27;cyan&#x27;</span>)</span><br><span class="line"><span class="built_in">hold</span> on</span><br><span class="line"><span class="built_in">scatter</span>(<span class="number">0</span>,data(label==<span class="number">2</span>),<span class="string">&#x27;b&#x27;</span>)</span><br><span class="line"><span class="built_in">scatter</span>(<span class="number">0</span>,data(label==<span class="number">3</span>),<span class="string">&#x27;g&#x27;</span>)</span><br><span class="line"><span class="built_in">scatter</span>(<span class="number">0</span>,data(label==<span class="number">4</span>),<span class="string">&#x27;y&#x27;</span>)</span><br><span class="line"><span class="built_in">scatter</span>(<span class="number">0</span>,data(label==<span class="number">5</span>),<span class="string">&#x27;black&#x27;</span>)</span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span>:k</span><br><span class="line">    <span class="built_in">plot</span>([<span class="number">-0.1</span>,<span class="number">0.1</span>],[center(<span class="built_in">i</span>),center(<span class="built_in">i</span>)],<span class="string">&#x27;r&#x27;</span>)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line">xlim([<span class="number">-1</span>,<span class="number">1</span>])</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="二、Python可使用代码"><a href="#二、Python可使用代码" class="headerlink" title="二、Python可使用代码"></a>二、Python可使用代码</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> tqdm <span class="keyword">import</span> tqdm</span><br><span class="line"><span class="keyword">import</span> sklearn</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">plt.rcParams[<span class="string">&#x27;font.family&#x27;</span>] = <span class="string">&#x27;Consolas&#x27;</span></span><br><span class="line">plt.rcParams[<span class="string">&#x27;font.sans-serif&#x27;</span>] = [<span class="string">&#x27;Consolas&#x27;</span>]</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 随机数据</span></span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line">random.seed(<span class="number">66</span>)</span><br><span class="line">x = [random.randint(<span class="number">1</span>,<span class="number">100</span>) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">100</span>)]</span><br><span class="line">y = [random.randint(<span class="number">1</span>,<span class="number">100</span>) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">100</span>)]</span><br><span class="line">data=<span class="built_in">list</span>(<span class="built_in">zip</span>(x,y))</span><br><span class="line">df = pd.DataFrame(data)</span><br><span class="line">df.columns = [<span class="string">&#x27;v1&#x27;</span>, <span class="string">&#x27;v2&#x27;</span>]</span><br><span class="line">df.head()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">plt.scatter(x, y)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;X&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;Y&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 手肘法判断图</span></span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> silhouette_score</span><br><span class="line"><span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> KMeans</span><br><span class="line"></span><br><span class="line">score01 = [ ]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">2</span>, <span class="number">7</span>):</span><br><span class="line">    km1 = KMeans(n_clusters=i, random_state=<span class="number">42</span>)</span><br><span class="line">    kcat1 = km1.fit_predict(df)</span><br><span class="line">    score = silhouette_score(df, kcat1)</span><br><span class="line">    score01.append(score)</span><br><span class="line">plt.plot(<span class="built_in">range</span>(<span class="number">2</span>, <span class="number">7</span>),score01)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> KMeans</span><br><span class="line">n = <span class="number">4</span></span><br><span class="line">km = KMeans(n_clusters=n, random_state=<span class="number">42</span>)</span><br><span class="line">km.fit(df)</span><br><span class="line">centers = km.cluster_centers_</span><br><span class="line"><span class="built_in">print</span>(centers)</span><br><span class="line">kcat = km.predict(df)</span><br><span class="line">df_cat = pd.concat([df,pd.DataFrame(kcat)],axis=<span class="number">1</span>)</span><br><span class="line">df_cat.columns = <span class="built_in">list</span>(df.columns) + [<span class="string">&#x27;Cate&#x27;</span>]</span><br><span class="line">df_cat.head()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">colorg1 = [<span class="string">&#x27;#1f77b4&#x27;</span>, <span class="string">&#x27;#2ca02c&#x27;</span>, <span class="string">&#x27;#ff7f0e&#x27;</span>, <span class="string">&#x27;#7f7f7f&#x27;</span>, <span class="string">&#x27;#9467bd&#x27;</span>]</span><br><span class="line">colorg2 = [<span class="string">&#x27;#2ecc71&#x27;</span>, <span class="string">&#x27;#3498db&#x27;</span>, <span class="string">&#x27;#e74c3c&#x27;</span>, <span class="string">&#x27;#9b59b6&#x27;</span>, <span class="string">&#x27;#f39c12&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">    plt.scatter(df_cat[df_cat[<span class="string">&#x27;Cate&#x27;</span>] == i].iloc[:,<span class="number">0</span>],</span><br><span class="line">                df_cat[df_cat[<span class="string">&#x27;Cate&#x27;</span>] == i].iloc[:,<span class="number">1</span>],</span><br><span class="line">                label = <span class="string">f&#x27;Cate<span class="subst">&#123;i&#125;</span>&#x27;</span>,color = colorg1[i],)</span><br><span class="line">    <span class="keyword">for</span> index, row <span class="keyword">in</span> df_cat[df_cat[<span class="string">&#x27;Cate&#x27;</span>] == i].iterrows():</span><br><span class="line">        plt.plot([row[<span class="string">&#x27;v1&#x27;</span>], centers[i, <span class="number">0</span>]], [row[<span class="string">&#x27;v2&#x27;</span>], centers[i, <span class="number">1</span>]], color=colorg1[i])</span><br><span class="line"></span><br><span class="line">plt.scatter(centers[:,<span class="number">0</span>],centers[:,<span class="number">1</span>],color = <span class="string">&#x27;r&#x27;</span>, s = <span class="number">100</span>, zorder = <span class="number">5</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;KMeans Result&#x27;</span>,size = <span class="number">20</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;V1&#x27;</span>, size = <span class="number">15</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;V2&#x27;</span>, size = <span class="number">15</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.savefig(<span class="string">r&#x27;./PIC.svg&#x27;</span>,dpi=<span class="number">500</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df_cat.to_csv(<span class="string">r&#x27;./kmoutput.csv&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="三、Python展开Kmeans聚类"><a href="#三、Python展开Kmeans聚类" class="headerlink" title="三、Python展开Kmeans聚类"></a>三、Python展开Kmeans聚类</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 生成测试数据</span></span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt </span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line">random.seed(<span class="number">1</span>)</span><br><span class="line">kdatax = [random.randint(<span class="number">1</span>,<span class="number">30</span>) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">30</span>)]</span><br><span class="line">kdatay = [random.randint(<span class="number">1</span>,<span class="number">30</span>) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">30</span>)]</span><br><span class="line">kdata = pd.DataFrame([kdatax,kdatay]).transpose()</span><br><span class="line">plt.plot(kdata.iloc[:,<span class="number">0</span>], kdata.iloc[:,<span class="number">1</span>], <span class="string">&#x27;ro&#x27;</span>)</span><br><span class="line">kdata.head()</span><br><span class="line"></span><br><span class="line">colorg1 = [<span class="string">&#x27;#1f77b4&#x27;</span>, <span class="string">&#x27;#2ca02c&#x27;</span>, <span class="string">&#x27;#ff7f0e&#x27;</span>, <span class="string">&#x27;#7f7f7f&#x27;</span>, <span class="string">&#x27;#9467bd&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">show</span>(<span class="params">kdata, cen, ax, k</span>):</span><br><span class="line">    plt.plot()</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">Dep</span>(<span class="params">ax, t, cen,</span>):</span><br><span class="line">    pls = [ ]</span><br><span class="line">    <span class="keyword">for</span> d <span class="keyword">in</span> t:</span><br><span class="line">        dval = [ ]</span><br><span class="line">        dsum = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(cen)):</span><br><span class="line">            dval.append(np.sqrt(<span class="built_in">sum</span>((cen[i] - d)**<span class="number">2</span>)))</span><br><span class="line">        place =  dval.index(<span class="built_in">min</span>(dval))</span><br><span class="line">        pls.append(place)</span><br><span class="line">    <span class="keyword">return</span> pls</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">Init_cen</span>(<span class="params">kdata, k, ax</span>):</span><br><span class="line">    centers = [ ]</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(k):</span><br><span class="line">        subcenters = [ ]</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(ax):</span><br><span class="line">            maxval = (kdata.iloc[:,i].<span class="built_in">max</span>())</span><br><span class="line">            minval = (kdata.iloc[:,i].<span class="built_in">min</span>())</span><br><span class="line">            subcenters.append(random.randint(minval,maxval))</span><br><span class="line">        centers.append(subcenters)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Init:&#x27;</span>,centers)</span><br><span class="line">    <span class="keyword">return</span> centers</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">KmeansH</span>(<span class="params">kdata, k, seed = <span class="number">0</span>,centers= [<span class="number">0</span>],co = <span class="number">0</span>, ax = <span class="number">0</span>, karray = <span class="number">0</span></span>):</span><br><span class="line">    <span class="keyword">if</span> ax ==<span class="number">0</span>:</span><br><span class="line">        ax = <span class="built_in">len</span>(kdata.columns)</span><br><span class="line">        karray = np.array(kdata)</span><br><span class="line">        <span class="keyword">if</span> seed !=<span class="number">0</span>:</span><br><span class="line">            random.seed(seed)</span><br><span class="line">    <span class="keyword">if</span> co == <span class="number">0</span>:</span><br><span class="line">        centers = Init_cen(kdata, k, ax)</span><br><span class="line">        co = <span class="number">1</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        co += <span class="number">1</span></span><br><span class="line">    label = Dep(ax, karray, centers)</span><br><span class="line">    kdatanew = pd.concat((kdata,pd.DataFrame(label)),axis=<span class="number">1</span>)</span><br><span class="line">    </span><br><span class="line">    cn1 = [ ]     </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(k):</span><br><span class="line">        cn2 = [ ]</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(ax):</span><br><span class="line">            cn2.append(np.mean(kdatanew[kdatanew.iloc[:,ax]==i].iloc[:,j]))</span><br><span class="line">        cn1.append(cn2)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(co,centers)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">abs</span>((np.array(cn1) - np.array(centers)).<span class="built_in">sum</span>()) &lt;= <span class="number">1e-9</span>:</span><br><span class="line">        random.seed()</span><br><span class="line">        <span class="keyword">return</span> kdatanew</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> KmeansH(kdata, k, seed,cn1 , co, ax, karray)</span><br><span class="line">    </span><br><span class="line">k=<span class="number">4</span></span><br><span class="line">kdatak = KmeansH(kdata,k,<span class="number">42</span>)</span><br><span class="line"></span><br><span class="line">centers = pd.DataFrame([[<span class="number">25.0</span>, <span class="number">10.416666666666666</span>], [<span class="number">9.555555555555555</span>, <span class="number">24.666666666666668</span>], [<span class="number">14.166666666666666</span>, <span class="number">10.0</span>], [<span class="number">3.0</span>, <span class="number">5.333333333333333</span>]])</span><br><span class="line">centers</span><br><span class="line"></span><br><span class="line">colorg1 = [<span class="string">&#x27;#1f77b4&#x27;</span>, <span class="string">&#x27;#2ca02c&#x27;</span>, <span class="string">&#x27;#ff7f0e&#x27;</span>, <span class="string">&#x27;#7f7f7f&#x27;</span>, <span class="string">&#x27;#9467bd&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(k):</span><br><span class="line"></span><br><span class="line">    plt.plot(kdatak[kdatak.iloc[:,<span class="number">2</span>]==i].iloc[:,<span class="number">0</span>],</span><br><span class="line">             kdatak[kdatak.iloc[:,<span class="number">2</span>]==i].iloc[:,<span class="number">1</span>],</span><br><span class="line">             <span class="string">&#x27;o&#x27;</span>,color = colorg1[i])</span><br><span class="line"></span><br><span class="line">plt.plot(centers.iloc[:,<span class="number">0</span>],centers.iloc[:,<span class="number">1</span>],<span class="string">&#x27;r*&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>数学建模</category>
+        <category>聚类分析</category>
+      </categories>
+      <tags>
+        <tag>MATLAB</tag>
+        <tag>聚类</tag>
+        <tag>Kmeans</tag>
+        <tag>Kmeans++</tag>
+        <tag>Python</tag>
       </tags>
   </entry>
 </search>
