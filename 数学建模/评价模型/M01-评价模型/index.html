@@ -1,17 +1,17 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>数模M01-评价模型 | XLY23333 Blog</title><meta name="author" content="XLY23333"><meta name="copyright" content="XLY23333"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="评价模型 一、层次分析法 AHP  学习源Video:Bilibili-ln异教徒 AHP  作用：层次分析法用来进行决策，求指标的权重 模型建立步骤：   建立层次结构  将决策问题分为三个部分：目标层、准则层和指标层&#x2F;方案层     对准则层构建判断矩阵  判断矩阵为两两指标重要性的判断，一般判别矩阵构造如下： $$ A&#x3D;(a_{ij}){m\times n}&#x3D;\begin{pmatrix}">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>数模M01-评价模型 | XLY23333 Blog</title><meta name="author" content="XLY23333"><meta name="copyright" content="XLY23333"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="评价模型一、层次分析法 AHP 学习源Video:Bilibili-ln异教徒 AHP  作用：层次分析法用来进行决策，求指标的权重 模型建立步骤：  建立层次结构  将决策问题分为三个部分：目标层、准则层和指标层&#x2F;方案层    对准则层构建判断矩阵  判断矩阵为两两指标重要性的判断，一般判别矩阵构造如下：  A&#x3D;(a_{ij}) _{m\times n}&#x3D; \begin{pmatrix} a_{">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数模M01-评价模型">
 <meta property="og:url" content="https://xly23333.xyz/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E8%AF%84%E4%BB%B7%E6%A8%A1%E5%9E%8B/M01-%E8%AF%84%E4%BB%B7%E6%A8%A1%E5%9E%8B/index.html">
 <meta property="og:site_name" content="XLY23333 Blog">
-<meta property="og:description" content="评价模型 一、层次分析法 AHP  学习源Video:Bilibili-ln异教徒 AHP  作用：层次分析法用来进行决策，求指标的权重 模型建立步骤：   建立层次结构  将决策问题分为三个部分：目标层、准则层和指标层&#x2F;方案层     对准则层构建判断矩阵  判断矩阵为两两指标重要性的判断，一般判别矩阵构造如下： $$ A&#x3D;(a_{ij}){m\times n}&#x3D;\begin{pmatrix}">
+<meta property="og:description" content="评价模型一、层次分析法 AHP 学习源Video:Bilibili-ln异教徒 AHP  作用：层次分析法用来进行决策，求指标的权重 模型建立步骤：  建立层次结构  将决策问题分为三个部分：目标层、准则层和指标层&#x2F;方案层    对准则层构建判断矩阵  判断矩阵为两两指标重要性的判断，一般判别矩阵构造如下：  A&#x3D;(a_{ij}) _{m\times n}&#x3D; \begin{pmatrix} a_{">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://raw.githubusercontent.com/XLY23333/picture01/main/img01/Met-XLY.jpg">
 <meta property="article:published_time" content="2024-02-14T15:07:00.000Z">
-<meta property="article:modified_time" content="2024-02-15T06:28:34.314Z">
+<meta property="article:modified_time" content="2024-02-15T06:39:46.158Z">
 <meta property="article:author" content="XLY23333">
+<meta property="article:tag" content="MATLAB">
 <meta property="article:tag" content="AHP层次分析法">
 <meta property="article:tag" content="EWM熵权法">
-<meta property="article:tag" content="MATLAB">
 <meta property="article:tag" content="评价模型">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/XLY23333/picture01/main/img01/Met-XLY.jpg"><link rel="shortcut icon" href="https://raw.githubusercontent.com/XLY23333/picture01/main/img01/MetE-XLY.png"><link rel="canonical" href="https://xly23333.xyz/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E8%AF%84%E4%BB%B7%E6%A8%A1%E5%9E%8B/M01-%E8%AF%84%E4%BB%B7%E6%A8%A1%E5%9E%8B/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.12.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
@@ -59,7 +59,7 @@
   isHome: false,
   isHighlightShrink: false,
   isToc: true,
-  postUpdate: '2024-02-15 14:28:34'
+  postUpdate: '2024-02-15 14:39:46'
 }</script><script>(win=>{
       win.saveToLocal = {
         set: (key, value, ttl) => {
@@ -156,90 +156,47 @@
         }
       }
       detectApple()
-    })(window)</script><meta name="generator" content="Hexo 7.1.1"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://raw.githubusercontent.com/XLY23333/picture01/main/img01/Met-XLY.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">2</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://raw.githubusercontent.com/XLY23333/picture01/main/Blog01/100590572_p0.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="XLY23333 Blog"><span class="site-name">XLY23333 Blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">数模M01-评价模型</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-02-14T15:07:00.000Z" title="发表于 2024-02-14 23:07:00">2024-02-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-02-15T06:28:34.314Z" title="更新于 2024-02-15 14:28:34">2024-02-15</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/">数学建模</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E8%AF%84%E4%BB%B7%E6%A8%A1%E5%9E%8B/">评价模型</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="数模M01-评价模型"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1>评价模型</h1>
-<h2 id="一、层次分析法-AHP">一、层次分析法 AHP</h2>
-<blockquote>
+    })(window)</script><meta name="generator" content="Hexo 7.1.1"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://raw.githubusercontent.com/XLY23333/picture01/main/img01/Met-XLY.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://raw.githubusercontent.com/XLY23333/picture01/main/Blog01/100590572_p0.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="XLY23333 Blog"><span class="site-name">XLY23333 Blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">数模M01-评价模型</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-02-14T15:07:00.000Z" title="发表于 2024-02-14 23:07:00">2024-02-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-02-15T06:39:46.158Z" title="更新于 2024-02-15 14:39:46">2024-02-15</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/">数学建模</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E8%AF%84%E4%BB%B7%E6%A8%A1%E5%9E%8B/">评价模型</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="数模M01-评价模型"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="评价模型"><a href="#评价模型" class="headerlink" title="评价模型"></a>评价模型</h1><h2 id="一、层次分析法-AHP"><a href="#一、层次分析法-AHP" class="headerlink" title="一、层次分析法 AHP"></a>一、层次分析法 AHP</h2><blockquote>
 <p>学习源Video:<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1qy4y1a7JJ?p=23&amp;vd_source=1437b1798845fbcba4cf09d5a889e546">Bilibili-ln异教徒 <strong>AHP</strong></a></p>
 </blockquote>
 <p>作用：层次分析法用来进行决策，求指标的权重</p>
 <p>模型建立步骤：</p>
 <ul>
-<li>
-<p>建立层次结构</p>
+<li><p>建立层次结构</p>
 <ul>
 <li>将决策问题分为三个部分：目标层、准则层和指标层/方案层</li>
 </ul>
-<img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img01/AHPeg01.png" style="zoom: 50%;" />
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img01/AHPeg01.png" style="zoom: 50%;" /></p>
 </li>
-<li>
-<p>对准则层构建判断矩阵</p>
+<li><p>对准则层构建判断矩阵</p>
 <ul>
-<li>判断矩阵为两两指标重要性的判断，一般判别矩阵构造如下：<br>
-$$<br>
-A=(a_{ij})<em>{m\times n}=\begin{pmatrix}<br>
-a</em>{11} &amp; a_{12} &amp; \cdots &amp; a_{1n} \<br>
-a_{21} &amp; a_{22} &amp; \cdots &amp; a_{2n} \<br>
-\vdots &amp; \vdots &amp; \ddots &amp; \vdots \<br>
-a_{n1} &amp; a_{n2} &amp; \cdots &amp; a_{nn} \<br>
-\end{pmatrix}<br>
-$$</li>
+<li><p>判断矩阵为两两指标重要性的判断，一般判别矩阵构造如下：</p>
+<script type="math/tex; mode=display">
+A=(a_{ij}) _{m\times n}=
+\begin{pmatrix}
+a_{11} & a_{12} & \cdots & a_{1n} \\
+a_{21} & a_{22} & \cdots & a_{2n} \\
+\vdots & \vdots & \ddots & \vdots \\
+a_{n1} & a_{n2} & \cdots & a_{nn}
+\end{pmatrix}</script></li>
 </ul>
 <p>九级标度法表格</p>
-<table>
-<thead>
-<tr>
-<th>标度</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>i和j具有<strong>相同</strong>的重要性(Eg:主对角线元素)</td>
-</tr>
-<tr>
-<td>3</td>
-<td>i比j<strong>稍微</strong>重要</td>
-</tr>
-<tr>
-<td>5</td>
-<td>i比j<strong>明显</strong>重要</td>
-</tr>
-<tr>
-<td>7</td>
-<td>i比j<strong>强烈</strong>重要</td>
-</tr>
-<tr>
-<td>9</td>
-<td>i比j<strong>极端</strong>重要</td>
-</tr>
-<tr>
-<td>2、4、6、8</td>
-<td>上述标度的<strong>中间量</strong></td>
-</tr>
-<tr>
-<td>$\frac{1}{标度}$</td>
-<td>矩阵下三角<strong>对称位置</strong>的值</td>
-</tr>
-</tbody>
-</table>
+<p>| 标度             | 含义                                      |<br>| ———————— | ————————————————————- |<br>| 1                | i和j具有<strong>相同</strong>的重要性(Eg:主对角线元素) |<br>| 3                | i比j<strong>稍微</strong>重要                          |<br>| 5                | i比j<strong>明显</strong>重要                          |<br>| 7                | i比j<strong>强烈</strong>重要                          |<br>| 9                | i比j<strong>极端</strong>重要                          |<br>| 2、4、6、8       | 上述标度的<strong>中间量</strong>                      |<br>| $\frac{1}{标度}$ | 矩阵下三角<strong>对称位置</strong>的值                |</p>
 </li>
-<li>
-<p>一致性检验（特征根法）</p>
+<li><p>一致性检验（特征根法）</p>
 <blockquote>
 <p>在通过主观想法确定两个属性之间的重要性差距标度时，可能出现不一致的情况，需要用一致性检验对所得的判断矩阵进行一致性的检验，确定所得的判断矩阵能够使用</p>
 <p>一致性的例子：A~12~=2, A~13~=2,那么说明1 对 2和3 的重要程度相同，可以推出2和3的重要程度相同，</p>
 <p>​                          即A~23~ = A~32~ =1，如果该值不为1则说明其不一致。</p>
 </blockquote>
-<p>用对应于A的最大特征根（记为$\lambda$）的特征向量（归一化后）作为权向量$w$，即$w$满足<br>
-$$<br>
-A\lambda = \lambda w<br>
-$$<br>
-当 $\lambda = n$ 时，该判断矩阵为一致阵，且任何判断矩阵的最大特征根 $\lambda\ge n$ 。因此，当最大特征根比 $n$ 大得多时，该判断矩阵的不一致程度越严重，所以可以用 $\lambda - n$ 的数值来衡量判断矩阵的不一致程度，并将<br>
-$$<br>
-CI = \frac{\lambda_{\max}-n}{n-1}<br>
-$$<br>
-作为一致性指标，当$CI=0$时判断矩阵为一致阵，并引入随机一致性指标$RI$，$RI$数值如下：</p>
+<p>用对应于A的最大特征根（记为$\lambda$）的特征向量（归一化后）作为权向量$w$，即$w$满足</p>
+<script type="math/tex; mode=display">
+A\lambda = \lambda w</script><p>当 $\lambda = n$ 时，该判断矩阵为一致阵，且任何判断矩阵的最大特征根 $\lambda\ge n$ 。因此，当最大特征根比 $n$ 大得多时，该判断矩阵的不一致程度越严重，所以可以用 $\lambda - n$ 的数值来衡量判断矩阵的不一致程度，并将</p>
+<script type="math/tex; mode=display">
+CI = \frac{\lambda_{\max}-n}{n-1}</script><p>作为一致性指标，当$CI=0$时判断矩阵为一致阵，并引入随机一致性指标$RI$，$RI$数值如下：</p>
+</li>
+</ul>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -266,23 +223,20 @@ $$<br>
 </tr>
 </tbody>
 </table>
-<p>将它的一致性指标$CI$与同阶（指$n$相同）的随机一致性指标$RI$之比称为一致性比率$CR$，当<br>
-$$<br>
-CR = \frac{CI}{RI}&lt;0.1<br>
-$$<br>
-时，认为该判断矩阵的不一致程度在容许范围之内，可以用其特征向量作为权向量。最终得到每个指标的权重结果。</p>
-</li>
-<li>
+</div>
+<p>  将它的一致性指标$CI$与同阶（指$n$相同）的随机一致性指标$RI$之比称为一致性比率$CR$，当</p>
+<script type="math/tex; mode=display">
+  CR = \frac{CI}{RI}<0.1</script><p>  时，认为该判断矩阵的不一致程度在容许范围之内，可以用其特征向量作为权向量。最终得到每个指标的权重结果。</p>
 <ul>
+<li><ul>
 <li>方法一：使用MATLAB的<code>eig()</code>方法直接求得特征根 $v$和特征向量$d$，随后通过求取特征向量和特征值的所在列，计算<code>w = v(:,loc)/sum(v(:,loc));</code>得到转为行向量，即权向量res_A。</li>
 </ul>
 </li>
 </ul>
-<p>​	<em><strong>Matlab-ModelCode</strong></em></p>
+<p>​    <strong><em>Matlab-ModelCode</em></strong></p>
 <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">clear</span><br><span class="line">clc</span><br><span class="line"><span class="comment">%% 判断矩阵导入</span></span><br><span class="line">A = [<span class="number">1</span>   <span class="number">1</span>/<span class="number">4</span> <span class="number">1</span>/<span class="number">4</span> <span class="number">2</span> <span class="number">2</span></span><br><span class="line">     <span class="number">4</span>   <span class="number">1</span>   <span class="number">1</span>   <span class="number">6</span> <span class="number">6</span></span><br><span class="line">     <span class="number">4</span>   <span class="number">1</span>   <span class="number">1</span>   <span class="number">6</span> <span class="number">6</span></span><br><span class="line">     <span class="number">1</span>/<span class="number">2</span> <span class="number">1</span>/<span class="number">6</span> <span class="number">1</span>/<span class="number">6</span> <span class="number">1</span> <span class="number">1</span></span><br><span class="line">     <span class="number">1</span>/<span class="number">2</span> <span class="number">1</span>/<span class="number">6</span> <span class="number">1</span>/<span class="number">6</span> <span class="number">1</span> <span class="number">1</span>]</span><br><span class="line"><span class="comment">%% 一致性检验</span></span><br><span class="line">n = <span class="built_in">length</span>(A);</span><br><span class="line">[v, d] = eig(A); <span class="comment">% 计算特征根和特征向量</span></span><br><span class="line">[temp, loc] = <span class="built_in">max</span>(<span class="built_in">max</span>(d)); <span class="comment">% 返回loc为特征向量的所在列</span></span><br><span class="line">r = temp; <span class="comment">% 得到lambda_max的值</span></span><br><span class="line">CI = (r-n)/(n<span class="number">-1</span>); <span class="comment">% 计算一致性指标CI</span></span><br><span class="line">RI = [<span class="number">0</span> <span class="number">0</span> <span class="number">0.58</span> <span class="number">0.90</span> <span class="number">1.12</span> <span class="number">1.24</span> <span class="number">1.32</span> <span class="number">1.41</span> ... <span class="comment">% 换行输入</span></span><br><span class="line">      <span class="number">1.45</span> <span class="number">1.49</span> <span class="number">1.52</span> <span class="number">1.54</span> <span class="number">1.56</span> <span class="number">1.58</span> <span class="number">1.59</span>]; <span class="comment">% 引入随机一致性指标RI</span></span><br><span class="line">CR = CI/RI(n); <span class="comment">% 计算一致性比率CR</span></span><br><span class="line"><span class="keyword">if</span> CR &lt; <span class="number">0.1</span> || n == <span class="number">2</span> <span class="comment">% 确定其一致性比率&lt;0.1或只含有两个元素，两个元素一定一致</span></span><br><span class="line">    CR_Result = <span class="string">&#x27;Pass&#x27;</span>;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    CR_Result = <span class="string">&#x27;Nope&#x27;</span>;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="comment">%% 权向量计算</span></span><br><span class="line">w = v(:,loc)/sum(v(:,loc));</span><br><span class="line">w = w&#x27;;</span><br><span class="line"><span class="comment">%% DispResult</span></span><br><span class="line"><span class="built_in">disp</span>(<span class="string">&#x27;---------AHP---------&#x27;</span>)</span><br><span class="line"><span class="built_in">disp</span>([<span class="string">&#x27;CI: &#x27;</span> num2str(CI)]) <span class="comment">% 一致性指标</span></span><br><span class="line"><span class="built_in">disp</span>([<span class="string">&#x27;CR: &#x27;</span> num2str(CR)]) <span class="comment">% 一致性比率</span></span><br><span class="line"><span class="built_in">disp</span>([<span class="string">&#x27;CR_Result: &#x27;</span> num2str(CR_Result)]) <span class="comment">% 一致性检验结果</span></span><br><span class="line"><span class="keyword">if</span> CR_Result == <span class="string">&#x27;Pass&#x27;</span> <span class="comment">% 若一致性检验通过则输出特征值和权向量</span></span><br><span class="line">    <span class="built_in">disp</span>([<span class="string">&#x27;lambda: &#x27;</span> num2str(r)]) <span class="comment">% 特征值</span></span><br><span class="line">    <span class="built_in">disp</span>([<span class="string">&#x27;w: &#x27;</span> num2str(w)]) <span class="comment">% 权向量</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
 <ul>
-<li>
-<ul>
+<li><ul>
 <li>方法二：算术平均法求权重</li>
 </ul>
 </li>
@@ -290,53 +244,41 @@ $$<br>
 <blockquote>
 <p>将判断矩阵按照列归一化$\to$将归一化的结果按行求和$\to$每个元素除以n</p>
 </blockquote>
-<p>$$<br>
-w_i =  \frac{1}{n}\sum\limits_{j=1}^n\frac{a_{ij}}{\sum\limits^n_{k=1}a_{kj}}\quad\quad(i=1,2,\cdots,n)<br>
-$$</p>
-<ul>
-<li>对指标层/方案层的内容构建
-<ul>
+<script type="math/tex; mode=display">
+w_i =  \frac{1}{n}\sum\limits_{j=1}^n\frac{a_{ij}}{\sum\limits^n_{k=1}a_{kj}}\quad\quad(i=1,2,\cdots,n)</script><ul>
+<li>对指标层/方案层的内容构建<ul>
 <li>每一个准则层性质中 多个指标间的判断矩阵并进行AHP（多个准则，每个准则指向多个指标）</li>
 <li>每一个准则层性质的 每个方案间的判断矩阵并进行AHP（多个准则，多个主责指向多个方案）</li>
 </ul>
 </li>
-<li>将准则层/方案层的每一个准则性质的$w$转成行向量
-<ul>
+<li>将准则层/方案层的每一个准则性质的$w$转成行向量<ul>
 <li>准则层的所有值$w$值构成权向量res_B</li>
 <li>方案层纵向拼接，所得的即为方案曾的权矩阵res_B，</li>
 </ul>
 </li>
-<li>计算最终得分/综合权重
-<ul>
+<li>计算最终得分/综合权重<ul>
 <li>指标：res_A(指标层集的大类准则)$\times$res_B所得结果</li>
 <li>方案：res_A$\times$res_B得到综合权重res_Z</li>
 </ul>
 </li>
 </ul>
 <hr>
-<h2 id="二、熵权法-EWM">二、熵权法 EWM</h2>
-<blockquote>
+<h2 id="二、熵权法-EWM"><a href="#二、熵权法-EWM" class="headerlink" title="二、熵权法 EWM"></a>二、熵权法 EWM</h2><blockquote>
 <p>学习源Video:<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1qy4y1a7JJ?p=24&amp;vd_source=1437b1798845fbcba4cf09d5a889e546">Bilibili-ln异教徒 <strong>EWM</strong></a></p>
 </blockquote>
 <ul>
-<li>
-<p>数据的归一化处理</p>
+<li><p>数据的归一化处理</p>
 <blockquote>
-<p>由于各项指标计量单位并不统一，因此在计算综合权重前先要对它进行标准化处理，即把指标的绝对值转化为相对值，并令 $x_{ij} = |x_{ij}|$ ，从而解决各项不同质指标的同质化问题。</p>
+<p>由于各项指标计量单位并不统一，因此在计算综合权重前先要对它进行标准化处理，即把指标的绝对值转化为相对值，并令 $x<em>{ij} = |x</em>{ij}|$ ，从而解决各项不同质指标的同质化问题。</p>
 </blockquote>
 <ul>
-<li>
-<p>方法一：</p>
+<li><p>方法一：</p>
 <p>由于正向指标和负向指标数值代表的含义不同（正向指标数值越高越好，负向指标数值越低越好），因此对于高低需求指标应当采取不同的算法进行数据标准化处理，具体处理方法为 :</p>
-<p>对于正向指标：<br>
-$$<br>
-x_{ij} = 0.998\frac{x_{ij}-\min{x_{1j},\cdots,x_{nj}}}{\max{x_{1j},\cdots,x_{nj}}-\min{x_{1j},\cdots,x_{nj}}}+0.002<br>
-$$<br>
-对于负向指标：<br>
-$$<br>
-x_{ij} = 0.998\frac{\max{x_{1j},\cdots,x_{nj}}-x_{ij}}{\max{x_{1j},\cdots,x_{nj}}-\min{x_{1j},\cdots,x_{nj}}}+0.002<br>
-$$</p>
-</li>
+<p>对于正向指标：</p>
+<script type="math/tex; mode=display">
+x_{ij} = 0.998\frac{x_{ij}-\min\{x_{1j},\cdots,x_{nj}\}}{\max\{x_{1j},\cdots,x_{nj}\}-\min\{x_{1j},\cdots,x_{nj}\}}+0.002</script><p>对于负向指标：</p>
+<script type="math/tex; mode=display">
+x_{ij} = 0.998\frac{\max\{x_{1j},\cdots,x_{nj}\}-x_{ij}}{\max\{x_{1j},\cdots,x_{nj}\}-\min\{x_{1j},\cdots,x_{nj}\}}+0.002</script></li>
 </ul>
 </li>
 </ul>
@@ -346,44 +288,31 @@ $$</p>
 </blockquote>
 <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">% Matlab的归一化自定义函数 # Gy.m</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">y</span> = <span class="title">Gy</span><span class="params">(x,type,ymin,ymax)</span></span></span><br><span class="line"><span class="comment">% 实现正向或负向指标归一化，返回归一化后的数据矩阵</span></span><br><span class="line"><span class="comment">% x为原始数据矩阵，一行代表一个样本，每列代表一种指标</span></span><br><span class="line"><span class="comment">% type设定正向指标1，负向指标2</span></span><br><span class="line"><span class="comment">% ymin，ymax为归一化的区间端点</span></span><br><span class="line">[n, m] = <span class="built_in">size</span>(x);</span><br><span class="line">y = <span class="built_in">zeros</span>(n,m);</span><br><span class="line">xmin = <span class="built_in">min</span>(x);</span><br><span class="line">xmax = <span class="built_in">max</span>(x);</span><br><span class="line"><span class="keyword">switch</span> <span class="built_in">type</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> <span class="built_in">j</span>=<span class="number">1</span>:m</span><br><span class="line">            y(:,<span class="built_in">j</span>)=(ymax-ymin)*(x(:,<span class="built_in">j</span>)-xmin(<span class="built_in">j</span>))/(xmax(<span class="built_in">j</span>)-xmin(<span class="built_in">j</span>))+ymin;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    case2</span><br><span class="line">        <span class="keyword">for</span> <span class="built_in">j</span>=<span class="number">1</span>:m</span><br><span class="line">            y(:,<span class="built_in">j</span>)=(ymax-ymin)*(xmax(<span class="built_in">j</span>)-x(:,<span class="built_in">j</span>))/(xmax(<span class="built_in">j</span>)-xmin(<span class="built_in">j</span>))+ymin;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
 <ul>
-<li>方法二：Python scikit-learn MinMaxScaler</li>
-</ul>
-  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 数据归一化(sklearn)</span></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> MinMaxScaler</span><br><span class="line">data = [[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],</span><br><span class="line">        [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>],</span><br><span class="line">        [<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>],]</span><br><span class="line"><span class="comment"># 如果data为单列则需添加.values.reshape(-1,1)</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;data:&#x27;</span>,data[:<span class="number">5</span>]) <span class="comment"># 展示前五个数据</span></span><br><span class="line"></span><br><span class="line">MM_Scaler = MinMaxScaler(feature_range=(<span class="number">0</span>,<span class="number">1</span>)) <span class="comment"># 默认缩放范围(0,1)</span></span><br><span class="line">MMres = MM_Scaler.fit_transform(data)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;MMres:&#x27;</span>,np.<span class="built_in">round</span>(MMres[:<span class="number">5</span>,],<span class="number">2</span>)) <span class="comment"># 展示前五个数据,保留3位小数</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>
-<p>计算第$j$项指标下第$i$方案指标值的比重$p_{ij}$<br>
-$$<br>
-p_{ij} = \frac{x_{ij}}{\sum\limits^n_{i=1}x_{ij}}\quad(j=1,2,\cdots,m)<br>
-$$</p>
-</li>
-<li>
-<p>计算第$j$项指标的熵值$e_j$<br>
-$$<br>
-e_j = -k\sum^n_{i=1}p_{ij}\ln p_{ij}\quad(j=1,2,\cdots,m)<br>
-$$<br>
-其中$k=\dfrac{1}{\ln(n)}$，满足$e_j\ge 0$</p>
-</li>
-<li>
-<p>计算信息熵冗余度$g_{j}$<br>
-$$<br>
-g_j = 1-e_j\quad(j=1,2,\cdots,m)<br>
-$$</p>
-</li>
-<li>
-<p>计算各项指标权重$w_j$</p>
+<li><p>方法二：Python scikit-learn MinMaxScaler</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 数据归一化(sklearn)</span></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> MinMaxScaler</span><br><span class="line">data = [[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],</span><br><span class="line">        [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>],</span><br><span class="line">        [<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>],]</span><br><span class="line"><span class="comment"># 如果data为单列则需添加.values.reshape(-1,1)</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;data:&#x27;</span>,data[:<span class="number">5</span>]) <span class="comment"># 展示前五个数据</span></span><br><span class="line"></span><br><span class="line">MM_Scaler = MinMaxScaler(feature_range=(<span class="number">0</span>,<span class="number">1</span>)) <span class="comment"># 默认缩放范围(0,1)</span></span><br><span class="line">MMres = MM_Scaler.fit_transform(data)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;MMres:&#x27;</span>,np.<span class="built_in">round</span>(MMres[:<span class="number">5</span>,],<span class="number">2</span>)) <span class="comment"># 展示前五个数据,保留3位小数</span></span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<p>$$<br>
-w_j =\frac{g_j}{\sum\limits^m_{j=1}g_j}\quad(j=1,2,\cdots,m)<br>
-$$</p>
 <ul>
-<li>计算综合评分$S_i$<br>
-$$<br>
-S_i = \sum^m_{j=1}w_jx_{ij}<br>
-$$</li>
+<li><p>计算第$j$项指标下第$i$方案指标值的比重$p_{ij}$</p>
+<script type="math/tex; mode=display">
+p_{ij} = \frac{x_{ij}}{\sum\limits^n_{i=1}x_{ij}}\quad(j=1,2,\cdots,m)</script></li>
+<li><p>计算第$j$项指标的熵值$e_j$</p>
+<script type="math/tex; mode=display">
+e_j = -k\sum^n_{i=1}p_{ij}\ln p_{ij}\quad(j=1,2,\cdots,m)</script><p>其中$k=\dfrac{1}{\ln(n)}$，满足$e_j\ge 0$</p>
+</li>
+<li><p>计算信息熵冗余度$g_{j}$</p>
+<script type="math/tex; mode=display">
+g_j = 1-e_j\quad(j=1,2,\cdots,m)</script></li>
+<li><p>计算各项指标权重$w_j$</p>
+</li>
+</ul>
+<script type="math/tex; mode=display">
+w_j =\frac{g_j}{\sum\limits^m_{j=1}g_j}\quad(j=1,2,\cdots,m)</script><ul>
+<li>计算综合评分$S_i$<script type="math/tex; mode=display">
+S_i = \sum^m_{j=1}w_jx_{ij}</script></li>
 </ul>
 <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">clear</span><br><span class="line">clc</span><br><span class="line"><span class="comment">%% DataLoad</span></span><br><span class="line">data = xlsread(<span class="string">&#x27;./HouseData.xlsx&#x27;</span>);</span><br><span class="line"><span class="comment">%% 归一化</span></span><br><span class="line">ind = <span class="built_in">ones</span>(<span class="built_in">size</span>(data,<span class="number">2</span>),<span class="number">1</span>); <span class="comment">% data列数作为RowCount,ColCount=1</span></span><br><span class="line"><span class="comment">% indArr的建立，正向写1，负向写2，在此处默认都是正向指标，所以建立全一的纵向Arr</span></span><br><span class="line"></span><br><span class="line">[n, m] = <span class="built_in">size</span>(data); <span class="comment">% n个样本，m个指标</span></span><br><span class="line"><span class="keyword">for</span> <span class="built_in">j</span> = <span class="number">1</span>:m</span><br><span class="line">    <span class="keyword">if</span> ind(<span class="built_in">j</span>) == <span class="number">1</span> <span class="comment">% 正向指标的归一化</span></span><br><span class="line">        X(:,<span class="built_in">j</span>) = Gy(data(:,<span class="built_in">j</span>),<span class="number">1</span>,<span class="number">0.002</span>,<span class="number">1</span>); <span class="comment">% 归一化最低值范围不能为0</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">else</span> <span class="comment">% 负向指标的归一化</span></span><br><span class="line">        X(:,<span class="built_in">j</span>) = Gy(data(:,<span class="built_in">j</span>),<span class="number">2</span>,<span class="number">0.002</span>,<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="comment">%% 熵权法求取权向量</span></span><br><span class="line"><span class="comment">% 计算第j个指标下，第i个样本占该指标的比重p(i,j)</span></span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span>:n</span><br><span class="line">    <span class="keyword">for</span> <span class="built_in">j</span> = <span class="number">1</span>:m</span><br><span class="line">        p(<span class="built_in">i</span>,<span class="built_in">j</span>) = X(<span class="built_in">i</span>,<span class="built_in">j</span>)/sum(X(:,<span class="built_in">j</span>));</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="comment">% 计算第j个指标的熵值e(j)</span></span><br><span class="line">k = <span class="number">1</span>/<span class="built_in">log</span>(n);</span><br><span class="line"><span class="keyword">for</span> <span class="built_in">j</span> = <span class="number">1</span>:m</span><br><span class="line">    e(<span class="built_in">j</span>) = -k * sum(p(:,<span class="built_in">j</span>).*<span class="built_in">log</span>(p(:,<span class="built_in">j</span>)));</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line">g = <span class="built_in">ones</span>(<span class="number">1</span>,m)-e; <span class="comment">% 计算信息熵冗余度</span></span><br><span class="line">w = g./sum(g); <span class="comment">% 求权值w</span></span><br><span class="line">s = X*w&#x27;; <span class="comment">% 求综合评分</span></span><br><span class="line"><span class="comment">% DispPlot</span></span><br><span class="line"><span class="built_in">disp</span>(<span class="string">&#x27;Gyed_Data:&#x27;</span>);<span class="built_in">disp</span>(X)</span><br><span class="line"><span class="built_in">disp</span>(<span class="string">&#x27;p(i,j):&#x27;</span>);<span class="built_in">disp</span>(p)</span><br><span class="line"><span class="built_in">disp</span>(<span class="string">&#x27;e(j):&#x27;</span>);<span class="built_in">disp</span>(e)</span><br><span class="line"><span class="built_in">disp</span>(<span class="string">&#x27;g(j):&#x27;</span>);<span class="built_in">disp</span>(g)</span><br><span class="line"><span class="built_in">disp</span>(<span class="string">&#x27;w(j):&#x27;</span>);<span class="built_in">disp</span>(w)</span><br><span class="line"><span class="built_in">disp</span>(<span class="string">&#x27;s(j):&#x27;</span>);<span class="built_in">disp</span>(s)</span><br><span class="line"><span class="built_in">plot</span>(<span class="number">2017</span>:<span class="number">-1</span>:<span class="number">2010</span>,s)</span><br></pre></td></tr></table></figure>
-</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/AHP%E5%B1%82%E6%AC%A1%E5%88%86%E6%9E%90%E6%B3%95/">AHP层次分析法</a><a class="post-meta__tags" href="/tags/EWM%E7%86%B5%E6%9D%83%E6%B3%95/">EWM熵权法</a><a class="post-meta__tags" href="/tags/MATLAB/">MATLAB</a><a class="post-meta__tags" href="/tags/%E8%AF%84%E4%BB%B7%E6%A8%A1%E5%9E%8B/">评价模型</a></div><div class="post_share"><div class="social-share" data-image="https://raw.githubusercontent.com/XLY23333/picture01/main/img01/Met-XLY.jpg" data-sites="twitter, wechat"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/test/b01-test/" title="TestDoc"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">TestDoc</div></div></a></div></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://raw.githubusercontent.com/XLY23333/picture01/main/img01/Met-XLY.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">XLY23333</div><div class="author-info__description">一大黑耗子的个人博客</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">2</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://space.bilibili.com/18752589"><i class="https://i0.hdslb.com/bfs/archive/c8fd97a40bf79f03e7b76cbc87236f612caef7b2.png"></i><span>Follow Me [Bilibili]</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">评价模型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%B1%82%E6%AC%A1%E5%88%86%E6%9E%90%E6%B3%95-AHP"><span class="toc-number">1.1.</span> <span class="toc-text">一、层次分析法 AHP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%86%B5%E6%9D%83%E6%B3%95-EWM"><span class="toc-number">1.2.</span> <span class="toc-text">二、熵权法 EWM</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E8%AF%84%E4%BB%B7%E6%A8%A1%E5%9E%8B/M01-%E8%AF%84%E4%BB%B7%E6%A8%A1%E5%9E%8B/" title="数模M01-评价模型">数模M01-评价模型</a><time datetime="2024-02-14T15:07:00.000Z" title="发表于 2024-02-14 23:07:00">2024-02-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/test/b01-test/" title="TestDoc">TestDoc</a><time datetime="2024-02-14T00:50:00.000Z" title="发表于 2024-02-14 08:50:00">2024-02-14</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://github.com/XLY23333/picture01/blob/main/img01/illust_102208379_20221101_170757.jpg?raw=true')"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2024 By XLY23333</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, Welcome to XLY23333's <a target="_blank" rel="noopener" href="https://XLY23333.github.io/">Blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.12.0"></script><script src="/js/main.js?v=4.12.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/MATLAB/">MATLAB</a><a class="post-meta__tags" href="/tags/AHP%E5%B1%82%E6%AC%A1%E5%88%86%E6%9E%90%E6%B3%95/">AHP层次分析法</a><a class="post-meta__tags" href="/tags/EWM%E7%86%B5%E6%9D%83%E6%B3%95/">EWM熵权法</a><a class="post-meta__tags" href="/tags/%E8%AF%84%E4%BB%B7%E6%A8%A1%E5%9E%8B/">评价模型</a></div><div class="post_share"><div class="social-share" data-image="https://raw.githubusercontent.com/XLY23333/picture01/main/img01/Met-XLY.jpg" data-sites="twitter, wechat"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E8%81%9A%E7%B1%BB%E5%88%86%E6%9E%90/M03-KmeansPaper/" title="数模M03-Kmeans聚类论文可使用部分"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">数模M03-Kmeans聚类论文可使用部分</div></div></a></div><div class="next-post pull-right"><a href="/test/b01-test/" title="TestDoc"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">TestDoc</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E8%81%9A%E7%B1%BB%E5%88%86%E6%9E%90/M02-Kmeans/" title="数模M02-Kmeans聚类"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-02-15</div><div class="title">数模M02-Kmeans聚类</div></div></a></div><div><a href="/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E8%81%9A%E7%B1%BB%E5%88%86%E6%9E%90/M03-KmeansPaper/" title="数模M03-Kmeans聚类论文可使用部分"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-02-14</div><div class="title">数模M03-Kmeans聚类论文可使用部分</div></div></a></div></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://raw.githubusercontent.com/XLY23333/picture01/main/img01/Met-XLY.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">XLY23333</div><div class="author-info__description">一大黑耗子的个人博客</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://space.bilibili.com/18752589"><i class="https://i0.hdslb.com/bfs/archive/c8fd97a40bf79f03e7b76cbc87236f612caef7b2.png"></i><span>Follow Me [Bilibili]</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AF%84%E4%BB%B7%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.</span> <span class="toc-text">评价模型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%B1%82%E6%AC%A1%E5%88%86%E6%9E%90%E6%B3%95-AHP"><span class="toc-number">1.1.</span> <span class="toc-text">一、层次分析法 AHP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%86%B5%E6%9D%83%E6%B3%95-EWM"><span class="toc-number">1.2.</span> <span class="toc-text">二、熵权法 EWM</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E8%81%9A%E7%B1%BB%E5%88%86%E6%9E%90/M02-Kmeans/" title="数模M02-Kmeans聚类">数模M02-Kmeans聚类</a><time datetime="2024-02-14T16:00:00.000Z" title="发表于 2024-02-15 00:00:00">2024-02-15</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E8%81%9A%E7%B1%BB%E5%88%86%E6%9E%90/M03-KmeansPaper/" title="数模M03-Kmeans聚类论文可使用部分">数模M03-Kmeans聚类论文可使用部分</a><time datetime="2024-02-14T15:07:00.000Z" title="发表于 2024-02-14 23:07:00">2024-02-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E8%AF%84%E4%BB%B7%E6%A8%A1%E5%9E%8B/M01-%E8%AF%84%E4%BB%B7%E6%A8%A1%E5%9E%8B/" title="数模M01-评价模型">数模M01-评价模型</a><time datetime="2024-02-14T15:07:00.000Z" title="发表于 2024-02-14 23:07:00">2024-02-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/test/b01-test/" title="TestDoc">TestDoc</a><time datetime="2024-02-14T00:50:00.000Z" title="发表于 2024-02-14 08:50:00">2024-02-14</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://github.com/XLY23333/picture01/blob/main/img01/illust_102208379_20221101_170757.jpg?raw=true')"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2024 By XLY23333</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, Welcome to XLY23333's <a target="_blank" rel="noopener" href="https://XLY23333.github.io/">Blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.12.0"></script><script src="/js/main.js?v=4.12.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
   window.MathJax = {
     tex: {
       inlineMath: [['$', '$'], ['\\(', '\\)']],
