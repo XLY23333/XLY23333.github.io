@@ -1,6 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>数模M02-Kmeans聚类</title>
+    <url>/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E8%81%9A%E7%B1%BB%E5%88%86%E6%9E%90/M02-Kmeans/</url>
+    <content><![CDATA[<h1 id="KMeans聚类法"><a href="#KMeans聚类法" class="headerlink" title="KMeans聚类法"></a>KMeans聚类法</h1><h2 id="一、Kmeans内容"><a href="#一、Kmeans内容" class="headerlink" title="一、Kmeans内容"></a>一、Kmeans内容</h2><blockquote>
+<p>Video:~<a href="https://www.bilibili.com/video/BV1qy4y1a7JJ?p=25&amp;vd_source=1437b1798845fbcba4cf09d5a889e546">Bilibili-ln异教徒 <strong>Kmeans</strong></a></p>
+</blockquote>
+<ul>
+<li><p>随机生成k个聚类中心点</p>
+<ul>
+<li><p>其中k值的确定可以采用“手肘法”，通过分析不同k值下误差平方和(SSE)的值的变化，选取其”肘部“作为合适的聚类数目</p>
+<script type="math/tex; mode=display">
+SSE = \sum_{i=1}^k\sum_{p\in C_i}|p-m_i|^2</script><p>其中$C_i$是第i个类，p是$C_i$中的样本点，$m_i$是$C_i$的质心($C_i$中所有样本点的均值)，SSE是所有样本的聚类误差，代表了聚类效果的好坏。通过找寻SSE的值的下降幅度剧烈减小的位置来判断合适的k取值</p>
+<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">SSE</span> = <span class="title">funcSSE</span><span class="params">(data,total)</span> % <span class="title">data</span>为数据,<span class="title">total</span>为要划分的类别总数</span></span><br><span class="line">n = <span class="built_in">size</span>(data,<span class="number">2</span>); <span class="comment">% data的ColCount</span></span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">2</span>:total</span><br><span class="line">    k = <span class="built_in">i</span>;</span><br><span class="line">    [label,c] = kmeans(data,k);</span><br><span class="line">    temp = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> <span class="built_in">j</span> = <span class="number">1</span>:<span class="built_in">i</span> <span class="comment">% 按照分类数量遍历</span></span><br><span class="line">        loc = <span class="built_in">find</span>(label == <span class="built_in">j</span>) <span class="comment">% 找到每个类别所对应的行标(Row)，形成一个Arr</span></span><br><span class="line">        <span class="keyword">for</span> j2 = <span class="number">1</span>:n <span class="comment">% 按照Col遍历</span></span><br><span class="line">            temp = temp + sum((data(loc,j2)-c(<span class="built_in">j</span>,j2)).^<span class="number">2</span>)</span><br><span class="line">            <span class="comment">% 通过loc得到一个row区域内的所有label与c索引相同的数据</span></span><br><span class="line">            <span class="comment">% 依次loc所对应数据块中的每一列与c同列的数据相减并求点成的平方</span></span><br><span class="line">            <span class="comment">% 随后sum求和处理后每一列loc数据的和并且与先前的其他列数据结果相加</span></span><br><span class="line">            <span class="comment">% 将每一个label相同的data和c的结果再相加，全部用temp承接数值</span></span><br><span class="line">            <span class="comment">% 实际上是将原本每一数据点同其c的减法求平方(距离)过程纵向化了</span></span><br><span class="line">            <span class="comment">% 用于矩阵运算的遍历，以及其最终得到的结果就是每个数据每个坐标的距离</span></span><br><span class="line">            <span class="comment">% 所以可以用这种简单的方法Coding</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    SSE(<span class="built_in">i</span><span class="number">-1</span>) = temp <span class="comment">% 令SSE这个Arr的数值仍然从Index=1开始</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>根据聚类中心点，将数据分为k类。分类的原则是数据离哪个中心点最近就将他分为哪一类别</p>
+<ul>
+<li><p>距离的判断采用欧式距离(欧几里得距离):</p>
+<p>令各类中心为 $\mu_j$ ,计算各个数据到各类中心点的距离为$(x-\mu_j)^2$</p>
+</li>
+</ul>
+</li>
+<li><p>根据分好的类别的数据，重新计算聚类的类别中心点</p>
+</li>
+<li><p>不断重复上述的两步，直到中心点不再变化，得到聚类结果</p>
+<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line">clear</span><br><span class="line">clc</span><br><span class="line"><span class="comment">%% 数据导入</span></span><br><span class="line">data = xlsread(<span class="string">&#x27;./k-means.xlsx&#x27;</span>);</span><br><span class="line"><span class="comment">%% SSE手肘法判断</span></span><br><span class="line">km = <span class="number">10</span>; <span class="comment">% 所需的k最大测试值</span></span><br><span class="line">SSE = funcSSE(data,km);</span><br><span class="line"><span class="built_in">plot</span>(<span class="number">2</span>:km,SSE)</span><br><span class="line">k = <span class="number">5</span>; <span class="comment">% 选择 k=5</span></span><br><span class="line"><span class="comment">%% Kmeans聚类</span></span><br><span class="line">[label,center] = kmeans(data,k)</span><br><span class="line"><span class="comment">%% DispPlot</span></span><br><span class="line"><span class="built_in">figure</span></span><br><span class="line"><span class="built_in">scatter</span>(<span class="number">0</span>,data(label==<span class="number">1</span>),<span class="string">&#x27;cyan&#x27;</span>)</span><br><span class="line"><span class="built_in">hold</span> on</span><br><span class="line"><span class="built_in">scatter</span>(<span class="number">0</span>,data(label==<span class="number">2</span>),<span class="string">&#x27;b&#x27;</span>)</span><br><span class="line"><span class="built_in">scatter</span>(<span class="number">0</span>,data(label==<span class="number">3</span>),<span class="string">&#x27;g&#x27;</span>)</span><br><span class="line"><span class="built_in">scatter</span>(<span class="number">0</span>,data(label==<span class="number">4</span>),<span class="string">&#x27;y&#x27;</span>)</span><br><span class="line"><span class="built_in">scatter</span>(<span class="number">0</span>,data(label==<span class="number">5</span>),<span class="string">&#x27;black&#x27;</span>)</span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span>:k</span><br><span class="line">    <span class="built_in">plot</span>([<span class="number">-0.1</span>,<span class="number">0.1</span>],[center(<span class="built_in">i</span>),center(<span class="built_in">i</span>)],<span class="string">&#x27;r&#x27;</span>)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line">xlim([<span class="number">-1</span>,<span class="number">1</span>])</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="二、Python可使用代码"><a href="#二、Python可使用代码" class="headerlink" title="二、Python可使用代码"></a>二、Python可使用代码</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> tqdm <span class="keyword">import</span> tqdm</span><br><span class="line"><span class="keyword">import</span> sklearn</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">plt.rcParams[<span class="string">&#x27;font.family&#x27;</span>] = <span class="string">&#x27;Consolas&#x27;</span></span><br><span class="line">plt.rcParams[<span class="string">&#x27;font.sans-serif&#x27;</span>] = [<span class="string">&#x27;Consolas&#x27;</span>]</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 随机数据</span></span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line">random.seed(<span class="number">66</span>)</span><br><span class="line">x = [random.randint(<span class="number">1</span>,<span class="number">100</span>) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">100</span>)]</span><br><span class="line">y = [random.randint(<span class="number">1</span>,<span class="number">100</span>) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">100</span>)]</span><br><span class="line">data=<span class="built_in">list</span>(<span class="built_in">zip</span>(x,y))</span><br><span class="line">df = pd.DataFrame(data)</span><br><span class="line">df.columns = [<span class="string">&#x27;v1&#x27;</span>, <span class="string">&#x27;v2&#x27;</span>]</span><br><span class="line">df.head()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">plt.scatter(x, y)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;X&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;Y&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 手肘法判断图</span></span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> silhouette_score</span><br><span class="line"><span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> KMeans</span><br><span class="line"></span><br><span class="line">score01 = [ ]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">2</span>, <span class="number">7</span>):</span><br><span class="line">    km1 = KMeans(n_clusters=i, random_state=<span class="number">42</span>)</span><br><span class="line">    kcat1 = km1.fit_predict(df)</span><br><span class="line">    score = silhouette_score(df, kcat1)</span><br><span class="line">    score01.append(score)</span><br><span class="line">plt.plot(<span class="built_in">range</span>(<span class="number">2</span>, <span class="number">7</span>),score01)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> KMeans</span><br><span class="line">n = <span class="number">4</span></span><br><span class="line">km = KMeans(n_clusters=n, random_state=<span class="number">42</span>)</span><br><span class="line">km.fit(df)</span><br><span class="line">centers = km.cluster_centers_</span><br><span class="line"><span class="built_in">print</span>(centers)</span><br><span class="line">kcat = km.predict(df)</span><br><span class="line">df_cat = pd.concat([df,pd.DataFrame(kcat)],axis=<span class="number">1</span>)</span><br><span class="line">df_cat.columns = <span class="built_in">list</span>(df.columns) + [<span class="string">&#x27;Cate&#x27;</span>]</span><br><span class="line">df_cat.head()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">colorg1 = [<span class="string">&#x27;#1f77b4&#x27;</span>, <span class="string">&#x27;#2ca02c&#x27;</span>, <span class="string">&#x27;#ff7f0e&#x27;</span>, <span class="string">&#x27;#7f7f7f&#x27;</span>, <span class="string">&#x27;#9467bd&#x27;</span>]</span><br><span class="line">colorg2 = [<span class="string">&#x27;#2ecc71&#x27;</span>, <span class="string">&#x27;#3498db&#x27;</span>, <span class="string">&#x27;#e74c3c&#x27;</span>, <span class="string">&#x27;#9b59b6&#x27;</span>, <span class="string">&#x27;#f39c12&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">    plt.scatter(df_cat[df_cat[<span class="string">&#x27;Cate&#x27;</span>] == i].iloc[:,<span class="number">0</span>],</span><br><span class="line">                df_cat[df_cat[<span class="string">&#x27;Cate&#x27;</span>] == i].iloc[:,<span class="number">1</span>],</span><br><span class="line">                label = <span class="string">f&#x27;Cate<span class="subst">&#123;i&#125;</span>&#x27;</span>,color = colorg1[i],)</span><br><span class="line">    <span class="keyword">for</span> index, row <span class="keyword">in</span> df_cat[df_cat[<span class="string">&#x27;Cate&#x27;</span>] == i].iterrows():</span><br><span class="line">        plt.plot([row[<span class="string">&#x27;v1&#x27;</span>], centers[i, <span class="number">0</span>]], [row[<span class="string">&#x27;v2&#x27;</span>], centers[i, <span class="number">1</span>]], color=colorg1[i])</span><br><span class="line"></span><br><span class="line">plt.scatter(centers[:,<span class="number">0</span>],centers[:,<span class="number">1</span>],color = <span class="string">&#x27;r&#x27;</span>, s = <span class="number">100</span>, zorder = <span class="number">5</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;KMeans Result&#x27;</span>,size = <span class="number">20</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;V1&#x27;</span>, size = <span class="number">15</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;V2&#x27;</span>, size = <span class="number">15</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.savefig(<span class="string">r&#x27;./PIC.svg&#x27;</span>,dpi=<span class="number">500</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df_cat.to_csv(<span class="string">r&#x27;./kmoutput.csv&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="三、Python展开Kmeans聚类"><a href="#三、Python展开Kmeans聚类" class="headerlink" title="三、Python展开Kmeans聚类"></a>三、Python展开Kmeans聚类</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 生成测试数据</span></span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt </span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line">random.seed(<span class="number">1</span>)</span><br><span class="line">kdatax = [random.randint(<span class="number">1</span>,<span class="number">30</span>) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">30</span>)]</span><br><span class="line">kdatay = [random.randint(<span class="number">1</span>,<span class="number">30</span>) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">30</span>)]</span><br><span class="line">kdata = pd.DataFrame([kdatax,kdatay]).transpose()</span><br><span class="line">plt.plot(kdata.iloc[:,<span class="number">0</span>], kdata.iloc[:,<span class="number">1</span>], <span class="string">&#x27;ro&#x27;</span>)</span><br><span class="line">kdata.head()</span><br><span class="line"></span><br><span class="line">colorg1 = [<span class="string">&#x27;#1f77b4&#x27;</span>, <span class="string">&#x27;#2ca02c&#x27;</span>, <span class="string">&#x27;#ff7f0e&#x27;</span>, <span class="string">&#x27;#7f7f7f&#x27;</span>, <span class="string">&#x27;#9467bd&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">show</span>(<span class="params">kdata, cen, ax, k</span>):</span><br><span class="line">    plt.plot()</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">Dep</span>(<span class="params">ax, t, cen,</span>):</span><br><span class="line">    pls = [ ]</span><br><span class="line">    <span class="keyword">for</span> d <span class="keyword">in</span> t:</span><br><span class="line">        dval = [ ]</span><br><span class="line">        dsum = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(cen)):</span><br><span class="line">            dval.append(np.sqrt(<span class="built_in">sum</span>((cen[i] - d)**<span class="number">2</span>)))</span><br><span class="line">        place =  dval.index(<span class="built_in">min</span>(dval))</span><br><span class="line">        pls.append(place)</span><br><span class="line">    <span class="keyword">return</span> pls</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">Init_cen</span>(<span class="params">kdata, k, ax</span>):</span><br><span class="line">    centers = [ ]</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(k):</span><br><span class="line">        subcenters = [ ]</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(ax):</span><br><span class="line">            maxval = (kdata.iloc[:,i].<span class="built_in">max</span>())</span><br><span class="line">            minval = (kdata.iloc[:,i].<span class="built_in">min</span>())</span><br><span class="line">            subcenters.append(random.randint(minval,maxval))</span><br><span class="line">        centers.append(subcenters)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Init:&#x27;</span>,centers)</span><br><span class="line">    <span class="keyword">return</span> centers</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">KmeansH</span>(<span class="params">kdata, k, seed = <span class="number">0</span>,centers= [<span class="number">0</span>],co = <span class="number">0</span>, ax = <span class="number">0</span>, karray = <span class="number">0</span></span>):</span><br><span class="line">    <span class="keyword">if</span> ax ==<span class="number">0</span>:</span><br><span class="line">        ax = <span class="built_in">len</span>(kdata.columns)</span><br><span class="line">        karray = np.array(kdata)</span><br><span class="line">        <span class="keyword">if</span> seed !=<span class="number">0</span>:</span><br><span class="line">            random.seed(seed)</span><br><span class="line">    <span class="keyword">if</span> co == <span class="number">0</span>:</span><br><span class="line">        centers = Init_cen(kdata, k, ax)</span><br><span class="line">        co = <span class="number">1</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        co += <span class="number">1</span></span><br><span class="line">    label = Dep(ax, karray, centers)</span><br><span class="line">    kdatanew = pd.concat((kdata,pd.DataFrame(label)),axis=<span class="number">1</span>)</span><br><span class="line">    </span><br><span class="line">    cn1 = [ ]     </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(k):</span><br><span class="line">        cn2 = [ ]</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(ax):</span><br><span class="line">            cn2.append(np.mean(kdatanew[kdatanew.iloc[:,ax]==i].iloc[:,j]))</span><br><span class="line">        cn1.append(cn2)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(co,centers)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">abs</span>((np.array(cn1) - np.array(centers)).<span class="built_in">sum</span>()) &lt;= <span class="number">1e-9</span>:</span><br><span class="line">        random.seed()</span><br><span class="line">        <span class="keyword">return</span> kdatanew</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> KmeansH(kdata, k, seed,cn1 , co, ax, karray)</span><br><span class="line">    </span><br><span class="line">k=<span class="number">4</span></span><br><span class="line">kdatak = KmeansH(kdata,k,<span class="number">42</span>)</span><br><span class="line"></span><br><span class="line">centers = pd.DataFrame([[<span class="number">25.0</span>, <span class="number">10.416666666666666</span>], [<span class="number">9.555555555555555</span>, <span class="number">24.666666666666668</span>], [<span class="number">14.166666666666666</span>, <span class="number">10.0</span>], [<span class="number">3.0</span>, <span class="number">5.333333333333333</span>]])</span><br><span class="line">centers</span><br><span class="line"></span><br><span class="line">colorg1 = [<span class="string">&#x27;#1f77b4&#x27;</span>, <span class="string">&#x27;#2ca02c&#x27;</span>, <span class="string">&#x27;#ff7f0e&#x27;</span>, <span class="string">&#x27;#7f7f7f&#x27;</span>, <span class="string">&#x27;#9467bd&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(k):</span><br><span class="line"></span><br><span class="line">    plt.plot(kdatak[kdatak.iloc[:,<span class="number">2</span>]==i].iloc[:,<span class="number">0</span>],</span><br><span class="line">             kdatak[kdatak.iloc[:,<span class="number">2</span>]==i].iloc[:,<span class="number">1</span>],</span><br><span class="line">             <span class="string">&#x27;o&#x27;</span>,color = colorg1[i])</span><br><span class="line"></span><br><span class="line">plt.plot(centers.iloc[:,<span class="number">0</span>],centers.iloc[:,<span class="number">1</span>],<span class="string">&#x27;r*&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>数学建模</category>
+        <category>聚类分析</category>
+      </categories>
+      <tags>
+        <tag>聚类</tag>
+        <tag>Kmeans</tag>
+        <tag>Kmeans++</tag>
+        <tag>MATLAB</tag>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>数模M01-评价模型</title>
     <url>/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E8%AF%84%E4%BB%B7%E6%A8%A1%E5%9E%8B/M01-%E8%AF%84%E4%BB%B7%E6%A8%A1%E5%9E%8B/</url>
     <content><![CDATA[<h1 id="评价模型"><a href="#评价模型" class="headerlink" title="评价模型"></a>评价模型</h1><h2 id="一、层次分析法-AHP"><a href="#一、层次分析法-AHP" class="headerlink" title="一、层次分析法 AHP"></a>一、层次分析法 AHP</h2><blockquote>
@@ -165,9 +216,9 @@ S_i = \sum^m_{j=1}w_jx_{ij}</script></li>
         <category>评价模型</category>
       </categories>
       <tags>
+        <tag>MATLAB</tag>
         <tag>AHP层次分析法</tag>
         <tag>EWM熵权法</tag>
-        <tag>MATLAB</tag>
         <tag>评价模型</tag>
       </tags>
   </entry>
@@ -191,12 +242,106 @@ S_i = \sum^m_{j=1}w_jx_{ij}</script></li>
         <category>聚类分析</category>
       </categories>
       <tags>
-        <tag>MATLAB</tag>
         <tag>聚类</tag>
         <tag>Kmeans</tag>
         <tag>Kmeans++</tag>
+        <tag>MATLAB</tag>
         <tag>Python</tag>
         <tag>Paper</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数模M05-拟合</title>
+    <url>/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E9%A2%84%E6%B5%8B%E6%A8%A1%E5%9E%8B/M05-%E6%8B%9F%E5%90%88/</url>
+    <content><![CDATA[<h1 id="拟合"><a href="#拟合" class="headerlink" title="拟合"></a>拟合</h1><h2 id="一、曲线拟合的线性最小二乘法"><a href="#一、曲线拟合的线性最小二乘法" class="headerlink" title="一、曲线拟合的线性最小二乘法"></a>一、曲线拟合的线性最小二乘法</h2><h3 id="（一）线性最小二乘法"><a href="#（一）线性最小二乘法" class="headerlink" title="（一）线性最小二乘法"></a>（一）线性最小二乘法</h3><h4 id="1-问题提出"><a href="#1-问题提出" class="headerlink" title="1. 问题提出"></a>1. 问题提出</h4><h5 id="（1）简介"><a href="#（1）简介" class="headerlink" title="（1）简介"></a>（1）简介</h5><p>已知一组（二维）数据，即平面上的n个点$(x_i,y_i)\ (i=1,2,\cdots,n)$，$x_i$互不相同，求一个函数（曲线）$y=f(x)$使得$f(x)$在某种准则下与所有数据点最为接近，即曲线拟合的最好</p>
+<p>线性最小二乘法是解决曲线拟合最常见的方法，思路为：令</p>
+<script type="math/tex; mode=display">
+f(x) = a_1r_1(x)+a_2r_2(x)+\cdots+a_mr_m(x)</script><p>其中$r_k(x)$是事先选定的一组线性无关的函数，$a_k$是待定系数 $(k=1,2,\cdots,m\quad ,m&lt;n)$</p>
+<p>拟合的准则为使$y_i\ ,(i=1,2,\cdots,n)$与$f(x_i)$的距离$\delta_i$的平方和最小，称为最小二乘准则</p>
+<h5 id="（2）系数-a-k-的确定"><a href="#（2）系数-a-k-的确定" class="headerlink" title="（2）系数$a_k$的确定"></a>（2）系数$a_k$的确定</h5><p>记</p>
+<script type="math/tex; mode=display">
+J(a_1,\cdots,a_m)=\sum^n_{i=1}\delta^2_i=\sum^n_{i=1}[f(x_i)-y_i]^2</script><p>为求$a_1,\cdots,a_m$使得$J$达到最小，秩序利用极值的必要条件$\dfrac{\partial J}{\partial A_j}=0\ (j=1,\cdots,m)$，得到关于$a_1,\cdots,a_m$的线性方程组</p>
+<script type="math/tex; mode=display">
+\sum^n_{i=1}r_j(x_i)[\sum^m_{k=1}a_kr_k(x_i)-y_i]=0\quad,(j=1,\cdots,m)</script><p>即</p>
+<script type="math/tex; mode=display">
+\sum^n_{i=1}a_k[\sum^m_{k=1}r_j(x_i)r_k(x_i)]=\sum^n_{i=1}r_j(x_i)y_i\quad,(j=1,\cdots,m)</script><p>记</p>
+<script type="math/tex; mode=display">
+R=
+\begin{bmatrix}
+r_1(x_1) & \cdots & r_m(x_1)\\
+\vdots & \vdots & \vdots \\
+r_1(x_n) & \cdots & r_m(x_n)\\
+\end{bmatrix}_{n\times m}\\\\
+A=[a_1,\cdots,a_m]^{\rm T}\ ,\ Y=[y_1,\cdots,y_n]^{\rm T}</script><p>当${r_1(x),\cdots,r_m(x)}$线性无关时，$R$列满秩，$R^{\rm T}R$可逆，于是上方程组有唯一解</p>
+<script type="math/tex; mode=display">
+A = (R^{\rm T}R)^{-1}R^{\rm T}Y</script><h5 id="（3）函数-r-k-x-的选择"><a href="#（3）函数-r-k-x-的选择" class="headerlink" title="（3）函数$r_k(x)$的选择"></a>（3）函数$r_k(x)$的选择</h5><p>通常通过机理分析能够知道有什么样的函数关系，如果不清楚其关系，可以先对数据作图，直观的判断应该使用的拟合曲线</p>
+<p>常见的拟合曲线选择</p>
+<ul>
+<li>直线 $y=a_1x+a_2$</li>
+<li>多项式（一般m=2，3，不宜太高）$y=a_1x^m+\cdots+a_mx+a{\small m+1}$</li>
+<li>双曲线（一支）$y=\dfrac{a_1}{x}+a_2$</li>
+<li>指数曲线 $y=a_1e^{a_2x}$</li>
+</ul>
+<blockquote>
+<p>对于指数曲线，拟合前需做变量代换，化为对$a_1,a_2$的线性函数</p>
+</blockquote>
+<p>可以选择多种曲线进行拟合，通过判断最后$J$值，选择最小的一条</p>
+<p>也可以通过计算MSE、MAE等数值对拟合的结果进行评价</p>
+<h3 id="（二）MATLAB实现最小二乘法"><a href="#（二）MATLAB实现最小二乘法" class="headerlink" title="（二）MATLAB实现最小二乘法"></a>（二）MATLAB实现最小二乘法</h3><h4 id="1-解方程法"><a href="#1-解方程法" class="headerlink" title="1. 解方程法"></a>1. 解方程法</h4><p>由上述的可得 $J(a_1,\cdots,a_m) = ||RA-Y||^2$</p>
+<p>MATLAB中的线性最小二乘标准型为 $\min\limits_A||RA-Y||^2_2$</p>
+<p>CoreCode : <code>A = R/Y</code> </p>
+<p>在此方法下，需要将用于训练的x0，y0数据初始化为<strong>列向量</strong></p>
+<p>其中A是返回的系数矩阵，R为拟合所用函数由x0列向量对应值构建的矩阵，Y为训练用的y0列向量</p>
+<p>R的具体的构建方法如下：</p>
+<p>将构建函数对应的每一项依次带入列向量x0，一个系数一列，所以需要将x0，y0数据初始化为<strong>列向量</strong></p>
+<p>特殊的，常数项可以用<code>ones(size(x0))</code>来替换，同时也可以用于倒数等位置Init用1的情况</p>
+<p>最终得出的A数组每一位对应R矩阵的每一列所求的系数</p>
+<p><strong>Eg：</strong></p>
+<p>拟合函数：$a+bx^2+c\dfrac{1}{x}$ ，已知训练数据 $x0\ ,y0$ ，需要进行拟合的范围 $x$</p>
+<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line">R = [<span class="built_in">ones</span>(<span class="built_in">size</span>(x0)), x0.^<span class="number">2</span>, <span class="built_in">ones</span>(<span class="built_in">size</span>(x0))./x]；</span><br><span class="line">a = R(<span class="number">1</span>)</span><br><span class="line">b = R(<span class="number">2</span>)</span><br><span class="line">c = R(<span class="number">3</span>)</span><br><span class="line">y = a + b*x.^<span class="number">2</span> + c./x <span class="comment">% 输出x所包含范围内的拟合y值</span></span><br></pre></td></tr></table></figure>
+<h4 id="2-多项式拟合Poly"><a href="#2-多项式拟合Poly" class="headerlink" title="2. 多项式拟合Poly"></a>2. 多项式拟合Poly</h4><p>如果取 ${r<em>1(x),\cdots,r</em>{m+1}(x)}={1,x,\cdots,x^m}$，即用m次多项式拟合给定的数据，可以用MATLAB中的poly系列函数执行</p>
+<h5 id="（1）拟合函数"><a href="#（1）拟合函数" class="headerlink" title="（1）拟合函数"></a>（1）拟合函数</h5><p>Code : <code>A = polyfit(x0, y0, &lt;Count&gt;)</code></p>
+<p>其中<code>&lt;Count&gt;</code>为拟合多项式的次数，输出的参数A为拟合多项式的系数数组，从高次项向低次项的顺序</p>
+<p>即在拟合函数$y=a(1)x^m+\cdots+a(m)x+a(m+1)$中，$a=[a(1),\cdots,a(m),a(m+1)]$</p>
+<h5 id="（2）数值计算"><a href="#（2）数值计算" class="headerlink" title="（2）数值计算"></a>（2）数值计算</h5><p>Code : <code>y = polyval(A,x)</code></p>
+<p>其中x为拟合需求的取值，当x换成x0的时候，可以用与求y_fit_test，并进行MSE检测</p>
+<h4 id="3-MSE检测拟合度"><a href="#3-MSE检测拟合度" class="headerlink" title="3. MSE检测拟合度"></a>3. MSE检测拟合度</h4><p>MSE(Mean Squared Error)是指最小平方误差，可以检验拟合结果和实际结果的MSE来判断拟合的程度</p>
+<h5 id="（1）MATLAB实现代码："><a href="#（1）MATLAB实现代码：" class="headerlink" title="（1）MATLAB实现代码："></a>（1）MATLAB实现代码：</h5><p><code>MSEValue = mse(&lt;y_real&gt; - &lt;y_fit_test&gt;)</code></p>
+<p>如果使用<strong>解方程法</strong>拟合，应当首先对<code>&lt;y_real&gt;</code>进行转置，即 <code>mse(&lt;y_real&gt;&#39;-&lt;y_fit_test&gt;)</code></p>
+<h5 id="（2）y-fit-test的获取方法"><a href="#（2）y-fit-test的获取方法" class="headerlink" title="（2）y_fit_test的获取方法"></a>（2）y_fit_test的获取方法</h5><ul>
+<li><p>拟合相应点</p>
+<ul>
+<li><p>解方程法：<code>y_fit_test = f(x0)</code></p>
+<ul>
+<li><code>f</code>为代入系数矩阵A的相应的函数求解表达式，其中自变量改为<strong>x0</strong></li>
+</ul>
+</li>
+<li><p>polyval法：<code>y_fit_test = polyval(r,x0)</code></p>
+<ul>
+<li><code>r</code>为<code>polyfit</code>所得到的系数数组，进行<code>ployval</code>的自变量为<strong>x0</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>包含拟合后索引（x的步长需为等长）</p>
+<ul>
+<li><code>y_fit_test = y(1+(x0-min(x)./step))</code><ul>
+<li>其中x为拟合要求的数据范围，<strong>step是x的步长</strong></li>
+</ul>
+</li>
+<li><code>y_fit_test = y(round(1+(x0-min(x))./(x(2)-x(1))))</code></li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>数学建模</category>
+        <category>预测模型</category>
+      </categories>
+      <tags>
+        <tag>MATLAB</tag>
+        <tag>预测</tag>
+        <tag>拟合</tag>
       </tags>
   </entry>
   <entry>
@@ -887,57 +1032,6 @@ y=\frac{\beta_4x_2-\dfrac{x_3}{\beta_5}}{1+\beta_1x_1+\beta_2x_2+\beta_3x_3}</sc
       </tags>
   </entry>
   <entry>
-    <title>数模M02-Kmeans聚类</title>
-    <url>/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E8%81%9A%E7%B1%BB%E5%88%86%E6%9E%90/M02-Kmeans/</url>
-    <content><![CDATA[<h1 id="KMeans聚类法"><a href="#KMeans聚类法" class="headerlink" title="KMeans聚类法"></a>KMeans聚类法</h1><h2 id="一、Kmeans内容"><a href="#一、Kmeans内容" class="headerlink" title="一、Kmeans内容"></a>一、Kmeans内容</h2><blockquote>
-<p>Video:~<a href="https://www.bilibili.com/video/BV1qy4y1a7JJ?p=25&amp;vd_source=1437b1798845fbcba4cf09d5a889e546">Bilibili-ln异教徒 <strong>Kmeans</strong></a></p>
-</blockquote>
-<ul>
-<li><p>随机生成k个聚类中心点</p>
-<ul>
-<li><p>其中k值的确定可以采用“手肘法”，通过分析不同k值下误差平方和(SSE)的值的变化，选取其”肘部“作为合适的聚类数目</p>
-<script type="math/tex; mode=display">
-SSE = \sum_{i=1}^k\sum_{p\in C_i}|p-m_i|^2</script><p>其中$C_i$是第i个类，p是$C_i$中的样本点，$m_i$是$C_i$的质心($C_i$中所有样本点的均值)，SSE是所有样本的聚类误差，代表了聚类效果的好坏。通过找寻SSE的值的下降幅度剧烈减小的位置来判断合适的k取值</p>
-<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">SSE</span> = <span class="title">funcSSE</span><span class="params">(data,total)</span> % <span class="title">data</span>为数据,<span class="title">total</span>为要划分的类别总数</span></span><br><span class="line">n = <span class="built_in">size</span>(data,<span class="number">2</span>); <span class="comment">% data的ColCount</span></span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">2</span>:total</span><br><span class="line">    k = <span class="built_in">i</span>;</span><br><span class="line">    [label,c] = kmeans(data,k);</span><br><span class="line">    temp = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> <span class="built_in">j</span> = <span class="number">1</span>:<span class="built_in">i</span> <span class="comment">% 按照分类数量遍历</span></span><br><span class="line">        loc = <span class="built_in">find</span>(label == <span class="built_in">j</span>) <span class="comment">% 找到每个类别所对应的行标(Row)，形成一个Arr</span></span><br><span class="line">        <span class="keyword">for</span> j2 = <span class="number">1</span>:n <span class="comment">% 按照Col遍历</span></span><br><span class="line">            temp = temp + sum((data(loc,j2)-c(<span class="built_in">j</span>,j2)).^<span class="number">2</span>)</span><br><span class="line">            <span class="comment">% 通过loc得到一个row区域内的所有label与c索引相同的数据</span></span><br><span class="line">            <span class="comment">% 依次loc所对应数据块中的每一列与c同列的数据相减并求点成的平方</span></span><br><span class="line">            <span class="comment">% 随后sum求和处理后每一列loc数据的和并且与先前的其他列数据结果相加</span></span><br><span class="line">            <span class="comment">% 将每一个label相同的data和c的结果再相加，全部用temp承接数值</span></span><br><span class="line">            <span class="comment">% 实际上是将原本每一数据点同其c的减法求平方(距离)过程纵向化了</span></span><br><span class="line">            <span class="comment">% 用于矩阵运算的遍历，以及其最终得到的结果就是每个数据每个坐标的距离</span></span><br><span class="line">            <span class="comment">% 所以可以用这种简单的方法Coding</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    SSE(<span class="built_in">i</span><span class="number">-1</span>) = temp <span class="comment">% 令SSE这个Arr的数值仍然从Index=1开始</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>根据聚类中心点，将数据分为k类。分类的原则是数据离哪个中心点最近就将他分为哪一类别</p>
-<ul>
-<li><p>距离的判断采用欧式距离(欧几里得距离):</p>
-<p>令各类中心为 $\mu_j$ ,计算各个数据到各类中心点的距离为$(x-\mu_j)^2$</p>
-</li>
-</ul>
-</li>
-<li><p>根据分好的类别的数据，重新计算聚类的类别中心点</p>
-</li>
-<li><p>不断重复上述的两步，直到中心点不再变化，得到聚类结果</p>
-<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line">clear</span><br><span class="line">clc</span><br><span class="line"><span class="comment">%% 数据导入</span></span><br><span class="line">data = xlsread(<span class="string">&#x27;./k-means.xlsx&#x27;</span>);</span><br><span class="line"><span class="comment">%% SSE手肘法判断</span></span><br><span class="line">km = <span class="number">10</span>; <span class="comment">% 所需的k最大测试值</span></span><br><span class="line">SSE = funcSSE(data,km);</span><br><span class="line"><span class="built_in">plot</span>(<span class="number">2</span>:km,SSE)</span><br><span class="line">k = <span class="number">5</span>; <span class="comment">% 选择 k=5</span></span><br><span class="line"><span class="comment">%% Kmeans聚类</span></span><br><span class="line">[label,center] = kmeans(data,k)</span><br><span class="line"><span class="comment">%% DispPlot</span></span><br><span class="line"><span class="built_in">figure</span></span><br><span class="line"><span class="built_in">scatter</span>(<span class="number">0</span>,data(label==<span class="number">1</span>),<span class="string">&#x27;cyan&#x27;</span>)</span><br><span class="line"><span class="built_in">hold</span> on</span><br><span class="line"><span class="built_in">scatter</span>(<span class="number">0</span>,data(label==<span class="number">2</span>),<span class="string">&#x27;b&#x27;</span>)</span><br><span class="line"><span class="built_in">scatter</span>(<span class="number">0</span>,data(label==<span class="number">3</span>),<span class="string">&#x27;g&#x27;</span>)</span><br><span class="line"><span class="built_in">scatter</span>(<span class="number">0</span>,data(label==<span class="number">4</span>),<span class="string">&#x27;y&#x27;</span>)</span><br><span class="line"><span class="built_in">scatter</span>(<span class="number">0</span>,data(label==<span class="number">5</span>),<span class="string">&#x27;black&#x27;</span>)</span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span>:k</span><br><span class="line">    <span class="built_in">plot</span>([<span class="number">-0.1</span>,<span class="number">0.1</span>],[center(<span class="built_in">i</span>),center(<span class="built_in">i</span>)],<span class="string">&#x27;r&#x27;</span>)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line">xlim([<span class="number">-1</span>,<span class="number">1</span>])</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="二、Python可使用代码"><a href="#二、Python可使用代码" class="headerlink" title="二、Python可使用代码"></a>二、Python可使用代码</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> tqdm <span class="keyword">import</span> tqdm</span><br><span class="line"><span class="keyword">import</span> sklearn</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">plt.rcParams[<span class="string">&#x27;font.family&#x27;</span>] = <span class="string">&#x27;Consolas&#x27;</span></span><br><span class="line">plt.rcParams[<span class="string">&#x27;font.sans-serif&#x27;</span>] = [<span class="string">&#x27;Consolas&#x27;</span>]</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 随机数据</span></span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line">random.seed(<span class="number">66</span>)</span><br><span class="line">x = [random.randint(<span class="number">1</span>,<span class="number">100</span>) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">100</span>)]</span><br><span class="line">y = [random.randint(<span class="number">1</span>,<span class="number">100</span>) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">100</span>)]</span><br><span class="line">data=<span class="built_in">list</span>(<span class="built_in">zip</span>(x,y))</span><br><span class="line">df = pd.DataFrame(data)</span><br><span class="line">df.columns = [<span class="string">&#x27;v1&#x27;</span>, <span class="string">&#x27;v2&#x27;</span>]</span><br><span class="line">df.head()</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">plt.scatter(x, y)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;X&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;Y&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 手肘法判断图</span></span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> silhouette_score</span><br><span class="line"><span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> KMeans</span><br><span class="line"></span><br><span class="line">score01 = [ ]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">2</span>, <span class="number">7</span>):</span><br><span class="line">    km1 = KMeans(n_clusters=i, random_state=<span class="number">42</span>)</span><br><span class="line">    kcat1 = km1.fit_predict(df)</span><br><span class="line">    score = silhouette_score(df, kcat1)</span><br><span class="line">    score01.append(score)</span><br><span class="line">plt.plot(<span class="built_in">range</span>(<span class="number">2</span>, <span class="number">7</span>),score01)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> KMeans</span><br><span class="line">n = <span class="number">4</span></span><br><span class="line">km = KMeans(n_clusters=n, random_state=<span class="number">42</span>)</span><br><span class="line">km.fit(df)</span><br><span class="line">centers = km.cluster_centers_</span><br><span class="line"><span class="built_in">print</span>(centers)</span><br><span class="line">kcat = km.predict(df)</span><br><span class="line">df_cat = pd.concat([df,pd.DataFrame(kcat)],axis=<span class="number">1</span>)</span><br><span class="line">df_cat.columns = <span class="built_in">list</span>(df.columns) + [<span class="string">&#x27;Cate&#x27;</span>]</span><br><span class="line">df_cat.head()</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">colorg1 = [<span class="string">&#x27;#1f77b4&#x27;</span>, <span class="string">&#x27;#2ca02c&#x27;</span>, <span class="string">&#x27;#ff7f0e&#x27;</span>, <span class="string">&#x27;#7f7f7f&#x27;</span>, <span class="string">&#x27;#9467bd&#x27;</span>]</span><br><span class="line">colorg2 = [<span class="string">&#x27;#2ecc71&#x27;</span>, <span class="string">&#x27;#3498db&#x27;</span>, <span class="string">&#x27;#e74c3c&#x27;</span>, <span class="string">&#x27;#9b59b6&#x27;</span>, <span class="string">&#x27;#f39c12&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">    plt.scatter(df_cat[df_cat[<span class="string">&#x27;Cate&#x27;</span>] == i].iloc[:,<span class="number">0</span>],</span><br><span class="line">                df_cat[df_cat[<span class="string">&#x27;Cate&#x27;</span>] == i].iloc[:,<span class="number">1</span>],</span><br><span class="line">                label = <span class="string">f&#x27;Cate<span class="subst">&#123;i&#125;</span>&#x27;</span>,color = colorg1[i],)</span><br><span class="line">    <span class="keyword">for</span> index, row <span class="keyword">in</span> df_cat[df_cat[<span class="string">&#x27;Cate&#x27;</span>] == i].iterrows():</span><br><span class="line">        plt.plot([row[<span class="string">&#x27;v1&#x27;</span>], centers[i, <span class="number">0</span>]], [row[<span class="string">&#x27;v2&#x27;</span>], centers[i, <span class="number">1</span>]], color=colorg1[i])</span><br><span class="line"></span><br><span class="line">plt.scatter(centers[:,<span class="number">0</span>],centers[:,<span class="number">1</span>],color = <span class="string">&#x27;r&#x27;</span>, s = <span class="number">100</span>, zorder = <span class="number">5</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;KMeans Result&#x27;</span>,size = <span class="number">20</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;V1&#x27;</span>, size = <span class="number">15</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;V2&#x27;</span>, size = <span class="number">15</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.savefig(<span class="string">r&#x27;./PIC.svg&#x27;</span>,dpi=<span class="number">500</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df_cat.to_csv(<span class="string">r&#x27;./kmoutput.csv&#x27;</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="三、Python展开Kmeans聚类"><a href="#三、Python展开Kmeans聚类" class="headerlink" title="三、Python展开Kmeans聚类"></a>三、Python展开Kmeans聚类</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 生成测试数据</span></span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt </span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line">random.seed(<span class="number">1</span>)</span><br><span class="line">kdatax = [random.randint(<span class="number">1</span>,<span class="number">30</span>) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">30</span>)]</span><br><span class="line">kdatay = [random.randint(<span class="number">1</span>,<span class="number">30</span>) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">30</span>)]</span><br><span class="line">kdata = pd.DataFrame([kdatax,kdatay]).transpose()</span><br><span class="line">plt.plot(kdata.iloc[:,<span class="number">0</span>], kdata.iloc[:,<span class="number">1</span>], <span class="string">&#x27;ro&#x27;</span>)</span><br><span class="line">kdata.head()</span><br><span class="line"></span><br><span class="line">colorg1 = [<span class="string">&#x27;#1f77b4&#x27;</span>, <span class="string">&#x27;#2ca02c&#x27;</span>, <span class="string">&#x27;#ff7f0e&#x27;</span>, <span class="string">&#x27;#7f7f7f&#x27;</span>, <span class="string">&#x27;#9467bd&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">show</span>(<span class="params">kdata, cen, ax, k</span>):</span><br><span class="line">    plt.plot()</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">Dep</span>(<span class="params">ax, t, cen,</span>):</span><br><span class="line">    pls = [ ]</span><br><span class="line">    <span class="keyword">for</span> d <span class="keyword">in</span> t:</span><br><span class="line">        dval = [ ]</span><br><span class="line">        dsum = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(cen)):</span><br><span class="line">            dval.append(np.sqrt(<span class="built_in">sum</span>((cen[i] - d)**<span class="number">2</span>)))</span><br><span class="line">        place =  dval.index(<span class="built_in">min</span>(dval))</span><br><span class="line">        pls.append(place)</span><br><span class="line">    <span class="keyword">return</span> pls</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">Init_cen</span>(<span class="params">kdata, k, ax</span>):</span><br><span class="line">    centers = [ ]</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(k):</span><br><span class="line">        subcenters = [ ]</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(ax):</span><br><span class="line">            maxval = (kdata.iloc[:,i].<span class="built_in">max</span>())</span><br><span class="line">            minval = (kdata.iloc[:,i].<span class="built_in">min</span>())</span><br><span class="line">            subcenters.append(random.randint(minval,maxval))</span><br><span class="line">        centers.append(subcenters)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Init:&#x27;</span>,centers)</span><br><span class="line">    <span class="keyword">return</span> centers</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">KmeansH</span>(<span class="params">kdata, k, seed = <span class="number">0</span>,centers= [<span class="number">0</span>],co = <span class="number">0</span>, ax = <span class="number">0</span>, karray = <span class="number">0</span></span>):</span><br><span class="line">    <span class="keyword">if</span> ax ==<span class="number">0</span>:</span><br><span class="line">        ax = <span class="built_in">len</span>(kdata.columns)</span><br><span class="line">        karray = np.array(kdata)</span><br><span class="line">        <span class="keyword">if</span> seed !=<span class="number">0</span>:</span><br><span class="line">            random.seed(seed)</span><br><span class="line">    <span class="keyword">if</span> co == <span class="number">0</span>:</span><br><span class="line">        centers = Init_cen(kdata, k, ax)</span><br><span class="line">        co = <span class="number">1</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        co += <span class="number">1</span></span><br><span class="line">    label = Dep(ax, karray, centers)</span><br><span class="line">    kdatanew = pd.concat((kdata,pd.DataFrame(label)),axis=<span class="number">1</span>)</span><br><span class="line">    </span><br><span class="line">    cn1 = [ ]     </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(k):</span><br><span class="line">        cn2 = [ ]</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(ax):</span><br><span class="line">            cn2.append(np.mean(kdatanew[kdatanew.iloc[:,ax]==i].iloc[:,j]))</span><br><span class="line">        cn1.append(cn2)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(co,centers)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">abs</span>((np.array(cn1) - np.array(centers)).<span class="built_in">sum</span>()) &lt;= <span class="number">1e-9</span>:</span><br><span class="line">        random.seed()</span><br><span class="line">        <span class="keyword">return</span> kdatanew</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> KmeansH(kdata, k, seed,cn1 , co, ax, karray)</span><br><span class="line">    </span><br><span class="line">k=<span class="number">4</span></span><br><span class="line">kdatak = KmeansH(kdata,k,<span class="number">42</span>)</span><br><span class="line"></span><br><span class="line">centers = pd.DataFrame([[<span class="number">25.0</span>, <span class="number">10.416666666666666</span>], [<span class="number">9.555555555555555</span>, <span class="number">24.666666666666668</span>], [<span class="number">14.166666666666666</span>, <span class="number">10.0</span>], [<span class="number">3.0</span>, <span class="number">5.333333333333333</span>]])</span><br><span class="line">centers</span><br><span class="line"></span><br><span class="line">colorg1 = [<span class="string">&#x27;#1f77b4&#x27;</span>, <span class="string">&#x27;#2ca02c&#x27;</span>, <span class="string">&#x27;#ff7f0e&#x27;</span>, <span class="string">&#x27;#7f7f7f&#x27;</span>, <span class="string">&#x27;#9467bd&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(k):</span><br><span class="line"></span><br><span class="line">    plt.plot(kdatak[kdatak.iloc[:,<span class="number">2</span>]==i].iloc[:,<span class="number">0</span>],</span><br><span class="line">             kdatak[kdatak.iloc[:,<span class="number">2</span>]==i].iloc[:,<span class="number">1</span>],</span><br><span class="line">             <span class="string">&#x27;o&#x27;</span>,color = colorg1[i])</span><br><span class="line"></span><br><span class="line">plt.plot(centers.iloc[:,<span class="number">0</span>],centers.iloc[:,<span class="number">1</span>],<span class="string">&#x27;r*&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>数学建模</category>
-        <category>聚类分析</category>
-      </categories>
-      <tags>
-        <tag>MATLAB</tag>
-        <tag>聚类</tag>
-        <tag>Kmeans</tag>
-        <tag>Kmeans++</tag>
-        <tag>Python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>TestDoc</title>
     <url>/test/b01-test/</url>
     <content><![CDATA[<h3 id="TestDoc"><a href="#TestDoc" class="headerlink" title="TestDoc"></a>TestDoc</h3><p>这是一篇测试文章，选用的内容为数学建模插值的内容：</p>
@@ -1258,97 +1352,143 @@ S = \int_{0.15}^{0.18}v(t)\,{\rm d}t</script></blockquote>
       </tags>
   </entry>
   <entry>
-    <title>数模M05-拟合</title>
-    <url>/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E9%A2%84%E6%B5%8B%E6%A8%A1%E5%9E%8B/M05-%E6%8B%9F%E5%90%88/</url>
-    <content><![CDATA[<h1 id="拟合"><a href="#拟合" class="headerlink" title="拟合"></a>拟合</h1><h2 id="一、曲线拟合的线性最小二乘法"><a href="#一、曲线拟合的线性最小二乘法" class="headerlink" title="一、曲线拟合的线性最小二乘法"></a>一、曲线拟合的线性最小二乘法</h2><h3 id="（一）线性最小二乘法"><a href="#（一）线性最小二乘法" class="headerlink" title="（一）线性最小二乘法"></a>（一）线性最小二乘法</h3><h4 id="1-问题提出"><a href="#1-问题提出" class="headerlink" title="1. 问题提出"></a>1. 问题提出</h4><h5 id="（1）简介"><a href="#（1）简介" class="headerlink" title="（1）简介"></a>（1）简介</h5><p>已知一组（二维）数据，即平面上的n个点$(x_i,y_i)\ (i=1,2,\cdots,n)$，$x_i$互不相同，求一个函数（曲线）$y=f(x)$使得$f(x)$在某种准则下与所有数据点最为接近，即曲线拟合的最好</p>
-<p>线性最小二乘法是解决曲线拟合最常见的方法，思路为：令</p>
-<script type="math/tex; mode=display">
-f(x) = a_1r_1(x)+a_2r_2(x)+\cdots+a_mr_m(x)</script><p>其中$r_k(x)$是事先选定的一组线性无关的函数，$a_k$是待定系数 $(k=1,2,\cdots,m\quad ,m&lt;n)$</p>
-<p>拟合的准则为使$y_i\ ,(i=1,2,\cdots,n)$与$f(x_i)$的距离$\delta_i$的平方和最小，称为最小二乘准则</p>
-<h5 id="（2）系数-a-k-的确定"><a href="#（2）系数-a-k-的确定" class="headerlink" title="（2）系数$a_k$的确定"></a>（2）系数$a_k$的确定</h5><p>记</p>
-<script type="math/tex; mode=display">
-J(a_1,\cdots,a_m)=\sum^n_{i=1}\delta^2_i=\sum^n_{i=1}[f(x_i)-y_i]^2</script><p>为求$a_1,\cdots,a_m$使得$J$达到最小，秩序利用极值的必要条件$\dfrac{\partial J}{\partial A_j}=0\ (j=1,\cdots,m)$，得到关于$a_1,\cdots,a_m$的线性方程组</p>
-<script type="math/tex; mode=display">
-\sum^n_{i=1}r_j(x_i)[\sum^m_{k=1}a_kr_k(x_i)-y_i]=0\quad,(j=1,\cdots,m)</script><p>即</p>
-<script type="math/tex; mode=display">
-\sum^n_{i=1}a_k[\sum^m_{k=1}r_j(x_i)r_k(x_i)]=\sum^n_{i=1}r_j(x_i)y_i\quad,(j=1,\cdots,m)</script><p>记</p>
-<script type="math/tex; mode=display">
-R=
-\begin{bmatrix}
-r_1(x_1) & \cdots & r_m(x_1)\\
-\vdots & \vdots & \vdots \\
-r_1(x_n) & \cdots & r_m(x_n)\\
-\end{bmatrix}_{n\times m}\\\\
-A=[a_1,\cdots,a_m]^{\rm T}\ ,\ Y=[y_1,\cdots,y_n]^{\rm T}</script><p>当${r_1(x),\cdots,r_m(x)}$线性无关时，$R$列满秩，$R^{\rm T}R$可逆，于是上方程组有唯一解</p>
-<script type="math/tex; mode=display">
-A = (R^{\rm T}R)^{-1}R^{\rm T}Y</script><h5 id="（3）函数-r-k-x-的选择"><a href="#（3）函数-r-k-x-的选择" class="headerlink" title="（3）函数$r_k(x)$的选择"></a>（3）函数$r_k(x)$的选择</h5><p>通常通过机理分析能够知道有什么样的函数关系，如果不清楚其关系，可以先对数据作图，直观的判断应该使用的拟合曲线</p>
-<p>常见的拟合曲线选择</p>
-<ul>
-<li>直线 $y=a_1x+a_2$</li>
-<li>多项式（一般m=2，3，不宜太高）$y=a_1x^m+\cdots+a_mx+a{\small m+1}$</li>
-<li>双曲线（一支）$y=\dfrac{a_1}{x}+a_2$</li>
-<li>指数曲线 $y=a_1e^{a_2x}$</li>
-</ul>
+    <title>正则表达式快速入门</title>
+    <url>/Coding/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/</url>
+    <content><![CDATA[<h1 id="正则表达式快速入门"><a href="#正则表达式快速入门" class="headerlink" title="正则表达式快速入门"></a>正则表达式快速入门</h1><blockquote>
 <blockquote>
-<p>对于指数曲线，拟合前需做变量代换，化为对$a_1,a_2$的线性函数</p>
+<p>学习源视频：<a href="https://www.bilibili.com/video/BV1da4y1p7iZ/?spm_id_from=333.337.search-card.all.click&amp;vd_source=1437b1798845fbcba4cf09d5a889e546">奇乐编程学院-[Bilibili]</a><br>Note：<a href="https://www.xly23333.xyz">XLY23333-[Blog]</a><br>NoteBy：Typora[Markdown] + $\rm\LaTeX$ Themes by:<a href="https://github.com/Keldos-Li/typora-latex-theme">Keldos-Li-[Github]</a></p>
 </blockquote>
-<p>可以选择多种曲线进行拟合，通过判断最后$J$值，选择最小的一条</p>
-<p>也可以通过计算MSE、MAE等数值对拟合的结果进行评价</p>
-<h3 id="（二）MATLAB实现最小二乘法"><a href="#（二）MATLAB实现最小二乘法" class="headerlink" title="（二）MATLAB实现最小二乘法"></a>（二）MATLAB实现最小二乘法</h3><h4 id="1-解方程法"><a href="#1-解方程法" class="headerlink" title="1. 解方程法"></a>1. 解方程法</h4><p>由上述的可得 $J(a_1,\cdots,a_m) = ||RA-Y||^2$</p>
-<p>MATLAB中的线性最小二乘标准型为 $\min\limits_A||RA-Y||^2_2$</p>
-<p>CoreCode : <code>A = R/Y</code> </p>
-<p>在此方法下，需要将用于训练的x0，y0数据初始化为<strong>列向量</strong></p>
-<p>其中A是返回的系数矩阵，R为拟合所用函数由x0列向量对应值构建的矩阵，Y为训练用的y0列向量</p>
-<p>R的具体的构建方法如下：</p>
-<p>将构建函数对应的每一项依次带入列向量x0，一个系数一列，所以需要将x0，y0数据初始化为<strong>列向量</strong></p>
-<p>特殊的，常数项可以用<code>ones(size(x0))</code>来替换，同时也可以用于倒数等位置Init用1的情况</p>
-<p>最终得出的A数组每一位对应R矩阵的每一列所求的系数</p>
-<p><strong>Eg：</strong></p>
-<p>拟合函数：$a+bx^2+c\dfrac{1}{x}$ ，已知训练数据 $x0\ ,y0$ ，需要进行拟合的范围 $x$</p>
-<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line">R = [<span class="built_in">ones</span>(<span class="built_in">size</span>(x0)), x0.^<span class="number">2</span>, <span class="built_in">ones</span>(<span class="built_in">size</span>(x0))./x]；</span><br><span class="line">a = R(<span class="number">1</span>)</span><br><span class="line">b = R(<span class="number">2</span>)</span><br><span class="line">c = R(<span class="number">3</span>)</span><br><span class="line">y = a + b*x.^<span class="number">2</span> + c./x <span class="comment">% 输出x所包含范围内的拟合y值</span></span><br></pre></td></tr></table></figure>
-<h4 id="2-多项式拟合Poly"><a href="#2-多项式拟合Poly" class="headerlink" title="2. 多项式拟合Poly"></a>2. 多项式拟合Poly</h4><p>如果取 ${r<em>1(x),\cdots,r</em>{m+1}(x)}={1,x,\cdots,x^m}$，即用m次多项式拟合给定的数据，可以用MATLAB中的poly系列函数执行</p>
-<h5 id="（1）拟合函数"><a href="#（1）拟合函数" class="headerlink" title="（1）拟合函数"></a>（1）拟合函数</h5><p>Code : <code>A = polyfit(x0, y0, &lt;Count&gt;)</code></p>
-<p>其中<code>&lt;Count&gt;</code>为拟合多项式的次数，输出的参数A为拟合多项式的系数数组，从高次项向低次项的顺序</p>
-<p>即在拟合函数$y=a(1)x^m+\cdots+a(m)x+a(m+1)$中，$a=[a(1),\cdots,a(m),a(m+1)]$</p>
-<h5 id="（2）数值计算"><a href="#（2）数值计算" class="headerlink" title="（2）数值计算"></a>（2）数值计算</h5><p>Code : <code>y = polyval(A,x)</code></p>
-<p>其中x为拟合需求的取值，当x换成x0的时候，可以用与求y_fit_test，并进行MSE检测</p>
-<h4 id="3-MSE检测拟合度"><a href="#3-MSE检测拟合度" class="headerlink" title="3. MSE检测拟合度"></a>3. MSE检测拟合度</h4><p>MSE(Mean Squared Error)是指最小平方误差，可以检验拟合结果和实际结果的MSE来判断拟合的程度</p>
-<h5 id="（1）MATLAB实现代码："><a href="#（1）MATLAB实现代码：" class="headerlink" title="（1）MATLAB实现代码："></a>（1）MATLAB实现代码：</h5><p><code>MSEValue = mse(&lt;y_real&gt; - &lt;y_fit_test&gt;)</code></p>
-<p>如果使用<strong>解方程法</strong>拟合，应当首先对<code>&lt;y_real&gt;</code>进行转置，即 <code>mse(&lt;y_real&gt;&#39;-&lt;y_fit_test&gt;)</code></p>
-<h5 id="（2）y-fit-test的获取方法"><a href="#（2）y-fit-test的获取方法" class="headerlink" title="（2）y_fit_test的获取方法"></a>（2）y_fit_test的获取方法</h5><ul>
-<li><p>拟合相应点</p>
-<ul>
-<li><p>解方程法：<code>y_fit_test = f(x0)</code></p>
-<ul>
-<li><code>f</code>为代入系数矩阵A的相应的函数求解表达式，其中自变量改为<strong>x0</strong></li>
-</ul>
-</li>
-<li><p>polyval法：<code>y_fit_test = polyval(r,x0)</code></p>
-<ul>
-<li><code>r</code>为<code>polyfit</code>所得到的系数数组，进行<code>ployval</code>的自变量为<strong>x0</strong></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>包含拟合后索引（x的步长需为等长）</p>
-<ul>
-<li><code>y_fit_test = y(1+(x0-min(x)./step))</code><ul>
-<li>其中x为拟合要求的数据范围，<strong>step是x的步长</strong></li>
-</ul>
-</li>
-<li><code>y_fit_test = y(round(1+(x0-min(x))./(x(2)-x(1))))</code></li>
-</ul>
-</li>
-</ul>
+</blockquote>
+<hr>
+<h2 id="限定符-Quantifiers"><a href="#限定符-Quantifiers" class="headerlink" title="限定符 [Quantifiers]"></a>限定符 [Quantifiers]</h2><h3 id="单个字符的限定"><a href="#单个字符的限定" class="headerlink" title="单个字符的限定"></a>单个字符的限定</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">$\quad$限定符$\quad$</th>
+<th style="text-align:left">Description</th>
+<th style="text-align:center">$\quad$Eg$\quad$</th>
+<th style="text-align:left">Egmeans</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>?</code></td>
+<td style="text-align:left">?前字符出现<strong>0</strong>或1次(?前字符<strong>可有可无</strong>)</td>
+<td style="text-align:center"><code>used?</code></td>
+<td style="text-align:left">查找所有use和used</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>*</code></td>
+<td style="text-align:left">*前字符出现<strong>0</strong>或<strong>多次</strong>(*前字符<strong>可有多次可无</strong>)</td>
+<td style="text-align:center"><code>ab?c</code></td>
+<td style="text-align:left">可查找abc,ac,abbbc等</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>+</code></td>
+<td style="text-align:left">+前字符出现<strong>1</strong>或<strong>多次</strong>(+前字符<strong>可有一次或多次</strong>)</td>
+<td style="text-align:center"><code>ab+c</code></td>
+<td style="text-align:left">可查找abc,abbbc等</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>&#123;&lt;num&gt;&#125;</code></td>
+<td style="text-align:left">指定{…}前字符<strong>出现次数</strong>为<code>&lt;num&gt;</code>次</td>
+<td style="text-align:center">ab{2}c</td>
+<td style="text-align:left">可查找abbc等</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>&#123;&lt;min&gt;,&lt;max&gt;&#125;</code></td>
+<td style="text-align:left">指定{…}前字符<strong>出现次数范围</strong>,可以<strong>缺省<code>max</code>值</strong></td>
+<td style="text-align:center">ab{3,}c</td>
+<td style="text-align:left">可查找abbbbc,abbbc等</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="多个字符的限定"><a href="#多个字符的限定" class="headerlink" title="多个字符的限定"></a>多个字符的限定</h3><p>可以使用<code>()</code>将多个字符括起,随后操作同上方的单个字符限定</p>
+<p><strong><em>Eg:</em></strong><code>a(bc)&#123;1,2&#125;d</code>可以搜索 ‘abcd’ 和 ‘abcbcd’</p>
+<h2 id="或运算符-OR-Operation"><a href="#或运算符-OR-Operation" class="headerlink" title="或运算符 [OR Operation]"></a>或运算符 [OR Operation]</h2><p>同时匹配所有出现的情况,只要有就匹配</p>
+<p>Code: <code>(&lt;word1&gt;|&lt;words2&gt;|&lt;words3&gt;|...)</code></p>
+<p>使用<code>()</code>将或运算内容括起,用<code>|</code>将内容隔开,则括号中所有的内容执行或运算,均可以被查找到</p>
+<p><strong><em>Eg:</em></strong><code>a (cat|dog)</code>可以搜索 ‘a cat’ 和 ‘a dog’ [注意:a后方的空格也算作检索内容]</p>
+<h2 id="字符类-Character-Classes"><a href="#字符类-Character-Classes" class="headerlink" title="字符类 [Character Classes]"></a>字符类 [Character Classes]</h2><p>匹配由指定字符所构成的内容,无需完全匹配,拥有其中之一即可</p>
+<p>Code: <code>[&lt;char1&gt;&lt;char2&gt;...]</code>并列查找由他们构成的内容</p>
+<p>​           <code>[&lt;char1&gt;-&lt;char2&gt;]</code> 定义查找范围<code>&lt;char1&gt;-&lt;char2&gt;</code></p>
+<p>​            <code>[^&lt;char&gt;]</code>查找除了方括号的其他内容</p>
+<p><strong><em>Eg</em></strong>: <code>[^\nA-Za-z]+</code> 查找所有的数字(非换行符,非大写字母,非小写字母)</p>
+<h2 id="元字符-Meta-Characters"><a href="#元字符-Meta-Characters" class="headerlink" title="元字符 [Meta-Characters]"></a>元字符 [Meta-Characters]</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>$\quad$Meta-Char$\quad$</th>
+<th style="text-align:left">$\quad$Description$\quad$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>\d</code></td>
+<td style="text-align:left"><strong>数字</strong>字符</td>
+</tr>
+<tr>
+<td><code>\w</code></td>
+<td style="text-align:left"><strong>单词</strong>字符(英文字母+数字+下划线)</td>
+</tr>
+<tr>
+<td><code>\s</code></td>
+<td style="text-align:left"><strong>空白</strong>符(TAB+换行符)</td>
+</tr>
+<tr>
+<td><code>\D</code></td>
+<td style="text-align:left"><strong>非数字</strong>字符</td>
+</tr>
+<tr>
+<td><code>\W</code></td>
+<td style="text-align:left"><strong>非单词</strong>字符</td>
+</tr>
+<tr>
+<td><code>\S</code></td>
+<td style="text-align:left"><strong>非空白</strong>符</td>
+</tr>
+<tr>
+<td><code>.</code></td>
+<td style="text-align:left"><strong>任意</strong>字符(<strong>不包含换行符</strong>)</td>
+</tr>
+<tr>
+<td><code>^&lt;char&gt;</code></td>
+<td style="text-align:left">匹配<strong>行首</strong>的<code>&lt;char&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;char&gt;$</code></td>
+<td style="text-align:left">匹配<strong>行尾</strong>的<code>&lt;char&gt;</code></td>
+</tr>
+<tr>
+<td><code>\b&lt;chars&gt;\b</code></td>
+<td style="text-align:left">规定该位置为<strong>单词边界</strong>,<strong>防止对超量的截取匹配</strong></td>
+</tr>
+<tr>
+<td><code>\B&lt;chars&gt;\B</code></td>
+<td style="text-align:left">规定该位置为<strong>非单词边界</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>如果要使用<code>.</code>则可以通过转义后的<code>\.</code>进行匹配</p>
+<h2 id="贪婪与懒惰匹配-Greedy-vs-Lazy-Match"><a href="#贪婪与懒惰匹配-Greedy-vs-Lazy-Match" class="headerlink" title="贪婪与懒惰匹配 [Greedy vs Lazy Match]"></a>贪婪与懒惰匹配 [Greedy vs Lazy Match]</h2><p>假设对一下的html内容,需要匹配<code>&lt;center&gt;</code>和<code>&lt;/center&gt;&gt;</code></p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">center</span>&gt;</span>TEXT<span class="tag">&lt;/<span class="name">center</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>如果使用<code>&lt;.+&gt;</code>,由于<code>&gt;</code>和<code>&lt;</code>同样属于<code>.</code>,所以将匹配整行的全部代码</p>
+<p>可以将代码更改为<code>&lt;.+?&gt;</code>由贪婪模式匹配为<strong>懒惰匹配</strong>,从而精确匹配</p>
+<p>也可以在不切换模式的情况下,改用<code>&lt;[^&lt;&gt;]+&gt;</code>去掉可能出现的<code>&gt;</code>和<code>&lt;</code>查找</p>
+<h2 id="实战练习"><a href="#实战练习" class="headerlink" title="实战练习"></a>实战练习</h2><h3 id="匹配16进制的颜色值"><a href="#匹配16进制的颜色值" class="headerlink" title="匹配16进制的颜色值"></a>匹配16进制的颜色值</h3><p>颜色值#开头,为十六进制(由0~9,a~f,A~F构成),共6位字符</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img01/eg1.png" style="zoom:40%"></p>
+<h3 id="IPv4-地址匹配"><a href="#IPv4-地址匹配" class="headerlink" title="IPv4 地址匹配"></a>IPv4 地址匹配</h3><p>IPv4由四段数字组成,中间由符号.隔开,且数字的范围为0~255</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img01/eg2.png" style="zoom:50%"></p>
 ]]></content>
       <categories>
-        <category>数学建模</category>
-        <category>预测模型</category>
+        <category>Coding</category>
       </categories>
       <tags>
-        <tag>MATLAB</tag>
-        <tag>预测</tag>
-        <tag>拟合</tag>
+        <tag>Python</tag>
+        <tag>正则表达式</tag>
+        <tag>Search</tag>
       </tags>
   </entry>
   <entry>
