@@ -345,323 +345,6 @@ A = (R^{\rm T}R)^{-1}R^{\rm T}Y</script><h5 id="（3）函数-r-k-x-的选择"><
       </tags>
   </entry>
   <entry>
-    <title>数模M04-插值</title>
-    <url>/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E9%A2%84%E6%B5%8B%E6%A8%A1%E5%9E%8B/M04-%E6%8F%92%E5%80%BC/</url>
-    <content><![CDATA[<h1 id="插值"><a href="#插值" class="headerlink" title="插值"></a>插值</h1><h2 id="一、插值定义"><a href="#一、插值定义" class="headerlink" title="一、插值定义"></a>一、插值定义</h2><p>数据处理问题：在平面上给定一组离散点列，要求一条曲线把这些点依次连接起来，称之为插值</p>
-<p><strong>注意！</strong>此部分出现了大量不同的有关矩阵的函数运算方法，不同的运算方法之间对行标和列标的对应不同，最好在使用之前用<code>size()</code>方法看清相应的大小和对应关系，再进行操作！</p>
-<h2 id="二、常见插值方法"><a href="#二、常见插值方法" class="headerlink" title="二、常见插值方法"></a>二、常见插值方法</h2><p>已知$n+1$个点$(x_i,y_i)\ (i=0,1,…,n)$，下面求各种插值函数</p>
-<h3 id="（一）分段线性插值"><a href="#（一）分段线性插值" class="headerlink" title="（一）分段线性插值"></a>（一）分段线性插值</h3><p>将两个相邻的节点用直线连接起来，如此形成的一条折线就是分段线性插值函数，记作$I_n(x)$，它满足$I_n(x_i)=y_i$，且$I_n(x)$在每一个小区间$[x_i,x{\small i+1}]$上是线性函数   $(i=0,1,…,n)$</p>
-<p>$I_n(x)$可以表示为$I_n(x)\sum\limits^n{\small i=0}y_il_i(x)$，其中</p>
-<script type="math/tex; mode=display">
-l_i(x)=\begin{cases}
-\dfrac{x-x_{i-1}}{x_i-x_{i-1}},\quad x\in[x_{i-1},x_i]\ (i\ne 0)\\\\
-\dfrac{x-x_{i+1}}{x_i-x_{i+1}},\quad x\in[x_i,x_{i+1}]\ (i\ne n)\\\\
-\quad\ \ \ 0\quad\quad\,,\quad \rm Others
-\end{cases}</script><p>$I_n(x)$有较好的收敛性，即对于$x\in[a,b]$，有</p>
-<script type="math/tex; mode=display">
-\lim_{n\to\infty}I_n(x) = f(x)</script><p>用$I_n(x)$计算x点的插值时，只用到x左右的两个节点，计算量与节点个数n无关。但n越大，分段越多，插值误差越小。实际上用函数表做插值计算时，分段线性插值就足够了，如：数学、物理重用的特殊函数表，数理统计中用的概率分布表等等</p>
-<h3 id="（二）拉格朗日插值多项式"><a href="#（二）拉格朗日插值多项式" class="headerlink" title="（二）拉格朗日插值多项式"></a>（二）拉格朗日插值多项式</h3><p>拉格朗日插值的基函数为</p>
-<script type="math/tex; mode=display">
-\begin{align}
-l_i(x) &= \dfrac{(x-x_0)\cdots(x-x_{i-1})(x-x_{i+1})\cdots(x-x_n)}{(x_i-x_0)\cdots(x_i-x_{i-1})(x_i-x_{i+1})\cdots(x_i-x_n)}\\\\
-&={\prod^n_{j=0}}\limits_{j\ne i}\frac{x-x_j}{x_i-x_j}\quad(i=0,1,\cdots,n)
-\end{align}</script><p>其中$l_i(x)$是n次多项式，满足</p>
-<script type="math/tex; mode=display">
-l_i(x_j)=
-\begin{cases}
-0\ ,\quad j \ne i\\
-1\ ,\quad j = i
-\end{cases}</script><blockquote>
-<p>i,j相同时，$l_i(x)$式上下一致，结果为1</p>
-<p>i,j不同时，$l_i(x)$中一定存在$(x_j-x{\small ?})=0$，结果为0</p>
-</blockquote>
-<p>拉格朗日插值函数：</p>
-<script type="math/tex; mode=display">
-L_n(x) = \sum_{i=0}^n y_il_i(x)=\sum_{i=0}^ny_i\left({\prod^n_{j=0}}\limits_{j\ne i}\dfrac{x-x_j}{x_i-x_j}\right)\quad(i=0,1,\cdots,n)</script><h3 id="（三）样条插值"><a href="#（三）样条插值" class="headerlink" title="（三）样条插值"></a>（三）样条插值</h3><p>部分问题对所得插值函数的光滑性有较高的要求，不仅要连续，而且要有连续的曲率</p>
-<p>样条（Spline）原指富有弹性的细木条或金属条。利用将已知点连接成一条光滑曲线（称为样条曲线），并使连接点处具有连续的曲率，三次样条插值就是如此抽象出来的</p>
-<p>数学上将具有一定光滑性的分段多项式称为样条函数。具体来说，给定区间[a,b]的一个分划</p>
-<script type="math/tex; mode=display">
-\Delta:a=x_0<x_1<\cdots<x_{n-1}<x_n=b</script><p>如果函数S(x)满足</p>
-<ul>
-<li>在每一个小区间$[x_i,x{\small i+1}]\ (i = 0,1,\cdots,n-1)$上S(x)是m次多项式</li>
-<li>S(x)在$[a,b]$上具有m-1阶连续导数</li>
-</ul>
-<p>则称S(x)为关于分划$\Delta$的m次样条函数，其图形为m次样条曲线。显然，折现是依次样条曲线</p>
-<h2 id="三、MATLAB插值工具箱-notebook-with-decorative-cover"><a href="#三、MATLAB插值工具箱-notebook-with-decorative-cover" class="headerlink" title="三、MATLAB插值工具箱:notebook_with_decorative_cover:"></a>三、MATLAB插值工具箱:notebook_with_decorative_cover:</h2><h3 id="（一）一维插值函数-interp1"><a href="#（一）一维插值函数-interp1" class="headerlink" title="（一）一维插值函数 interp1()"></a>（一）一维插值函数 interp1()</h3><p>Code : <code>&lt;ValName&gt; = interp1(x0, y0, x, &lt;method&gt;)</code></p>
-<p>其中<code>&lt;method&gt;</code>指插值的方法，默认为线性插值(‘linear’)，其可选值有：</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>&lt; method &gt;</th>
-<th>Description</th>
-<th>Sp</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>‘linear’</td>
-<td>线性插值</td>
-<td>None</td>
-</tr>
-<tr>
-<td>‘nearest’</td>
-<td>最近项目插值</td>
-<td>None</td>
-</tr>
-<tr>
-<td>‘spline’</td>
-<td>立方(三次)样条插值</td>
-<td>保证函数平滑</td>
-</tr>
-<tr>
-<td>‘cubic’</td>
-<td>立方(三次)插值</td>
-<td>保持函数凸凹性</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>其中所有的插值方法都要求x0是单调的</p>
-<p>当x0为等距的时候可以使用快速插值法</p>
-<blockquote>
-<p>method格式：<code>&#39;*linear&#39;</code> , <code>&#39;*nearest&#39;</code> , <code>&#39;*spline&#39;</code> , <code>&#39;*cubic&#39;</code></p>
-</blockquote>
-<h3 id="（二）一维三次样条插值"><a href="#（二）一维三次样条插值" class="headerlink" title="（二）一维三次样条插值"></a>（二）一维三次样条插值</h3><p>CodeStyle01 : <code>&lt;ValName&gt; = interp1(x0, y0, x, &#39;spline&#39;)</code></p>
-<p>CodeStyle02 : <code>&lt;ValName&gt; = spline(x0, y0, x)</code></p>
-<p><em>Recommand </em>: <strong>csape()</strong></p>
-<p>CodeStyle03 : <code>pp = csape(x0, y0, &lt;conds&gt;)</code></p>
-<p>​                         <code>&lt;ValName&gt; = fnval(pp, x)</code></p>
-<p>CodeStyle04 : <code>pp = csape(x0, y0, &lt;conds&gt;, &lt;valconds&gt;)</code></p>
-<p>​                         <code>&lt;ValName&gt; = fnval(pp, x)</code></p>
-<p>提倡使用函数csape，其返回值是pp形式，为了求出插值点的函数值，需要调用函数fnval</p>
-<p><code>pp = csape(x0, y0)</code>使用默认的边界条件（Lagrange边界条件）</p>
-<p><code>&lt;conds&gt;</code>为指定插值的边界条件，可选值如下</p>
-<blockquote>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>&lt; conds &gt;</th>
-<th>Description</th>
-<th>&lt; valconds &gt;</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>‘complete’</td>
-<td>边界为一阶导数</td>
-<td>需提供</td>
-</tr>
-<tr>
-<td>‘not-a-knot’</td>
-<td>非扭结条件</td>
-<td></td>
-</tr>
-<tr>
-<td>‘periodic’</td>
-<td>周期条件</td>
-<td></td>
-</tr>
-<tr>
-<td>‘second’</td>
-<td>边界为二阶导数(缺省值为[0,0])</td>
-<td>需提供</td>
-</tr>
-<tr>
-<td>‘variational’</td>
-<td>设置边界的二阶导数值为[0,0]</td>
-<td>对于一些特殊的边界条件，可以通过conds的一个1$\times$2矩阵来表示，conds元素的取值为0,1,2</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p><strong><em>Eg:</em></strong> <code>conds = [2,1]</code> 左边界是二阶导数，右边界是一阶导数，相应的值由valconds给出</p>
-<p><code>&lt;valconds&gt;</code>为<code>&lt;conds&gt;</code>方法所需的值，若不填写则按照缺省情况处理</p>
-</blockquote>
-<p><a href="# Eg5.1  机床加工">Eg5.1  机床加工</a></p>
-<h3 id="（三）二维插值"><a href="#（三）二维插值" class="headerlink" title="（三）二维插值"></a>（三）二维插值</h3><h4 id="1-插值节点为网格节点"><a href="#1-插值节点为网格节点" class="headerlink" title="1. 插值节点为网格节点"></a>1. 插值节点为网格节点</h4><p>已知m$\times$n个节点：$(x_i,y_j,z{\small ij})\ (i = 1,2,\cdots,m;\ j=1,2,\cdots,n)$，</p>
-<p>且$x_1&lt;\cdots&lt;x_m;\ y_1&lt;\cdots&lt;y_n$</p>
-<p>求点$(x, y)$处的插值</p>
-<h5 id="（1）二维插值函数"><a href="#（1）二维插值函数" class="headerlink" title="（1）二维插值函数"></a>（1）二维插值函数</h5><p>Code : <code>&lt;ValName&gt; = interp2(x0, y0, z0, x, y, &lt;method&gt;)</code></p>
-<p>其中<code>&lt;method&gt;</code>指插值的方法，同一维的参数相同</p>
-<p><strong>x0,y0</strong> 分别为<strong>m</strong>维和<strong>n</strong>维向量，表示节点，z0为 n$\times$m 维度矩阵，表示节点的值，x,y为一维数组，指插值点</p>
-<p>x与y应当是方向不同的向量，即一个是行向量，一个是列向量（y需要转置）</p>
-<p>输出内容为矩阵，Row=y的维数，Col=x的维数，表示得到的插值</p>
-<h5 id="（2）二维三次样条插值"><a href="#（2）二维三次样条插值" class="headerlink" title="（2）二维三次样条插值"></a>（2）二维三次样条插值</h5><p>Code : <code>pp = csape(&#123;x0, y0&#125;, z0, conds, valconds)</code></p>
-<p>​            <code>&lt;ValName&gt; = fnval(pp, &#123;x, y&#125;)</code></p>
-<p>对其内容的解释同上</p>
-<h5 id="（3）显示相应的三维网格图"><a href="#（3）显示相应的三维网格图" class="headerlink" title="（3）显示相应的三维网格图"></a>（3）显示相应的三维网格图</h5><p>Code : <code>mesh(y,x,z)</code></p>
-<p>mesh函数的x为列，y为行，需要将xy反写</p>
-<p><a href="# Eg5.3 丘陵曲面最高点">Eg5.3 丘陵曲面最高点</a></p>
-<h4 id="2-插值节点为散乱节点"><a href="#2-插值节点为散乱节点" class="headerlink" title="2. 插值节点为散乱节点"></a>2. 插值节点为散乱节点</h4><p>已知n个节点$(x_i,y_i,z_i)\ (i=1,2,\cdots,n)$，求点$(x,y)$处的插值z</p>
-<p>Code：<code>&lt;ValName&gt; = griddata(x, y, z, XI, YI)</code></p>
-<p>其中x、y、z均为n维向量，指明所给出数据的横坐标、纵坐标和竖坐标 </p>
-<p>向量XI、YI是给定的网格点的横坐标和纵坐标</p>
-<p>返回值<code>&lt;ValName&gt;</code>为网格(XI, YI)处的函数值，但是<strong>行为YI，列为XI</strong>，进行mesh的时候不需要反转XY</p>
-<p>XI与YI应当是方向不同的向量，一行一列（YI需要转置）</p>
-<blockquote>
-<p>MATLAB中插值时，外插值是不确定的，可以使用混合插值的方法，把不确定的插值换成最近点的插值结果</p>
-<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line">ZI1=griddata(x,y,z,XI,YI&#x27;,<span class="string">&#x27;cubic&#x27;</span>); <span class="comment">%立方插值</span></span><br><span class="line">ZI2=griddata(x,y,z,XI,YI&#x27;,<span class="string">&#x27;nearest&#x27;</span>); <span class="comment">%最近点插值</span></span><br><span class="line">ZI = ZI1; <span class="comment">%</span></span><br><span class="line">ZI(<span class="built_in">isnan</span>(ZI1)) = ZI2(<span class="built_in">isnan</span>(ZI1));</span><br></pre></td></tr></table></figure>
-</blockquote>
-<hr>
-<h2 id="四、实战例题"><a href="#四、实战例题" class="headerlink" title="四、实战例题"></a>四、实战例题</h2><h4 id="Eg5-1-机床加工"><a href="#Eg5-1-机床加工" class="headerlink" title="Eg5.1  机床加工"></a>Eg5.1  机床加工</h4><blockquote>
-<p>待加工零件的外形根据工艺要求由一组数据$(x,y)$给出（在平面情况下），用程控铣床加工时每一刀只能沿$x$方向和$y$方向走非常小的一步，这就需要从已知数据得到加工所要求的步长很小的$(x,y)$坐标。<br>Data中给出的$x,y$数据位于机翼断面的下轮廓线上，假设需要得到$x$坐标每改变0.1时的$y$坐标。试完成加工所需数据，画出曲线，并求出$x=0$处的曲线斜率和$13\le x\le15$范围内y的最小值。要求用分段线性和三次样条两种插值方法计算。</p>
-</blockquote>
-<p>Data：</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">x</th>
-<th style="text-align:center">0</th>
-<th style="text-align:center">3</th>
-<th style="text-align:center">5</th>
-<th style="text-align:center">7</th>
-<th style="text-align:center">9</th>
-<th style="text-align:center">11</th>
-<th style="text-align:center">12</th>
-<th style="text-align:center">13</th>
-<th style="text-align:center">14</th>
-<th style="text-align:center">15</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center"><strong>y</strong></td>
-<td style="text-align:center">0</td>
-<td style="text-align:center">1.2</td>
-<td style="text-align:center">1.7</td>
-<td style="text-align:center">2.0</td>
-<td style="text-align:center">2.1</td>
-<td style="text-align:center">2.0</td>
-<td style="text-align:center">1.8</td>
-<td style="text-align:center">1.2</td>
-<td style="text-align:center">1.0</td>
-<td style="text-align:center">1.6</td>
-</tr>
-</tbody>
-</table>
-</div>
-<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line">clear</span><br><span class="line">clc</span><br><span class="line"><span class="comment">%% Data:</span></span><br><span class="line">x0 = [<span class="number">0</span> <span class="number">3</span> <span class="number">5</span> <span class="number">7</span> <span class="number">9</span> <span class="number">11</span> <span class="number">12</span> <span class="number">13</span> <span class="number">14</span> <span class="number">15</span>];</span><br><span class="line">y0 = [<span class="number">0</span> <span class="number">1.2</span> <span class="number">1.7</span> <span class="number">2.0</span> <span class="number">2.1</span> <span class="number">2.0</span> <span class="number">1.8</span> <span class="number">1.2</span> <span class="number">1.0</span> <span class="number">1.6</span>];</span><br><span class="line">x = [<span class="built_in">min</span>(x0):<span class="number">0.1</span>:<span class="built_in">max</span>(x0)];</span><br><span class="line"><span class="comment">%% Linear</span></span><br><span class="line">y_linear = interp1(x0, y0, x);</span><br><span class="line"><span class="comment">%% Spline</span></span><br><span class="line">y_spline = interp1(x0, y0, x, <span class="string">&#x27;spline&#x27;</span>);</span><br><span class="line">pp_lagrange = csape(x0, y0);</span><br><span class="line">y_spline_lagrange = fnval(pp_lagrange, x);</span><br><span class="line">pp_second = csape(x0, y0, <span class="string">&#x27;second&#x27;</span>);</span><br><span class="line">y_spline_second = fnval(pp_second, x);</span><br><span class="line"><span class="comment">%% DispFigure</span></span><br><span class="line"><span class="comment">% linear</span></span><br><span class="line"><span class="built_in">figure</span>(<span class="string">&#x27;Position&#x27;</span>, [<span class="number">800</span>,<span class="number">100</span>,<span class="number">1000</span>,<span class="number">800</span>]);</span><br><span class="line">subplot(<span class="number">2</span>,<span class="number">2</span>,<span class="number">1</span>)</span><br><span class="line"><span class="built_in">plot</span>(x,y_linear, <span class="string">&#x27;r&#x27;</span>,x0, y0,<span class="string">&#x27;bp&#x27;</span>)</span><br><span class="line">title(<span class="string">&#x27;Interp1-Linear&#x27;</span>)</span><br><span class="line"><span class="comment">% spline</span></span><br><span class="line">subplot(<span class="number">2</span>,<span class="number">2</span>,<span class="number">2</span>)</span><br><span class="line"><span class="built_in">plot</span>(x,y_spline, <span class="string">&#x27;r&#x27;</span>,x0, y0,<span class="string">&#x27;bp&#x27;</span>)</span><br><span class="line">title(<span class="string">&#x27;Interp1-Spline&#x27;</span>)</span><br><span class="line">subplot(<span class="number">2</span>,<span class="number">2</span>,<span class="number">3</span>)</span><br><span class="line"><span class="built_in">plot</span>(x,y_spline_lagrange, <span class="string">&#x27;r&#x27;</span>,x0, y0,<span class="string">&#x27;bp&#x27;</span>)</span><br><span class="line">title(<span class="string">&#x27;Csape-Lagrange&#x27;</span>)</span><br><span class="line">subplot(<span class="number">2</span>,<span class="number">2</span>,<span class="number">4</span>)</span><br><span class="line"><span class="built_in">plot</span>(x,y_spline_second, <span class="string">&#x27;r&#x27;</span>,x0, y0,<span class="string">&#x27;bp&#x27;</span>)</span><br><span class="line">title(<span class="string">&#x27;Csape-Second&#x27;</span>)</span><br><span class="line"><span class="comment">%% Other Tasks</span></span><br><span class="line"><span class="comment">% 求x=0处的斜率</span></span><br><span class="line">dx = diff(x); <span class="comment">% diff逐差函数</span></span><br><span class="line">dy = diff(y_spline_lagrange);</span><br><span class="line">dy_dx = dy./dx;</span><br><span class="line">dy_dx_0 = dy_dx(<span class="number">1</span>);</span><br><span class="line"><span class="comment">% 求13~15范围内y的最小值</span></span><br><span class="line">ymin = <span class="built_in">min</span>(y_spline_lagrange(<span class="number">131</span>:<span class="number">151</span>)); <span class="comment">% 找出ymin</span></span><br><span class="line">yloc = <span class="built_in">find</span>(y_spline_lagrange == ymin); <span class="comment">% find ymin的index</span></span><br><span class="line">xloc = x(yloc); <span class="comment">% 用ymin的index定位xloc</span></span><br><span class="line"><span class="built_in">disp</span>([<span class="string">&#x27;k(0) = &#x27;</span> num2str(dy_dx_0)])</span><br><span class="line"><span class="built_in">disp</span>([<span class="string">&#x27;xloc: &#x27;</span> num2str(xloc)])</span><br><span class="line"><span class="built_in">disp</span>([<span class="string">&#x27;ymin: &#x27;</span> num2str(ymin)])</span><br></pre></td></tr></table></figure>
-<p><strong><em>output</em></strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">k(0) = 0.49716</span><br><span class="line">xloc: 13.8</span><br><span class="line">ymin: 0.98511</span><br></pre></td></tr></table></figure>
-<p><strong><em>Pic</em></strong></p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img01/eg51output.jpg" alt="eg51output"></p>
-<h4 id="Eg5-2-求速度曲线的位移"><a href="#Eg5-2-求速度曲线的位移" class="headerlink" title="Eg5.2 求速度曲线的位移"></a>Eg5.2 求速度曲线的位移</h4><blockquote>
-<p>已知速度曲线$v(t)$上的四个数据点如下表，用三次样条插值求位移</p>
-<script type="math/tex; mode=display">
-S = \int_{0.15}^{0.18}v(t)\,{\rm d}t</script></blockquote>
-<p>Data:</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>$t$</th>
-<th>0.15</th>
-<th>0.16</th>
-<th>0.17</th>
-<th>0.18</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>$v(t)$</strong></td>
-<td>3.5</td>
-<td>1.5</td>
-<td>2.5</td>
-<td>2.8</td>
-</tr>
-</tbody>
-</table>
-</div>
-<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line">clear</span><br><span class="line">clc</span><br><span class="line"><span class="comment">%% DataLoad</span></span><br><span class="line">t0 = <span class="number">0.15</span>:<span class="number">0.01</span>:<span class="number">0.18</span>;</span><br><span class="line">v0 = [<span class="number">3.5</span>,<span class="number">1.5</span>,<span class="number">2.5</span>,<span class="number">2.8</span>];</span><br><span class="line"><span class="comment">%% Spline</span></span><br><span class="line">pp = csape(t0, v0); <span class="comment">% 使用默认边界条件Lagrange</span></span><br><span class="line">format long g <span class="comment">% 设置长小数格式</span></span><br><span class="line">xs = pp.coefs <span class="comment">% 显示每个区间上三次多项式的系数</span></span><br><span class="line">s = integral(@(t)ppval(pp,t),<span class="number">0.15</span>,<span class="number">0.18</span>) <span class="comment">% 求数值积分</span></span><br><span class="line">    <span class="comment">% @(t) 为匿名函数的书写格式 </span></span><br><span class="line">    <span class="comment">% integral(fx,xmin,ymin) 求数值积分</span></span><br><span class="line">        <span class="comment">% 使用全局自适应积分和默认误差容限在 xmin 至 xmax 间以数值形式为函数</span></span><br><span class="line">    <span class="comment">% ppval(pp,xq)计算分段多项式:查询点 xq 处计算分段多项式 pp</span></span><br><span class="line">format <span class="comment">% 恢复短小数小时格式</span></span><br></pre></td></tr></table></figure>
-<p><strong><em>output</em></strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">xs =     -616666.666666667                     33500         -473.333333333334                       3.5</span><br><span class="line">         -616666.666666667                     15000          11.6666666666671                       1.5</span><br><span class="line">         -616666.666666668         -3499.99999999999          126.666666666667                       2.5</span><br><span class="line">s =0.068625</span><br></pre></td></tr></table></figure>
-<h4 id="Eg5-3-丘陵曲面最高点"><a href="#Eg5-3-丘陵曲面最高点" class="headerlink" title="Eg5.3 丘陵曲面最高点"></a>Eg5.3 丘陵曲面最高点</h4><blockquote>
-<p>在一丘陵地带测量高程，x和y方向每隔100米测一个点，得高程如表，试插值一曲面，确定合适的模型，并由此找出最高点和该点的高程</p>
-</blockquote>
-<p>Data:</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">y\x</th>
-<th style="text-align:center">100</th>
-<th style="text-align:center">200</th>
-<th style="text-align:center">300</th>
-<th style="text-align:center">400</th>
-<th style="text-align:center">500</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center"><strong>100</strong></td>
-<td style="text-align:center">636</td>
-<td style="text-align:center">697</td>
-<td style="text-align:center">624</td>
-<td style="text-align:center">478</td>
-<td style="text-align:center">450</td>
-</tr>
-<tr>
-<td style="text-align:center"><strong>200</strong></td>
-<td style="text-align:center">698</td>
-<td style="text-align:center">712</td>
-<td style="text-align:center">630</td>
-<td style="text-align:center">478</td>
-<td style="text-align:center">420</td>
-</tr>
-<tr>
-<td style="text-align:center"><strong>300</strong></td>
-<td style="text-align:center">680</td>
-<td style="text-align:center">674</td>
-<td style="text-align:center">598</td>
-<td style="text-align:center">412</td>
-<td style="text-align:center">400</td>
-</tr>
-<tr>
-<td style="text-align:center"><strong>400</strong></td>
-<td style="text-align:center">662</td>
-<td style="text-align:center">626</td>
-<td style="text-align:center">552</td>
-<td style="text-align:center">334</td>
-<td style="text-align:center">310</td>
-</tr>
-</tbody>
-</table>
-</div>
-<blockquote>
-<p>注意此处直接列写矩阵，则xy与正常的对应相反</p>
-</blockquote>
-<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line">clear</span><br><span class="line">clc</span><br><span class="line"><span class="comment">%% DataLoad</span></span><br><span class="line">x0 = <span class="number">100</span>:<span class="number">100</span>:<span class="number">500</span>;</span><br><span class="line">y0 = <span class="number">100</span>:<span class="number">100</span>:<span class="number">400</span>;</span><br><span class="line">z0 = [<span class="number">636</span> <span class="number">697</span> <span class="number">624</span> <span class="number">478</span> <span class="number">450</span></span><br><span class="line">      <span class="number">698</span> <span class="number">712</span> <span class="number">630</span> <span class="number">478</span> <span class="number">420</span></span><br><span class="line">      <span class="number">680</span> <span class="number">674</span> <span class="number">598</span> <span class="number">412</span> <span class="number">400</span></span><br><span class="line">      <span class="number">662</span> <span class="number">626</span> <span class="number">552</span> <span class="number">334</span> <span class="number">310</span>]&#x27;;</span><br><span class="line"><span class="comment">% 此处的z0两坐标方向交叉，需要转置</span></span><br><span class="line">step = <span class="number">5</span>;</span><br><span class="line">x = <span class="number">100</span>:step:<span class="number">500</span>;</span><br><span class="line">y = <span class="number">100</span>:step:<span class="number">400</span>;</span><br><span class="line"><span class="comment">%% interp</span></span><br><span class="line"><span class="comment">% interp2要求矩阵和向量交叉对应，且y为列向量</span></span><br><span class="line">z1 = interp2(x0,y0,z0&#x27;,x,y&#x27;);</span><br><span class="line">z1 = z1&#x27;; <span class="comment">% 转置z1回正常的对应</span></span><br><span class="line"><span class="comment">% csape正常进行</span></span><br><span class="line">pp = csape(&#123;x0,y0&#125;,z0);</span><br><span class="line">z2 = fnval(pp,&#123;x,y&#125;);</span><br><span class="line"><span class="comment">%% DispMesh</span></span><br><span class="line"><span class="comment">% mesh函数的x为列，y为行，需要将xy反写</span></span><br><span class="line"><span class="built_in">figure</span>(<span class="string">&#x27;Position&#x27;</span>,[<span class="number">500</span>,<span class="number">300</span>,<span class="number">1000</span>,<span class="number">600</span>])</span><br><span class="line">subplot(<span class="number">1</span>,<span class="number">2</span>,<span class="number">1</span>)</span><br><span class="line">mesh(y,x,z1) </span><br><span class="line">title(<span class="string">&#x27;Interp1-Linear&#x27;</span>,<span class="string">&#x27;FontSize&#x27;</span>,<span class="number">20</span>)</span><br><span class="line">subplot(<span class="number">1</span>,<span class="number">2</span>,<span class="number">2</span>)</span><br><span class="line">mesh(y,x,z2)</span><br><span class="line">title(<span class="string">&#x27;Spline&#x27;</span>,<span class="string">&#x27;FontSize&#x27;</span>,<span class="number">20</span>)</span><br><span class="line"><span class="comment">%% MAXValue</span></span><br><span class="line"><span class="comment">% interp-Linear</span></span><br><span class="line">[maxls1,xlocls1] = <span class="built_in">max</span>(z1); <span class="comment">% 按列取max</span></span><br><span class="line">[vmax1,yloc1] = <span class="built_in">max</span>(maxls1); <span class="comment">% 按行取max</span></span><br><span class="line">info1 = [<span class="string">&quot;interp-Linear&quot;</span>,x(xlocls1(yloc1)),y(yloc1),vmax1]; </span><br><span class="line">    <span class="comment">% 行loc索引列ls的loc,并用loc索引相应的x,y的值</span></span><br><span class="line"><span class="comment">% Spline</span></span><br><span class="line">[maxls2,xlocls2] = <span class="built_in">max</span>(z2);</span><br><span class="line">[vmax2,yloc2] = <span class="built_in">max</span>(maxls2);</span><br><span class="line">info2 = [<span class="string">&quot;Spline&quot;</span>,x(xlocls2(yloc2)),y(yloc2),vmax2]; </span><br><span class="line">info = [info1;info2];</span><br><span class="line"><span class="comment">% 更好的位置索引方法</span></span><br><span class="line">[<span class="built_in">i</span>,<span class="built_in">j</span>]=<span class="built_in">find</span>(z2==<span class="built_in">max</span>(<span class="built_in">max</span>(z2)));  <span class="comment">%找最高点的地址</span></span><br><span class="line">xm=x(<span class="built_in">i</span>),ym=y(<span class="built_in">j</span>),zm=z2(<span class="built_in">i</span>,<span class="built_in">j</span>);  <span class="comment">%求最高点的坐标 </span></span><br><span class="line">[zm,xm,ym]</span><br><span class="line"><span class="comment">%% DispMAX</span></span><br><span class="line"><span class="built_in">disp</span>([<span class="string">&#x27;Step:&#x27;</span> num2str(step)])</span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span>:<span class="number">2</span></span><br><span class="line">    <span class="built_in">disp</span>([<span class="string">&#x27;Type:&#x27;</span> num2str(info(<span class="built_in">i</span>,<span class="number">1</span>))]) </span><br><span class="line">    <span class="built_in">disp</span>([<span class="string">&#x27;max = &#x27;</span> num2str(info(<span class="built_in">i</span>,<span class="number">4</span>)) ...</span><br><span class="line">        <span class="string">&#x27;    x = &#x27;</span> num2str(info(<span class="built_in">i</span>,<span class="number">2</span>)) ...</span><br><span class="line">        <span class="string">&#x27;    y = &#x27;</span> num2str(info(<span class="built_in">i</span>,<span class="number">3</span>))])</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-<p><strong><em>output</em></strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">  720.7217  165.0000  175.0000</span><br><span class="line">Step:5</span><br><span class="line">Type:interp-Linear</span><br><span class="line">max = 712    x = 200    y = 200</span><br><span class="line">Type:Spline</span><br><span class="line">max = 720.7217    x = 165    y = 175</span><br></pre></td></tr></table></figure>
-<p><strong><em>Pic</em></strong></p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img01/eg53output.jpg" alt="eg53output"></p>
-<h4 id="Eg5-4-海底图像"><a href="#Eg5-4-海底图像" class="headerlink" title="Eg5.4 海底图像"></a>Eg5.4 海底图像</h4><blockquote>
-<p>在某海域测得一些点（x,y）处的水深z由表5.4给出，在适当的矩形区域内画出海底曲面的图形。</p>
-</blockquote>
-<p>Data：</p>
-<blockquote>
-<p>x=[129,140,103.5,88,185.5,195,105,157.5,107.5,77,81,162,162,117.5];</p>
-<p>y=[7.5,141.5,23,147,22.5,137.5,85.5,-6.5,-81,3,56.5,-66.5,84,-33.5];</p>
-<p>z=-[4,8,6,8,6,8,8,9,9,8,8,9,4,9];</p>
-</blockquote>
-<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line">clear</span><br><span class="line">clc</span><br><span class="line"><span class="comment">%% DataLoad</span></span><br><span class="line">x=[<span class="number">129</span>,<span class="number">140</span>,<span class="number">103.5</span>,<span class="number">88</span>,<span class="number">185.5</span>,<span class="number">195</span>,<span class="number">105</span>,<span class="number">157.5</span>,<span class="number">107.5</span>,<span class="number">77</span>,<span class="number">81</span>,<span class="number">162</span>,<span class="number">162</span>,<span class="number">117.5</span>];</span><br><span class="line">y=[<span class="number">7.5</span>,<span class="number">141.5</span>,<span class="number">23</span>,<span class="number">147</span>,<span class="number">22.5</span>,<span class="number">137.5</span>,<span class="number">85.5</span>,<span class="number">-6.5</span>,<span class="number">-81</span>,<span class="number">3</span>,<span class="number">56.5</span>,<span class="number">-66.5</span>,<span class="number">84</span>,<span class="number">-33.5</span>];</span><br><span class="line">z=-[<span class="number">4</span>,<span class="number">8</span>,<span class="number">6</span>,<span class="number">8</span>,<span class="number">6</span>,<span class="number">8</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">9</span>,<span class="number">8</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">4</span>,<span class="number">9</span>];</span><br><span class="line">step = <span class="number">1</span>;</span><br><span class="line">XI = <span class="built_in">min</span>(x):step:<span class="built_in">max</span>(x)</span><br><span class="line">YI = <span class="built_in">min</span>(y):step:<span class="built_in">max</span>(y)</span><br><span class="line"><span class="comment">%% grid</span></span><br><span class="line">ZI1=griddata(x,y,z,XI,YI&#x27;,<span class="string">&#x27;cubic&#x27;</span>); <span class="comment">%立方插值</span></span><br><span class="line">ZI2=griddata(x,y,z,XI,YI&#x27;,<span class="string">&#x27;nearest&#x27;</span>); <span class="comment">%最近点插值</span></span><br><span class="line">ZI = ZI1; <span class="comment">% 设置ZI初始值为ZI1</span></span><br><span class="line">ZI(<span class="built_in">isnan</span>(ZI1)) = ZI2(<span class="built_in">isnan</span>(ZI1)); <span class="comment">% 用ZI2填充ZI1外插值(为NaN)的部分</span></span><br><span class="line"><span class="built_in">figure</span></span><br><span class="line">mesh(XI,YI,ZI)</span><br><span class="line"><span class="built_in">hold</span> on</span><br><span class="line"><span class="built_in">plot3</span>(x,y,z,<span class="string">&#x27;or&#x27;</span>)</span><br></pre></td></tr></table></figure>
-<p><strong><em>Pic</em></strong></p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img01/eg54output.jpg" alt="eg54output"></p>
-]]></content>
-      <categories>
-        <category>数学建模</category>
-        <category>预测模型</category>
-      </categories>
-      <tags>
-        <tag>MATLAB</tag>
-        <tag>预测</tag>
-        <tag>插值</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>数模M06-回归</title>
     <url>/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E9%A2%84%E6%B5%8B%E6%A8%A1%E5%9E%8B/M06-%E5%9B%9E%E5%BD%92/</url>
     <content><![CDATA[<h1 id="回归"><a href="#回归" class="headerlink" title="回归"></a>回归</h1><blockquote>
@@ -1032,6 +715,323 @@ y=\frac{\beta_4x_2-\dfrac{x_3}{\beta_5}}{1+\beta_1x_1+\beta_2x_2+\beta_3x_3}</sc
       </tags>
   </entry>
   <entry>
+    <title>数模M04-插值</title>
+    <url>/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E9%A2%84%E6%B5%8B%E6%A8%A1%E5%9E%8B/M04-%E6%8F%92%E5%80%BC/</url>
+    <content><![CDATA[<h1 id="插值"><a href="#插值" class="headerlink" title="插值"></a>插值</h1><h2 id="一、插值定义"><a href="#一、插值定义" class="headerlink" title="一、插值定义"></a>一、插值定义</h2><p>数据处理问题：在平面上给定一组离散点列，要求一条曲线把这些点依次连接起来，称之为插值</p>
+<p><strong>注意！</strong>此部分出现了大量不同的有关矩阵的函数运算方法，不同的运算方法之间对行标和列标的对应不同，最好在使用之前用<code>size()</code>方法看清相应的大小和对应关系，再进行操作！</p>
+<h2 id="二、常见插值方法"><a href="#二、常见插值方法" class="headerlink" title="二、常见插值方法"></a>二、常见插值方法</h2><p>已知$n+1$个点$(x_i,y_i)\ (i=0,1,…,n)$，下面求各种插值函数</p>
+<h3 id="（一）分段线性插值"><a href="#（一）分段线性插值" class="headerlink" title="（一）分段线性插值"></a>（一）分段线性插值</h3><p>将两个相邻的节点用直线连接起来，如此形成的一条折线就是分段线性插值函数，记作$I_n(x)$，它满足$I_n(x_i)=y_i$，且$I_n(x)$在每一个小区间$[x_i,x{\small i+1}]$上是线性函数   $(i=0,1,…,n)$</p>
+<p>$I_n(x)$可以表示为$I_n(x)\sum\limits^n{\small i=0}y_il_i(x)$，其中</p>
+<script type="math/tex; mode=display">
+l_i(x)=\begin{cases}
+\dfrac{x-x_{i-1}}{x_i-x_{i-1}},\quad x\in[x_{i-1},x_i]\ (i\ne 0)\\\\
+\dfrac{x-x_{i+1}}{x_i-x_{i+1}},\quad x\in[x_i,x_{i+1}]\ (i\ne n)\\\\
+\quad\ \ \ 0\quad\quad\,,\quad \rm Others
+\end{cases}</script><p>$I_n(x)$有较好的收敛性，即对于$x\in[a,b]$，有</p>
+<script type="math/tex; mode=display">
+\lim_{n\to\infty}I_n(x) = f(x)</script><p>用$I_n(x)$计算x点的插值时，只用到x左右的两个节点，计算量与节点个数n无关。但n越大，分段越多，插值误差越小。实际上用函数表做插值计算时，分段线性插值就足够了，如：数学、物理重用的特殊函数表，数理统计中用的概率分布表等等</p>
+<h3 id="（二）拉格朗日插值多项式"><a href="#（二）拉格朗日插值多项式" class="headerlink" title="（二）拉格朗日插值多项式"></a>（二）拉格朗日插值多项式</h3><p>拉格朗日插值的基函数为</p>
+<script type="math/tex; mode=display">
+\begin{align}
+l_i(x) &= \dfrac{(x-x_0)\cdots(x-x_{i-1})(x-x_{i+1})\cdots(x-x_n)}{(x_i-x_0)\cdots(x_i-x_{i-1})(x_i-x_{i+1})\cdots(x_i-x_n)}\\\\
+&={\prod^n_{j=0}}\limits_{j\ne i}\frac{x-x_j}{x_i-x_j}\quad(i=0,1,\cdots,n)
+\end{align}</script><p>其中$l_i(x)$是n次多项式，满足</p>
+<script type="math/tex; mode=display">
+l_i(x_j)=
+\begin{cases}
+0\ ,\quad j \ne i\\
+1\ ,\quad j = i
+\end{cases}</script><blockquote>
+<p>i,j相同时，$l_i(x)$式上下一致，结果为1</p>
+<p>i,j不同时，$l_i(x)$中一定存在$(x_j-x{\small ?})=0$，结果为0</p>
+</blockquote>
+<p>拉格朗日插值函数：</p>
+<script type="math/tex; mode=display">
+L_n(x) = \sum_{i=0}^n y_il_i(x)=\sum_{i=0}^ny_i\left({\prod^n_{j=0}}\limits_{j\ne i}\dfrac{x-x_j}{x_i-x_j}\right)\quad(i=0,1,\cdots,n)</script><h3 id="（三）样条插值"><a href="#（三）样条插值" class="headerlink" title="（三）样条插值"></a>（三）样条插值</h3><p>部分问题对所得插值函数的光滑性有较高的要求，不仅要连续，而且要有连续的曲率</p>
+<p>样条（Spline）原指富有弹性的细木条或金属条。利用将已知点连接成一条光滑曲线（称为样条曲线），并使连接点处具有连续的曲率，三次样条插值就是如此抽象出来的</p>
+<p>数学上将具有一定光滑性的分段多项式称为样条函数。具体来说，给定区间[a,b]的一个分划</p>
+<script type="math/tex; mode=display">
+\Delta:a=x_0<x_1<\cdots<x_{n-1}<x_n=b</script><p>如果函数S(x)满足</p>
+<ul>
+<li>在每一个小区间$[x_i,x{\small i+1}]\ (i = 0,1,\cdots,n-1)$上S(x)是m次多项式</li>
+<li>S(x)在$[a,b]$上具有m-1阶连续导数</li>
+</ul>
+<p>则称S(x)为关于分划$\Delta$的m次样条函数，其图形为m次样条曲线。显然，折现是依次样条曲线</p>
+<h2 id="三、MATLAB插值工具箱-notebook-with-decorative-cover"><a href="#三、MATLAB插值工具箱-notebook-with-decorative-cover" class="headerlink" title="三、MATLAB插值工具箱:notebook_with_decorative_cover:"></a>三、MATLAB插值工具箱:notebook_with_decorative_cover:</h2><h3 id="（一）一维插值函数-interp1"><a href="#（一）一维插值函数-interp1" class="headerlink" title="（一）一维插值函数 interp1()"></a>（一）一维插值函数 interp1()</h3><p>Code : <code>&lt;ValName&gt; = interp1(x0, y0, x, &lt;method&gt;)</code></p>
+<p>其中<code>&lt;method&gt;</code>指插值的方法，默认为线性插值(‘linear’)，其可选值有：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>&lt; method &gt;</th>
+<th>Description</th>
+<th>Sp</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>‘linear’</td>
+<td>线性插值</td>
+<td>None</td>
+</tr>
+<tr>
+<td>‘nearest’</td>
+<td>最近项目插值</td>
+<td>None</td>
+</tr>
+<tr>
+<td>‘spline’</td>
+<td>立方(三次)样条插值</td>
+<td>保证函数平滑</td>
+</tr>
+<tr>
+<td>‘cubic’</td>
+<td>立方(三次)插值</td>
+<td>保持函数凸凹性</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>其中所有的插值方法都要求x0是单调的</p>
+<p>当x0为等距的时候可以使用快速插值法</p>
+<blockquote>
+<p>method格式：<code>&#39;*linear&#39;</code> , <code>&#39;*nearest&#39;</code> , <code>&#39;*spline&#39;</code> , <code>&#39;*cubic&#39;</code></p>
+</blockquote>
+<h3 id="（二）一维三次样条插值"><a href="#（二）一维三次样条插值" class="headerlink" title="（二）一维三次样条插值"></a>（二）一维三次样条插值</h3><p>CodeStyle01 : <code>&lt;ValName&gt; = interp1(x0, y0, x, &#39;spline&#39;)</code></p>
+<p>CodeStyle02 : <code>&lt;ValName&gt; = spline(x0, y0, x)</code></p>
+<p><em>Recommand </em>: <strong>csape()</strong></p>
+<p>CodeStyle03 : <code>pp = csape(x0, y0, &lt;conds&gt;)</code></p>
+<p>​                         <code>&lt;ValName&gt; = fnval(pp, x)</code></p>
+<p>CodeStyle04 : <code>pp = csape(x0, y0, &lt;conds&gt;, &lt;valconds&gt;)</code></p>
+<p>​                         <code>&lt;ValName&gt; = fnval(pp, x)</code></p>
+<p>提倡使用函数csape，其返回值是pp形式，为了求出插值点的函数值，需要调用函数fnval</p>
+<p><code>pp = csape(x0, y0)</code>使用默认的边界条件（Lagrange边界条件）</p>
+<p><code>&lt;conds&gt;</code>为指定插值的边界条件，可选值如下</p>
+<blockquote>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>&lt; conds &gt;</th>
+<th>Description</th>
+<th>&lt; valconds &gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>‘complete’</td>
+<td>边界为一阶导数</td>
+<td>需提供</td>
+</tr>
+<tr>
+<td>‘not-a-knot’</td>
+<td>非扭结条件</td>
+<td></td>
+</tr>
+<tr>
+<td>‘periodic’</td>
+<td>周期条件</td>
+<td></td>
+</tr>
+<tr>
+<td>‘second’</td>
+<td>边界为二阶导数(缺省值为[0,0])</td>
+<td>需提供</td>
+</tr>
+<tr>
+<td>‘variational’</td>
+<td>设置边界的二阶导数值为[0,0]</td>
+<td>对于一些特殊的边界条件，可以通过conds的一个1$\times$2矩阵来表示，conds元素的取值为0,1,2</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong><em>Eg:</em></strong> <code>conds = [2,1]</code> 左边界是二阶导数，右边界是一阶导数，相应的值由valconds给出</p>
+<p><code>&lt;valconds&gt;</code>为<code>&lt;conds&gt;</code>方法所需的值，若不填写则按照缺省情况处理</p>
+</blockquote>
+<p><a href="# Eg5.1  机床加工">Eg5.1  机床加工</a></p>
+<h3 id="（三）二维插值"><a href="#（三）二维插值" class="headerlink" title="（三）二维插值"></a>（三）二维插值</h3><h4 id="1-插值节点为网格节点"><a href="#1-插值节点为网格节点" class="headerlink" title="1. 插值节点为网格节点"></a>1. 插值节点为网格节点</h4><p>已知m$\times$n个节点：$(x_i,y_j,z{\small ij})\ (i = 1,2,\cdots,m;\ j=1,2,\cdots,n)$，</p>
+<p>且$x_1&lt;\cdots&lt;x_m;\ y_1&lt;\cdots&lt;y_n$</p>
+<p>求点$(x, y)$处的插值</p>
+<h5 id="（1）二维插值函数"><a href="#（1）二维插值函数" class="headerlink" title="（1）二维插值函数"></a>（1）二维插值函数</h5><p>Code : <code>&lt;ValName&gt; = interp2(x0, y0, z0, x, y, &lt;method&gt;)</code></p>
+<p>其中<code>&lt;method&gt;</code>指插值的方法，同一维的参数相同</p>
+<p><strong>x0,y0</strong> 分别为<strong>m</strong>维和<strong>n</strong>维向量，表示节点，z0为 n$\times$m 维度矩阵，表示节点的值，x,y为一维数组，指插值点</p>
+<p>x与y应当是方向不同的向量，即一个是行向量，一个是列向量（y需要转置）</p>
+<p>输出内容为矩阵，Row=y的维数，Col=x的维数，表示得到的插值</p>
+<h5 id="（2）二维三次样条插值"><a href="#（2）二维三次样条插值" class="headerlink" title="（2）二维三次样条插值"></a>（2）二维三次样条插值</h5><p>Code : <code>pp = csape(&#123;x0, y0&#125;, z0, conds, valconds)</code></p>
+<p>​            <code>&lt;ValName&gt; = fnval(pp, &#123;x, y&#125;)</code></p>
+<p>对其内容的解释同上</p>
+<h5 id="（3）显示相应的三维网格图"><a href="#（3）显示相应的三维网格图" class="headerlink" title="（3）显示相应的三维网格图"></a>（3）显示相应的三维网格图</h5><p>Code : <code>mesh(y,x,z)</code></p>
+<p>mesh函数的x为列，y为行，需要将xy反写</p>
+<p><a href="# Eg5.3 丘陵曲面最高点">Eg5.3 丘陵曲面最高点</a></p>
+<h4 id="2-插值节点为散乱节点"><a href="#2-插值节点为散乱节点" class="headerlink" title="2. 插值节点为散乱节点"></a>2. 插值节点为散乱节点</h4><p>已知n个节点$(x_i,y_i,z_i)\ (i=1,2,\cdots,n)$，求点$(x,y)$处的插值z</p>
+<p>Code：<code>&lt;ValName&gt; = griddata(x, y, z, XI, YI)</code></p>
+<p>其中x、y、z均为n维向量，指明所给出数据的横坐标、纵坐标和竖坐标 </p>
+<p>向量XI、YI是给定的网格点的横坐标和纵坐标</p>
+<p>返回值<code>&lt;ValName&gt;</code>为网格(XI, YI)处的函数值，但是<strong>行为YI，列为XI</strong>，进行mesh的时候不需要反转XY</p>
+<p>XI与YI应当是方向不同的向量，一行一列（YI需要转置）</p>
+<blockquote>
+<p>MATLAB中插值时，外插值是不确定的，可以使用混合插值的方法，把不确定的插值换成最近点的插值结果</p>
+<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line">ZI1=griddata(x,y,z,XI,YI&#x27;,<span class="string">&#x27;cubic&#x27;</span>); <span class="comment">%立方插值</span></span><br><span class="line">ZI2=griddata(x,y,z,XI,YI&#x27;,<span class="string">&#x27;nearest&#x27;</span>); <span class="comment">%最近点插值</span></span><br><span class="line">ZI = ZI1; <span class="comment">%</span></span><br><span class="line">ZI(<span class="built_in">isnan</span>(ZI1)) = ZI2(<span class="built_in">isnan</span>(ZI1));</span><br></pre></td></tr></table></figure>
+</blockquote>
+<hr>
+<h2 id="四、实战例题"><a href="#四、实战例题" class="headerlink" title="四、实战例题"></a>四、实战例题</h2><h4 id="Eg5-1-机床加工"><a href="#Eg5-1-机床加工" class="headerlink" title="Eg5.1  机床加工"></a>Eg5.1  机床加工</h4><blockquote>
+<p>待加工零件的外形根据工艺要求由一组数据$(x,y)$给出（在平面情况下），用程控铣床加工时每一刀只能沿$x$方向和$y$方向走非常小的一步，这就需要从已知数据得到加工所要求的步长很小的$(x,y)$坐标。<br>Data中给出的$x,y$数据位于机翼断面的下轮廓线上，假设需要得到$x$坐标每改变0.1时的$y$坐标。试完成加工所需数据，画出曲线，并求出$x=0$处的曲线斜率和$13\le x\le15$范围内y的最小值。要求用分段线性和三次样条两种插值方法计算。</p>
+</blockquote>
+<p>Data：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">x</th>
+<th style="text-align:center">0</th>
+<th style="text-align:center">3</th>
+<th style="text-align:center">5</th>
+<th style="text-align:center">7</th>
+<th style="text-align:center">9</th>
+<th style="text-align:center">11</th>
+<th style="text-align:center">12</th>
+<th style="text-align:center">13</th>
+<th style="text-align:center">14</th>
+<th style="text-align:center">15</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>y</strong></td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">1.2</td>
+<td style="text-align:center">1.7</td>
+<td style="text-align:center">2.0</td>
+<td style="text-align:center">2.1</td>
+<td style="text-align:center">2.0</td>
+<td style="text-align:center">1.8</td>
+<td style="text-align:center">1.2</td>
+<td style="text-align:center">1.0</td>
+<td style="text-align:center">1.6</td>
+</tr>
+</tbody>
+</table>
+</div>
+<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line">clear</span><br><span class="line">clc</span><br><span class="line"><span class="comment">%% Data:</span></span><br><span class="line">x0 = [<span class="number">0</span> <span class="number">3</span> <span class="number">5</span> <span class="number">7</span> <span class="number">9</span> <span class="number">11</span> <span class="number">12</span> <span class="number">13</span> <span class="number">14</span> <span class="number">15</span>];</span><br><span class="line">y0 = [<span class="number">0</span> <span class="number">1.2</span> <span class="number">1.7</span> <span class="number">2.0</span> <span class="number">2.1</span> <span class="number">2.0</span> <span class="number">1.8</span> <span class="number">1.2</span> <span class="number">1.0</span> <span class="number">1.6</span>];</span><br><span class="line">x = [<span class="built_in">min</span>(x0):<span class="number">0.1</span>:<span class="built_in">max</span>(x0)];</span><br><span class="line"><span class="comment">%% Linear</span></span><br><span class="line">y_linear = interp1(x0, y0, x);</span><br><span class="line"><span class="comment">%% Spline</span></span><br><span class="line">y_spline = interp1(x0, y0, x, <span class="string">&#x27;spline&#x27;</span>);</span><br><span class="line">pp_lagrange = csape(x0, y0);</span><br><span class="line">y_spline_lagrange = fnval(pp_lagrange, x);</span><br><span class="line">pp_second = csape(x0, y0, <span class="string">&#x27;second&#x27;</span>);</span><br><span class="line">y_spline_second = fnval(pp_second, x);</span><br><span class="line"><span class="comment">%% DispFigure</span></span><br><span class="line"><span class="comment">% linear</span></span><br><span class="line"><span class="built_in">figure</span>(<span class="string">&#x27;Position&#x27;</span>, [<span class="number">800</span>,<span class="number">100</span>,<span class="number">1000</span>,<span class="number">800</span>]);</span><br><span class="line">subplot(<span class="number">2</span>,<span class="number">2</span>,<span class="number">1</span>)</span><br><span class="line"><span class="built_in">plot</span>(x,y_linear, <span class="string">&#x27;r&#x27;</span>,x0, y0,<span class="string">&#x27;bp&#x27;</span>)</span><br><span class="line">title(<span class="string">&#x27;Interp1-Linear&#x27;</span>)</span><br><span class="line"><span class="comment">% spline</span></span><br><span class="line">subplot(<span class="number">2</span>,<span class="number">2</span>,<span class="number">2</span>)</span><br><span class="line"><span class="built_in">plot</span>(x,y_spline, <span class="string">&#x27;r&#x27;</span>,x0, y0,<span class="string">&#x27;bp&#x27;</span>)</span><br><span class="line">title(<span class="string">&#x27;Interp1-Spline&#x27;</span>)</span><br><span class="line">subplot(<span class="number">2</span>,<span class="number">2</span>,<span class="number">3</span>)</span><br><span class="line"><span class="built_in">plot</span>(x,y_spline_lagrange, <span class="string">&#x27;r&#x27;</span>,x0, y0,<span class="string">&#x27;bp&#x27;</span>)</span><br><span class="line">title(<span class="string">&#x27;Csape-Lagrange&#x27;</span>)</span><br><span class="line">subplot(<span class="number">2</span>,<span class="number">2</span>,<span class="number">4</span>)</span><br><span class="line"><span class="built_in">plot</span>(x,y_spline_second, <span class="string">&#x27;r&#x27;</span>,x0, y0,<span class="string">&#x27;bp&#x27;</span>)</span><br><span class="line">title(<span class="string">&#x27;Csape-Second&#x27;</span>)</span><br><span class="line"><span class="comment">%% Other Tasks</span></span><br><span class="line"><span class="comment">% 求x=0处的斜率</span></span><br><span class="line">dx = diff(x); <span class="comment">% diff逐差函数</span></span><br><span class="line">dy = diff(y_spline_lagrange);</span><br><span class="line">dy_dx = dy./dx;</span><br><span class="line">dy_dx_0 = dy_dx(<span class="number">1</span>);</span><br><span class="line"><span class="comment">% 求13~15范围内y的最小值</span></span><br><span class="line">ymin = <span class="built_in">min</span>(y_spline_lagrange(<span class="number">131</span>:<span class="number">151</span>)); <span class="comment">% 找出ymin</span></span><br><span class="line">yloc = <span class="built_in">find</span>(y_spline_lagrange == ymin); <span class="comment">% find ymin的index</span></span><br><span class="line">xloc = x(yloc); <span class="comment">% 用ymin的index定位xloc</span></span><br><span class="line"><span class="built_in">disp</span>([<span class="string">&#x27;k(0) = &#x27;</span> num2str(dy_dx_0)])</span><br><span class="line"><span class="built_in">disp</span>([<span class="string">&#x27;xloc: &#x27;</span> num2str(xloc)])</span><br><span class="line"><span class="built_in">disp</span>([<span class="string">&#x27;ymin: &#x27;</span> num2str(ymin)])</span><br></pre></td></tr></table></figure>
+<p><strong><em>output</em></strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">k(0) = 0.49716</span><br><span class="line">xloc: 13.8</span><br><span class="line">ymin: 0.98511</span><br></pre></td></tr></table></figure>
+<p><strong><em>Pic</em></strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img01/eg51output.jpg" alt="eg51output"></p>
+<h4 id="Eg5-2-求速度曲线的位移"><a href="#Eg5-2-求速度曲线的位移" class="headerlink" title="Eg5.2 求速度曲线的位移"></a>Eg5.2 求速度曲线的位移</h4><blockquote>
+<p>已知速度曲线$v(t)$上的四个数据点如下表，用三次样条插值求位移</p>
+<script type="math/tex; mode=display">
+S = \int_{0.15}^{0.18}v(t)\,{\rm d}t</script></blockquote>
+<p>Data:</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>$t$</th>
+<th>0.15</th>
+<th>0.16</th>
+<th>0.17</th>
+<th>0.18</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>$v(t)$</strong></td>
+<td>3.5</td>
+<td>1.5</td>
+<td>2.5</td>
+<td>2.8</td>
+</tr>
+</tbody>
+</table>
+</div>
+<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line">clear</span><br><span class="line">clc</span><br><span class="line"><span class="comment">%% DataLoad</span></span><br><span class="line">t0 = <span class="number">0.15</span>:<span class="number">0.01</span>:<span class="number">0.18</span>;</span><br><span class="line">v0 = [<span class="number">3.5</span>,<span class="number">1.5</span>,<span class="number">2.5</span>,<span class="number">2.8</span>];</span><br><span class="line"><span class="comment">%% Spline</span></span><br><span class="line">pp = csape(t0, v0); <span class="comment">% 使用默认边界条件Lagrange</span></span><br><span class="line">format long g <span class="comment">% 设置长小数格式</span></span><br><span class="line">xs = pp.coefs <span class="comment">% 显示每个区间上三次多项式的系数</span></span><br><span class="line">s = integral(@(t)ppval(pp,t),<span class="number">0.15</span>,<span class="number">0.18</span>) <span class="comment">% 求数值积分</span></span><br><span class="line">    <span class="comment">% @(t) 为匿名函数的书写格式 </span></span><br><span class="line">    <span class="comment">% integral(fx,xmin,ymin) 求数值积分</span></span><br><span class="line">        <span class="comment">% 使用全局自适应积分和默认误差容限在 xmin 至 xmax 间以数值形式为函数</span></span><br><span class="line">    <span class="comment">% ppval(pp,xq)计算分段多项式:查询点 xq 处计算分段多项式 pp</span></span><br><span class="line">format <span class="comment">% 恢复短小数小时格式</span></span><br></pre></td></tr></table></figure>
+<p><strong><em>output</em></strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">xs =     -616666.666666667                     33500         -473.333333333334                       3.5</span><br><span class="line">         -616666.666666667                     15000          11.6666666666671                       1.5</span><br><span class="line">         -616666.666666668         -3499.99999999999          126.666666666667                       2.5</span><br><span class="line">s =0.068625</span><br></pre></td></tr></table></figure>
+<h4 id="Eg5-3-丘陵曲面最高点"><a href="#Eg5-3-丘陵曲面最高点" class="headerlink" title="Eg5.3 丘陵曲面最高点"></a>Eg5.3 丘陵曲面最高点</h4><blockquote>
+<p>在一丘陵地带测量高程，x和y方向每隔100米测一个点，得高程如表，试插值一曲面，确定合适的模型，并由此找出最高点和该点的高程</p>
+</blockquote>
+<p>Data:</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">y\x</th>
+<th style="text-align:center">100</th>
+<th style="text-align:center">200</th>
+<th style="text-align:center">300</th>
+<th style="text-align:center">400</th>
+<th style="text-align:center">500</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>100</strong></td>
+<td style="text-align:center">636</td>
+<td style="text-align:center">697</td>
+<td style="text-align:center">624</td>
+<td style="text-align:center">478</td>
+<td style="text-align:center">450</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>200</strong></td>
+<td style="text-align:center">698</td>
+<td style="text-align:center">712</td>
+<td style="text-align:center">630</td>
+<td style="text-align:center">478</td>
+<td style="text-align:center">420</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>300</strong></td>
+<td style="text-align:center">680</td>
+<td style="text-align:center">674</td>
+<td style="text-align:center">598</td>
+<td style="text-align:center">412</td>
+<td style="text-align:center">400</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>400</strong></td>
+<td style="text-align:center">662</td>
+<td style="text-align:center">626</td>
+<td style="text-align:center">552</td>
+<td style="text-align:center">334</td>
+<td style="text-align:center">310</td>
+</tr>
+</tbody>
+</table>
+</div>
+<blockquote>
+<p>注意此处直接列写矩阵，则xy与正常的对应相反</p>
+</blockquote>
+<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line">clear</span><br><span class="line">clc</span><br><span class="line"><span class="comment">%% DataLoad</span></span><br><span class="line">x0 = <span class="number">100</span>:<span class="number">100</span>:<span class="number">500</span>;</span><br><span class="line">y0 = <span class="number">100</span>:<span class="number">100</span>:<span class="number">400</span>;</span><br><span class="line">z0 = [<span class="number">636</span> <span class="number">697</span> <span class="number">624</span> <span class="number">478</span> <span class="number">450</span></span><br><span class="line">      <span class="number">698</span> <span class="number">712</span> <span class="number">630</span> <span class="number">478</span> <span class="number">420</span></span><br><span class="line">      <span class="number">680</span> <span class="number">674</span> <span class="number">598</span> <span class="number">412</span> <span class="number">400</span></span><br><span class="line">      <span class="number">662</span> <span class="number">626</span> <span class="number">552</span> <span class="number">334</span> <span class="number">310</span>]&#x27;;</span><br><span class="line"><span class="comment">% 此处的z0两坐标方向交叉，需要转置</span></span><br><span class="line">step = <span class="number">5</span>;</span><br><span class="line">x = <span class="number">100</span>:step:<span class="number">500</span>;</span><br><span class="line">y = <span class="number">100</span>:step:<span class="number">400</span>;</span><br><span class="line"><span class="comment">%% interp</span></span><br><span class="line"><span class="comment">% interp2要求矩阵和向量交叉对应，且y为列向量</span></span><br><span class="line">z1 = interp2(x0,y0,z0&#x27;,x,y&#x27;);</span><br><span class="line">z1 = z1&#x27;; <span class="comment">% 转置z1回正常的对应</span></span><br><span class="line"><span class="comment">% csape正常进行</span></span><br><span class="line">pp = csape(&#123;x0,y0&#125;,z0);</span><br><span class="line">z2 = fnval(pp,&#123;x,y&#125;);</span><br><span class="line"><span class="comment">%% DispMesh</span></span><br><span class="line"><span class="comment">% mesh函数的x为列，y为行，需要将xy反写</span></span><br><span class="line"><span class="built_in">figure</span>(<span class="string">&#x27;Position&#x27;</span>,[<span class="number">500</span>,<span class="number">300</span>,<span class="number">1000</span>,<span class="number">600</span>])</span><br><span class="line">subplot(<span class="number">1</span>,<span class="number">2</span>,<span class="number">1</span>)</span><br><span class="line">mesh(y,x,z1) </span><br><span class="line">title(<span class="string">&#x27;Interp1-Linear&#x27;</span>,<span class="string">&#x27;FontSize&#x27;</span>,<span class="number">20</span>)</span><br><span class="line">subplot(<span class="number">1</span>,<span class="number">2</span>,<span class="number">2</span>)</span><br><span class="line">mesh(y,x,z2)</span><br><span class="line">title(<span class="string">&#x27;Spline&#x27;</span>,<span class="string">&#x27;FontSize&#x27;</span>,<span class="number">20</span>)</span><br><span class="line"><span class="comment">%% MAXValue</span></span><br><span class="line"><span class="comment">% interp-Linear</span></span><br><span class="line">[maxls1,xlocls1] = <span class="built_in">max</span>(z1); <span class="comment">% 按列取max</span></span><br><span class="line">[vmax1,yloc1] = <span class="built_in">max</span>(maxls1); <span class="comment">% 按行取max</span></span><br><span class="line">info1 = [<span class="string">&quot;interp-Linear&quot;</span>,x(xlocls1(yloc1)),y(yloc1),vmax1]; </span><br><span class="line">    <span class="comment">% 行loc索引列ls的loc,并用loc索引相应的x,y的值</span></span><br><span class="line"><span class="comment">% Spline</span></span><br><span class="line">[maxls2,xlocls2] = <span class="built_in">max</span>(z2);</span><br><span class="line">[vmax2,yloc2] = <span class="built_in">max</span>(maxls2);</span><br><span class="line">info2 = [<span class="string">&quot;Spline&quot;</span>,x(xlocls2(yloc2)),y(yloc2),vmax2]; </span><br><span class="line">info = [info1;info2];</span><br><span class="line"><span class="comment">% 更好的位置索引方法</span></span><br><span class="line">[<span class="built_in">i</span>,<span class="built_in">j</span>]=<span class="built_in">find</span>(z2==<span class="built_in">max</span>(<span class="built_in">max</span>(z2)));  <span class="comment">%找最高点的地址</span></span><br><span class="line">xm=x(<span class="built_in">i</span>),ym=y(<span class="built_in">j</span>),zm=z2(<span class="built_in">i</span>,<span class="built_in">j</span>);  <span class="comment">%求最高点的坐标 </span></span><br><span class="line">[zm,xm,ym]</span><br><span class="line"><span class="comment">%% DispMAX</span></span><br><span class="line"><span class="built_in">disp</span>([<span class="string">&#x27;Step:&#x27;</span> num2str(step)])</span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span>:<span class="number">2</span></span><br><span class="line">    <span class="built_in">disp</span>([<span class="string">&#x27;Type:&#x27;</span> num2str(info(<span class="built_in">i</span>,<span class="number">1</span>))]) </span><br><span class="line">    <span class="built_in">disp</span>([<span class="string">&#x27;max = &#x27;</span> num2str(info(<span class="built_in">i</span>,<span class="number">4</span>)) ...</span><br><span class="line">        <span class="string">&#x27;    x = &#x27;</span> num2str(info(<span class="built_in">i</span>,<span class="number">2</span>)) ...</span><br><span class="line">        <span class="string">&#x27;    y = &#x27;</span> num2str(info(<span class="built_in">i</span>,<span class="number">3</span>))])</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p><strong><em>output</em></strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">  720.7217  165.0000  175.0000</span><br><span class="line">Step:5</span><br><span class="line">Type:interp-Linear</span><br><span class="line">max = 712    x = 200    y = 200</span><br><span class="line">Type:Spline</span><br><span class="line">max = 720.7217    x = 165    y = 175</span><br></pre></td></tr></table></figure>
+<p><strong><em>Pic</em></strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img01/eg53output.jpg" alt="eg53output"></p>
+<h4 id="Eg5-4-海底图像"><a href="#Eg5-4-海底图像" class="headerlink" title="Eg5.4 海底图像"></a>Eg5.4 海底图像</h4><blockquote>
+<p>在某海域测得一些点（x,y）处的水深z由表5.4给出，在适当的矩形区域内画出海底曲面的图形。</p>
+</blockquote>
+<p>Data：</p>
+<blockquote>
+<p>x=[129,140,103.5,88,185.5,195,105,157.5,107.5,77,81,162,162,117.5];</p>
+<p>y=[7.5,141.5,23,147,22.5,137.5,85.5,-6.5,-81,3,56.5,-66.5,84,-33.5];</p>
+<p>z=-[4,8,6,8,6,8,8,9,9,8,8,9,4,9];</p>
+</blockquote>
+<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line">clear</span><br><span class="line">clc</span><br><span class="line"><span class="comment">%% DataLoad</span></span><br><span class="line">x=[<span class="number">129</span>,<span class="number">140</span>,<span class="number">103.5</span>,<span class="number">88</span>,<span class="number">185.5</span>,<span class="number">195</span>,<span class="number">105</span>,<span class="number">157.5</span>,<span class="number">107.5</span>,<span class="number">77</span>,<span class="number">81</span>,<span class="number">162</span>,<span class="number">162</span>,<span class="number">117.5</span>];</span><br><span class="line">y=[<span class="number">7.5</span>,<span class="number">141.5</span>,<span class="number">23</span>,<span class="number">147</span>,<span class="number">22.5</span>,<span class="number">137.5</span>,<span class="number">85.5</span>,<span class="number">-6.5</span>,<span class="number">-81</span>,<span class="number">3</span>,<span class="number">56.5</span>,<span class="number">-66.5</span>,<span class="number">84</span>,<span class="number">-33.5</span>];</span><br><span class="line">z=-[<span class="number">4</span>,<span class="number">8</span>,<span class="number">6</span>,<span class="number">8</span>,<span class="number">6</span>,<span class="number">8</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">9</span>,<span class="number">8</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">4</span>,<span class="number">9</span>];</span><br><span class="line">step = <span class="number">1</span>;</span><br><span class="line">XI = <span class="built_in">min</span>(x):step:<span class="built_in">max</span>(x)</span><br><span class="line">YI = <span class="built_in">min</span>(y):step:<span class="built_in">max</span>(y)</span><br><span class="line"><span class="comment">%% grid</span></span><br><span class="line">ZI1=griddata(x,y,z,XI,YI&#x27;,<span class="string">&#x27;cubic&#x27;</span>); <span class="comment">%立方插值</span></span><br><span class="line">ZI2=griddata(x,y,z,XI,YI&#x27;,<span class="string">&#x27;nearest&#x27;</span>); <span class="comment">%最近点插值</span></span><br><span class="line">ZI = ZI1; <span class="comment">% 设置ZI初始值为ZI1</span></span><br><span class="line">ZI(<span class="built_in">isnan</span>(ZI1)) = ZI2(<span class="built_in">isnan</span>(ZI1)); <span class="comment">% 用ZI2填充ZI1外插值(为NaN)的部分</span></span><br><span class="line"><span class="built_in">figure</span></span><br><span class="line">mesh(XI,YI,ZI)</span><br><span class="line"><span class="built_in">hold</span> on</span><br><span class="line"><span class="built_in">plot3</span>(x,y,z,<span class="string">&#x27;or&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p><strong><em>Pic</em></strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img01/eg54output.jpg" alt="eg54output"></p>
+]]></content>
+      <categories>
+        <category>数学建模</category>
+        <category>预测模型</category>
+      </categories>
+      <tags>
+        <tag>MATLAB</tag>
+        <tag>预测</tag>
+        <tag>插值</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>TestDoc</title>
     <url>/test/b01-test/</url>
     <content><![CDATA[<h3 id="TestDoc"><a href="#TestDoc" class="headerlink" title="TestDoc"></a>TestDoc</h3><p>这是一篇测试文章，选用的内容为数学建模插值的内容：</p>
@@ -1355,9 +1355,7 @@ S = \int_{0.15}^{0.18}v(t)\,{\rm d}t</script></blockquote>
     <title>正则表达式快速入门</title>
     <url>/Coding/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/</url>
     <content><![CDATA[<h1 id="正则表达式快速入门"><a href="#正则表达式快速入门" class="headerlink" title="正则表达式快速入门"></a>正则表达式快速入门</h1><blockquote>
-<blockquote>
 <p>学习源视频：<a href="https://www.bilibili.com/video/BV1da4y1p7iZ/?spm_id_from=333.337.search-card.all.click&amp;vd_source=1437b1798845fbcba4cf09d5a889e546">奇乐编程学院-[Bilibili]</a><br>Note：<a href="https://www.xly23333.xyz">XLY23333-[Blog]</a><br>NoteBy：Typora[Markdown] + $\rm\LaTeX$ Themes by:<a href="https://github.com/Keldos-Li/typora-latex-theme">Keldos-Li-[Github]</a></p>
-</blockquote>
 </blockquote>
 <hr>
 <h2 id="限定符-Quantifiers"><a href="#限定符-Quantifiers" class="headerlink" title="限定符 [Quantifiers]"></a>限定符 [Quantifiers]</h2><h3 id="单个字符的限定"><a href="#单个字符的限定" class="headerlink" title="单个字符的限定"></a>单个字符的限定</h3><div class="table-container">
@@ -1392,13 +1390,13 @@ S = \int_{0.15}^{0.18}v(t)\,{\rm d}t</script></blockquote>
 <tr>
 <td style="text-align:center"><code>&#123;&lt;num&gt;&#125;</code></td>
 <td style="text-align:left">指定{…}前字符<strong>出现次数</strong>为<code>&lt;num&gt;</code>次</td>
-<td style="text-align:center">ab{2}c</td>
+<td style="text-align:center"><code>ab&#123;2&#125;c</code></td>
 <td style="text-align:left">可查找abbc等</td>
 </tr>
 <tr>
 <td style="text-align:center"><code>&#123;&lt;min&gt;,&lt;max&gt;&#125;</code></td>
 <td style="text-align:left">指定{…}前字符<strong>出现次数范围</strong>,可以<strong>缺省<code>max</code>值</strong></td>
-<td style="text-align:center">ab{3,}c</td>
+<td style="text-align:center"><code>ab&#123;3,&#125;c</code></td>
 <td style="text-align:left">可查找abbbbc,abbbc等</td>
 </tr>
 </tbody>
