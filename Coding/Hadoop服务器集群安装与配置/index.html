@@ -1,0 +1,343 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Hadoop服务器集群安装配置 | XLY23333 Blog</title><meta name="author" content="XLY23333"><meta name="copyright" content="XLY23333"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Hadoop服务器集群安装配置虚拟机CentOS7的安装 下载VMware WorkStation 17 PRO，并激活  添加全新虚拟机，使用Linux的CentOS7发行版，并通过稍后安装避免VM的快速安装自动安装GUI界面  启动虚拟机  虚拟机基础设置和克隆 进入网卡目录，使用Vi&#x2F;Vim修改文件12cd &#x2F;etc&#x2F;sysconfig&#x2F;network-scripts&#x2F;vi  ifcfg-e">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hadoop服务器集群安装配置">
+<meta property="og:url" content="https://xly23333.xyz/Coding/Hadoop%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE/index.html">
+<meta property="og:site_name" content="XLY23333 Blog">
+<meta property="og:description" content="Hadoop服务器集群安装配置虚拟机CentOS7的安装 下载VMware WorkStation 17 PRO，并激活  添加全新虚拟机，使用Linux的CentOS7发行版，并通过稍后安装避免VM的快速安装自动安装GUI界面  启动虚拟机  虚拟机基础设置和克隆 进入网卡目录，使用Vi&#x2F;Vim修改文件12cd &#x2F;etc&#x2F;sysconfig&#x2F;network-scripts&#x2F;vi  ifcfg-e">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/XLY23333/picture01/main/img01/t1.png">
+<meta property="article:published_time" content="2024-12-20T00:00:00.000Z">
+<meta property="article:modified_time" content="2024-12-20T01:42:27.503Z">
+<meta property="article:author" content="XLY23333">
+<meta property="article:tag" content="Hadoop">
+<meta property="article:tag" content="CentOS">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/XLY23333/picture01/main/img01/t1.png"><link rel="shortcut icon" href="https://raw.githubusercontent.com/XLY23333/picture01/main/img01/MetE-XLY.png"><link rel="canonical" href="https://xly23333.xyz/Coding/Hadoop%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.12.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Hadoop服务器集群安装配置',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-12-20 09:42:27'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.1.1"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://raw.githubusercontent.com/XLY23333/picture01/main/img01/Met-XLY.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">11</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">23</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://raw.githubusercontent.com/XLY23333/picture01/main/img01/t1.png')"><nav id="nav"><span id="blog-info"><a href="/" title="XLY23333 Blog"><span class="site-name">XLY23333 Blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Hadoop服务器集群安装配置</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-12-20T00:00:00.000Z" title="发表于 2024-12-20 08:00:00">2024-12-20</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-12-20T01:42:27.503Z" title="更新于 2024-12-20 09:42:27">2024-12-20</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Coding/">Coding</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Hadoop服务器集群安装配置"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Hadoop服务器集群安装配置"><a href="#Hadoop服务器集群安装配置" class="headerlink" title="Hadoop服务器集群安装配置"></a>Hadoop服务器集群安装配置</h1><h2 id="虚拟机CentOS7的安装"><a href="#虚拟机CentOS7的安装" class="headerlink" title="虚拟机CentOS7的安装"></a>虚拟机CentOS7的安装</h2><p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image002.png" alt="img"></p>
+<p>下载VMware WorkStation 17 PRO，并激活</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image004.jpg" alt="img"></p>
+<p>添加全新虚拟机，使用Linux的CentOS7发行版，并通过稍后安装避免VM的快速安装自动安装GUI界面</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image006.jpg" alt="img"></p>
+<p>启动虚拟机</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image008.jpg" alt="img"></p>
+<h2 id="虚拟机基础设置和克隆"><a href="#虚拟机基础设置和克隆" class="headerlink" title="虚拟机基础设置和克隆"></a>虚拟机基础设置和克隆</h2><p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image010.png" alt="img"></p>
+<p>进入网卡目录，使用Vi/Vim修改文件<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /etc/sysconfig/network-scripts/</span><br><span class="line">vi  ifcfg-eno16777736</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image012.jpg" alt="img"></p>
+<p>使用Vim基础操作修改ONBOOT值为yes</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image014.jpg" alt="img"></p>
+<p>完成网络服务重启，再次ip a查看ip地址</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image016.jpg" alt="img"></p>
+<p>将ip地址、用户名(root)、密码输入FinalShell完成远程OpenSSH连接</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image018.jpg" alt="img"></p>
+<p>由于CentOS停止维护，为方便后续安装，修改yum包管理器的镜像源</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image020.png" alt="img"></p>
+<p>更改为阿里云镜像源</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image022.jpg" alt="img"></p>
+<p>测试安装vim，成功则说明已经成功更换新镜像源</p>
+  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install vim</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image024.jpg" alt="img"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image026.jpg" alt="img"></p>
+<p>使用Vmware平台自带功能克隆整个虚拟机</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image028.png" alt="img"></p>
+<p>克隆出三台CentOS虚拟机</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image030.jpg" alt="img"></p>
+<p>分别ip a并使用FinalShell完成远程连接</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image032.jpg" alt="img"></p>
+<p>使用hostnamectl完成三台虚拟机的更名</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hostnamectl set-hostname  &lt;HOSTNAME&gt;</span><br><span class="line">bash</span><br></pre></td></tr></table></figure>
+<p>修改hosts文件映射到其hostname，主机再映射一个master，并同步到三台虚拟机</p>
+<p>关闭并永久禁用防火墙</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop firewalld</span><br><span class="line">systemctl  disable firewalld</span><br><span class="line">firewall-cmd --state</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image036.jpg" alt="img"></p>
+<p>查看SELinux系统安全曾的状态并临时关闭</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image038.jpg" alt="img"></p>
+<p>通过修改配置文件永久性关闭</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image040.jpg" alt="img"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image042.jpg" alt="img"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image044.jpg" alt="img"></p>
+<p>查看当前Jdk版本并进行卸载</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">java -version</span><br><span class="line">rpm  -qa \| grep java</span><br><span class="line">rpm -e --nodeps  java-1.7.0-openjdk-headless-1.7.0.91-2.6.2.3.el7.x86_64</span><br><span class="line">rpm  -e --nodeps java-1.7.0-openjdk-1.7.0.91-2.6.2.3.el7.x86_64</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image046.jpg" alt="img"></p>
+<p>使用yum重装java-1.8.0-openjdk<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum install -y java-1.8.0-openjdk</span><br><span class="line">java  -version</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image048.jpg" alt="img"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image050.jpg" alt="img"></p>
+<p>下载并将Hadoop文件导入虚拟机</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image052.jpg" alt="img"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image054.jpg" alt="img"></p>
+<p>tar解压文件</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image056.jpg" alt="img"></p>
+<p>移动解压后的文件</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image058.jpg" alt="img"></p>
+<p>进入相关文件</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image060.jpg" alt="img"></p>
+<p>查看jdk安装位置并编辑hadoop-env.sh和yarn-env.sh</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image062.jpg" alt="img"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image064.jpg" alt="img"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image066.jpg" alt="img"></p>
+<p>添加Hadoop环境变量</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image068.jpg" alt="img"></p>
+<p>使得配置文件生效</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image070.jpg" alt="img"></p>
+<p>配置hdfs-site.xml、yarn-site.xml、core-site.xml、mapred-site.xml</p>
+<p>core-site.xml</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image072.jpg" alt="img"></p>
+<p>hdfs-site.xml</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image074.jpg" alt="img"></p>
+<p>mapred-site.xml</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image076.jpg" alt="img"></p>
+<p>yarn-site.xml</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image078.jpg" alt="img"></p>
+<p>添加克隆机名称到 文件</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image080.jpg" alt="img"></p>
+<p>将六个配置文件复制到其他的虚拟机，也可以先做一个hadoop文件夹，然后直接scp整个文件夹</p>
+<p>设置ssh免密登录</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image084.jpg" alt="img"></p>
+<p>Scp发送密钥并测试免密登录效果</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image086.jpg" alt="img"></p>
+<p>设置NTP时间同步服务</p>
+<p>客户端安装ntp并修改配置文件</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image088.jpg" alt="img"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image090.jpg" alt="img"></p>
+<p>客户机的安装和同步服务</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image092.jpg" alt="img"></p>
+<p>使用XShell测试时间date</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image094.jpg" alt="img"></p>
+<p>主机Hadoop初始化</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image096.jpg" alt="img"></p>
+<p>群起</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image098.jpg" alt="img"></p>
+<p>查看8088端口</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image100.jpg" alt="img"></p>
+<p>端口50070查看节点状态</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image102.jpg" alt="img"></p>
+<p>Config Files Download</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>files</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://pan.xly23333.xyz/d/BaiduDisk/Code/Hadoop实训/core-site.xml?sign=SCzYgPz0CDQa_oHIOgbzBM7DSuw0sCz5FGfkJMpNUR8=:0">core-site.xml</a></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://pan.xly23333.xyz/d/BaiduDisk/Code/Hadoop实训/hdfs-site.xml?sign=NxjIG02bUmdftBJhzDaVPW8mvCpWN9G9QtUzo9gmJUg=:0">hdfs-site.xml</a></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://pan.xly23333.xyz/d/BaiduDisk/Code/Hadoop实训/mapred-site.xml?sign=nz2buXFqZBKnGqOowprKsLiXBTLPe6GMDIuS4zUQJb0=:0">mapred-site.xml</a></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://pan.xly23333.xyz/d/BaiduDisk/Code/Hadoop实训/yarn-site.xml?sign=LhmInckEWHo_0ZEXa-3FQJB3fjOcQZu5gexEHDt4BuM=:0">yarn-site.xml</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>​    </p>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Hadoop/">Hadoop</a><a class="post-meta__tags" href="/tags/CentOS/">CentOS</a><a class="post-meta__tags" href="/tags/Java/">Java</a></div><div class="post_share"><div class="social-share" data-image="https://raw.githubusercontent.com/XLY23333/picture01/main/img01/t1.png" data-sites="twitter, wechat"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/Software/MedV2/" title="智能医疗导诊系统官网"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">智能医疗导诊系统官网</div></div></a></div></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://raw.githubusercontent.com/XLY23333/picture01/main/img01/Met-XLY.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">XLY23333</div><div class="author-info__description">一大黑耗子的个人博客</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">11</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">23</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://space.bilibili.com/18752589"><i class="https://i0.hdslb.com/bfs/archive/c8fd97a40bf79f03e7b76cbc87236f612caef7b2.png"></i><span>Follow Me [Bilibili]</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Hadoop%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE"><span class="toc-number">1.</span> <span class="toc-text">Hadoop服务器集群安装配置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BACentOS7%E7%9A%84%E5%AE%89%E8%A3%85"><span class="toc-number">1.1.</span> <span class="toc-text">虚拟机CentOS7的安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%9F%BA%E7%A1%80%E8%AE%BE%E7%BD%AE%E5%92%8C%E5%85%8B%E9%9A%86"><span class="toc-number">1.2.</span> <span class="toc-text">虚拟机基础设置和克隆</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Coding/Hadoop%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE/" title="Hadoop服务器集群安装配置"><img src="https://raw.githubusercontent.com/XLY23333/picture01/main/img01/t1.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hadoop服务器集群安装配置"/></a><div class="content"><a class="title" href="/Coding/Hadoop%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE/" title="Hadoop服务器集群安装配置">Hadoop服务器集群安装配置</a><time datetime="2024-12-20T00:00:00.000Z" title="发表于 2024-12-20 08:00:00">2024-12-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/Software/MedV2/" title="智能医疗导诊系统官网">智能医疗导诊系统官网</a><time datetime="2024-04-24T16:00:00.000Z" title="发表于 2024-04-25 00:00:00">2024-04-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Coding/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/" title="正则表达式快速入门"><img src="https://raw.githubusercontent.com/XLY23333/picture01/main/img01/t1.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="正则表达式快速入门"/></a><div class="content"><a class="title" href="/Coding/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/" title="正则表达式快速入门">正则表达式快速入门</a><time datetime="2024-02-22T00:04:00.000Z" title="发表于 2024-02-22 08:04:00">2024-02-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E9%A2%84%E6%B5%8B%E6%A8%A1%E5%9E%8B/M06-%E5%9B%9E%E5%BD%92/" title="数模M06-回归"><img src="https://raw.githubusercontent.com/XLY23333/picture01/main/img01/MaMd.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="数模M06-回归"/></a><div class="content"><a class="title" href="/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E9%A2%84%E6%B5%8B%E6%A8%A1%E5%9E%8B/M06-%E5%9B%9E%E5%BD%92/" title="数模M06-回归">数模M06-回归</a><time datetime="2024-02-14T19:10:00.000Z" title="发表于 2024-02-15 03:10:00">2024-02-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E9%A2%84%E6%B5%8B%E6%A8%A1%E5%9E%8B/M05-%E6%8B%9F%E5%90%88/" title="数模M05-拟合"><img src="https://raw.githubusercontent.com/XLY23333/picture01/main/img01/MaMd.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="数模M05-拟合"/></a><div class="content"><a class="title" href="/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E9%A2%84%E6%B5%8B%E6%A8%A1%E5%9E%8B/M05-%E6%8B%9F%E5%90%88/" title="数模M05-拟合">数模M05-拟合</a><time datetime="2024-02-14T18:10:00.000Z" title="发表于 2024-02-15 02:10:00">2024-02-15</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2024 By XLY23333</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, Welcome to XLY23333's <a href="https://XLY23333.xyz">Blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.12.0"></script><script src="/js/main.js?v=4.12.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script><script>(() => {
+  const initValine = () => {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'tdTnsvz0HCkxUmpWc1fqtXrY-gzGzoHsz',
+      appKey: 'v2FuCD4qOCL6S2QPqrCaPGhv',
+      avatar: 'monsterid',
+      serverURLs: 'https://tdtnsvz0.lc-cn-n1-shared.com',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  const loadValine = async () => {
+    if (typeof Valine === 'function') initValine()
+    else {
+      await getScript('https://cdn.jsdelivr.net/npm/valine@1.5.1/dist/Valine.min.js')
+      initValine()
+    }
+  }
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.12.0"></script></div></div></body></html>
