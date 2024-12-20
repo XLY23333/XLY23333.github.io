@@ -1,6 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Hadoop服务器集群安装配置</title>
+    <url>/Coding/Hadoop%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<h1 id="Hadoop服务器集群安装配置"><a href="#Hadoop服务器集群安装配置" class="headerlink" title="Hadoop服务器集群安装配置"></a>Hadoop服务器集群安装配置</h1><h2 id="虚拟机CentOS7的安装"><a href="#虚拟机CentOS7的安装" class="headerlink" title="虚拟机CentOS7的安装"></a>虚拟机CentOS7的安装</h2><p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image002.png" alt="img"></p>
+<p>下载VMware WorkStation 17 PRO，并激活</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image004.jpg" alt="img"></p>
+<p>添加全新虚拟机，使用Linux的CentOS7发行版，并通过稍后安装避免VM的快速安装自动安装GUI界面</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image006.jpg" alt="img"></p>
+<p>启动虚拟机</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image008.jpg" alt="img"></p>
+<h2 id="虚拟机基础设置和克隆"><a href="#虚拟机基础设置和克隆" class="headerlink" title="虚拟机基础设置和克隆"></a>虚拟机基础设置和克隆</h2><p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image010.png" alt="img"></p>
+<p>进入网卡目录，使用Vi/Vim修改文件<br><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd /etc/sysconfig/network-scripts/</span><br><span class="line">vi  ifcfg-eno16777736</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image012.jpg" alt="img"></p>
+<p>使用Vim基础操作修改ONBOOT值为yes</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image014.jpg" alt="img"></p>
+<p>完成网络服务重启，再次ip a查看ip地址</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image016.jpg" alt="img"></p>
+<p>将ip地址、用户名(root)、密码输入FinalShell完成远程OpenSSH连接</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image018.jpg" alt="img"></p>
+<p>由于CentOS停止维护，为方便后续安装，修改yum包管理器的镜像源</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image020.png" alt="img"></p>
+<p>更改为阿里云镜像源</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image022.jpg" alt="img"></p>
+<p>测试安装vim，成功则说明已经成功更换新镜像源</p>
+  <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">yum install vim</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image024.jpg" alt="img"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image026.jpg" alt="img"></p>
+<p>使用Vmware平台自带功能克隆整个虚拟机</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image028.png" alt="img"></p>
+<p>克隆出三台CentOS虚拟机</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image030.jpg" alt="img"></p>
+<p>分别ip a并使用FinalShell完成远程连接</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image032.jpg" alt="img"></p>
+<p>使用hostnamectl完成三台虚拟机的更名</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hostnamectl set-hostname  &lt;HOSTNAME&gt;</span><br><span class="line">bash</span><br></pre></td></tr></table></figure>
+<p>修改hosts文件映射到其hostname，主机再映射一个master，并同步到三台虚拟机</p>
+<p>关闭并永久禁用防火墙</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">systemctl stop firewalld</span><br><span class="line">systemctl  disable firewalld</span><br><span class="line">firewall-cmd --state</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image036.jpg" alt="img"></p>
+<p>查看SELinux系统安全曾的状态并临时关闭</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image038.jpg" alt="img"></p>
+<p>通过修改配置文件永久性关闭</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image040.jpg" alt="img"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image042.jpg" alt="img"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image044.jpg" alt="img"></p>
+<p>查看当前Jdk版本并进行卸载</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">java -version</span><br><span class="line">rpm  -qa \| grep java</span><br><span class="line">rpm -e --nodeps  java-1.7.0-openjdk-headless-1.7.0.91-2.6.2.3.el7.x86_64</span><br><span class="line">rpm  -e --nodeps java-1.7.0-openjdk-1.7.0.91-2.6.2.3.el7.x86_64</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image046.jpg" alt="img"></p>
+<p>使用yum重装java-1.8.0-openjdk<br><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">yum install -y java-1.8.0-openjdk</span><br><span class="line">java  -version</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image048.jpg" alt="img"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image050.jpg" alt="img"></p>
+<p>下载并将Hadoop文件导入虚拟机</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image052.jpg" alt="img"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image054.jpg" alt="img"></p>
+<p>tar解压文件</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image056.jpg" alt="img"></p>
+<p>移动解压后的文件</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image058.jpg" alt="img"></p>
+<p>进入相关文件</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image060.jpg" alt="img"></p>
+<p>查看jdk安装位置并编辑hadoop-env.sh和yarn-env.sh</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image062.jpg" alt="img"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image064.jpg" alt="img"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image066.jpg" alt="img"></p>
+<p>添加Hadoop环境变量</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image068.jpg" alt="img"></p>
+<p>使得配置文件生效</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image070.jpg" alt="img"></p>
+<p>配置hdfs-site.xml、yarn-site.xml、core-site.xml、mapred-site.xml</p>
+<p>core-site.xml</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image072.jpg" alt="img"></p>
+<p>hdfs-site.xml</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image074.jpg" alt="img"></p>
+<p>mapred-site.xml</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image076.jpg" alt="img"></p>
+<p>yarn-site.xml</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image078.jpg" alt="img"></p>
+<p>添加克隆机名称到 文件</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image080.jpg" alt="img"></p>
+<p>将六个配置文件复制到其他的虚拟机，也可以先做一个hadoop文件夹，然后直接scp整个文件夹</p>
+<p>设置ssh免密登录</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image084.jpg" alt="img"></p>
+<p>Scp发送密钥并测试免密登录效果</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image086.jpg" alt="img"></p>
+<p>设置NTP时间同步服务</p>
+<p>客户端安装ntp并修改配置文件</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image088.jpg" alt="img"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image090.jpg" alt="img"></p>
+<p>客户机的安装和同步服务</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image092.jpg" alt="img"></p>
+<p>使用XShell测试时间date</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image094.jpg" alt="img"></p>
+<p>主机Hadoop初始化</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image096.jpg" alt="img"></p>
+<p>群起</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image098.jpg" alt="img"></p>
+<p>查看8088端口</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image100.jpg" alt="img"></p>
+<p>端口50070查看节点状态</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image102.jpg" alt="img"></p>
+<p>Config Files Download</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>files</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="http://pan.xly23333.xyz/d/BaiduDisk/Code/Hadoop实训/core-site.xml?sign=SCzYgPz0CDQa_oHIOgbzBM7DSuw0sCz5FGfkJMpNUR8=:0">core-site.xml</a></td>
+<td><a href="https://pan.xly23333.xyz/d/BaiduDisk/Code/Hadoop实训/core-site.xml?sign=SCzYgPz0CDQa_oHIOgbzBM7DSuw0sCz5FGfkJMpNUR8=:0">https://pan.xly23333.xyz/d/BaiduDisk/Code/Hadoop实训/core-site.xml?sign=SCzYgPz0CDQa_oHIOgbzBM7DSuw0sCz5FGfkJMpNUR8=:0</a></td>
+</tr>
+<tr>
+<td><a href="http://pan.xly23333.xyz/d/BaiduDisk/Code/Hadoop实训/hdfs-site.xml?sign=NxjIG02bUmdftBJhzDaVPW8mvCpWN9G9QtUzo9gmJUg=:0">hdfs-site.xml</a></td>
+<td><a href="https://pan.xly23333.xyz/d/BaiduDisk/Code/Hadoop实训/hdfs-site.xml?sign=NxjIG02bUmdftBJhzDaVPW8mvCpWN9G9QtUzo9gmJUg=:0">https://pan.xly23333.xyz/d/BaiduDisk/Code/Hadoop实训/hdfs-site.xml?sign=NxjIG02bUmdftBJhzDaVPW8mvCpWN9G9QtUzo9gmJUg=:0</a></td>
+</tr>
+<tr>
+<td><a href="http://pan.xly23333.xyz/d/BaiduDisk/Code/Hadoop实训/mapred-site.xml?sign=nz2buXFqZBKnGqOowprKsLiXBTLPe6GMDIuS4zUQJb0=:0">mapred-site.xml</a></td>
+<td><a href="https://pan.xly23333.xyz/d/BaiduDisk/Code/Hadoop实训/mapred-site.xml?sign=nz2buXFqZBKnGqOowprKsLiXBTLPe6GMDIuS4zUQJb0=:0">https://pan.xly23333.xyz/d/BaiduDisk/Code/Hadoop实训/mapred-site.xml?sign=nz2buXFqZBKnGqOowprKsLiXBTLPe6GMDIuS4zUQJb0=:0</a></td>
+</tr>
+<tr>
+<td><a href="http://pan.xly23333.xyz/d/BaiduDisk/Code/Hadoop实训/yarn-site.xml?sign=LhmInckEWHo_0ZEXa-3FQJB3fjOcQZu5gexEHDt4BuM=:0">yarn-site.xml</a></td>
+<td><a href="https://pan.xly23333.xyz/d/BaiduDisk/Code/Hadoop实训/yarn-site.xml?sign=LhmInckEWHo_0ZEXa-3FQJB3fjOcQZu5gexEHDt4BuM=:0">https://pan.xly23333.xyz/d/BaiduDisk/Code/Hadoop实训/yarn-site.xml?sign=LhmInckEWHo_0ZEXa-3FQJB3fjOcQZu5gexEHDt4BuM=:0</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>​    </p>
+]]></content>
+      <categories>
+        <category>Coding</category>
+      </categories>
+      <tags>
+        <tag>Hadoop</tag>
+        <tag>CentOS</tag>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>数模M01-评价模型</title>
     <url>/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E8%AF%84%E4%BB%B7%E6%A8%A1%E5%9E%8B/M01-%E8%AF%84%E4%BB%B7%E6%A8%A1%E5%9E%8B/</url>
     <content><![CDATA[<h1 id="评价模型"><a href="#评价模型" class="headerlink" title="评价模型"></a>评价模型</h1><h2 id="一、层次分析法-AHP"><a href="#一、层次分析法-AHP" class="headerlink" title="一、层次分析法 AHP"></a>一、层次分析法 AHP</h2><blockquote>
@@ -172,141 +312,6 @@ S_i = \sum^m_{j=1}w_jx_{ij}</script></li>
       </tags>
   </entry>
   <entry>
-    <title>Hadoop服务器集群安装配置</title>
-    <url>/Coding/Hadoop%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE/</url>
-    <content><![CDATA[<h1 id="Hadoop服务器集群安装配置"><a href="#Hadoop服务器集群安装配置" class="headerlink" title="Hadoop服务器集群安装配置"></a>Hadoop服务器集群安装配置</h1><h2 id="虚拟机CentOS7的安装"><a href="#虚拟机CentOS7的安装" class="headerlink" title="虚拟机CentOS7的安装"></a>虚拟机CentOS7的安装</h2><p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image002.png" alt="img"></p>
-<p>下载VMware WorkStation 17 PRO，并激活</p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image004.jpg" alt="img"></p>
-<p>添加全新虚拟机，使用Linux的CentOS7发行版，并通过稍后安装避免VM的快速安装自动安装GUI界面</p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image006.jpg" alt="img"></p>
-<p>启动虚拟机</p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image008.jpg" alt="img"></p>
-<h2 id="虚拟机基础设置和克隆"><a href="#虚拟机基础设置和克隆" class="headerlink" title="虚拟机基础设置和克隆"></a>虚拟机基础设置和克隆</h2><p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image010.png" alt="img"></p>
-<p>进入网卡目录，使用Vi/Vim修改文件<br><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd /etc/sysconfig/network-scripts/</span><br><span class="line">vi  ifcfg-eno16777736</span><br></pre></td></tr></table></figure></p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image012.jpg" alt="img"></p>
-<p>使用Vim基础操作修改ONBOOT值为yes</p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image014.jpg" alt="img"></p>
-<p>完成网络服务重启，再次ip a查看ip地址</p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image016.jpg" alt="img"></p>
-<p>将ip地址、用户名(root)、密码输入FinalShell完成远程OpenSSH连接</p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image018.jpg" alt="img"></p>
-<p>由于CentOS停止维护，为方便后续安装，修改yum包管理器的镜像源</p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image020.png" alt="img"></p>
-<p>更改为阿里云镜像源</p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image022.jpg" alt="img"></p>
-<p>测试安装vim，成功则说明已经成功更换新镜像源</p>
-  <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">yum install vim</span><br></pre></td></tr></table></figure>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image024.jpg" alt="img"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image026.jpg" alt="img"></p>
-<p>使用Vmware平台自带功能克隆整个虚拟机</p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image028.png" alt="img"></p>
-<p>克隆出三台CentOS虚拟机</p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image030.jpg" alt="img"></p>
-<p>分别ip a并使用FinalShell完成远程连接</p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image032.jpg" alt="img"></p>
-<p>使用hostnamectl完成三台虚拟机的更名</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hostnamectl set-hostname  &lt;HOSTNAME&gt;</span><br><span class="line">bash</span><br></pre></td></tr></table></figure>
-<p>修改hosts文件映射到其hostname，主机再映射一个master，并同步到三台虚拟机</p>
-<p>关闭并永久禁用防火墙</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">systemctl stop firewalld</span><br><span class="line">systemctl  disable firewalld</span><br><span class="line">firewall-cmd --state</span><br></pre></td></tr></table></figure>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image036.jpg" alt="img"></p>
-<p>查看SELinux系统安全曾的状态并临时关闭</p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image038.jpg" alt="img"></p>
-<p>通过修改配置文件永久性关闭</p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image040.jpg" alt="img"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image042.jpg" alt="img"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image044.jpg" alt="img"></p>
-<p>查看当前Jdk版本并进行卸载</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">java -version</span><br><span class="line">rpm  -qa \| grep java</span><br><span class="line">rpm -e --nodeps  java-1.7.0-openjdk-headless-1.7.0.91-2.6.2.3.el7.x86_64</span><br><span class="line">rpm  -e --nodeps java-1.7.0-openjdk-1.7.0.91-2.6.2.3.el7.x86_64</span><br></pre></td></tr></table></figure>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image046.jpg" alt="img"></p>
-<p>使用yum重装java-1.8.0-openjdk<br><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">yum install -y java-1.8.0-openjdk</span><br><span class="line">java  -version</span><br></pre></td></tr></table></figure></p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image048.jpg" alt="img"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image050.jpg" alt="img"></p>
-<p>下载并将Hadoop文件导入虚拟机</p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image052.jpg" alt="img"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image054.jpg" alt="img"></p>
-<p>tar解压文件</p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image056.jpg" alt="img"></p>
-<p>移动解压后的文件</p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image058.jpg" alt="img"></p>
-<p>进入相关文件</p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image060.jpg" alt="img"></p>
-<p>查看jdk安装位置并编辑hadoop-env.sh和yarn-env.sh</p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image062.jpg" alt="img"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image064.jpg" alt="img"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image066.jpg" alt="img"></p>
-<p>添加Hadoop环境变量</p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image068.jpg" alt="img"></p>
-<p>使得配置文件生效</p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image070.jpg" alt="img"></p>
-<p>配置hdfs-site.xml、yarn-site.xml、core-site.xml、mapred-site.xml</p>
-<p>core-site.xml</p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image072.jpg" alt="img"></p>
-<p>hdfs-site.xml</p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image074.jpg" alt="img"></p>
-<p>mapred-site.xml</p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image076.jpg" alt="img"></p>
-<p>yarn-site.xml</p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image078.jpg" alt="img"></p>
-<p>添加克隆机名称到 文件</p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image080.jpg" alt="img"></p>
-<p>将六个配置文件复制到其他的虚拟机，也可以先做一个hadoop文件夹，然后直接scp整个文件夹</p>
-<p>设置ssh免密登录</p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image084.jpg" alt="img"></p>
-<p>Scp发送密钥并测试免密登录效果</p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image086.jpg" alt="img"></p>
-<p>设置NTP时间同步服务</p>
-<p>客户端安装ntp并修改配置文件</p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image088.jpg" alt="img"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image090.jpg" alt="img"></p>
-<p>客户机的安装和同步服务</p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image092.jpg" alt="img"></p>
-<p>使用XShell测试时间date</p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image094.jpg" alt="img"></p>
-<p>主机Hadoop初始化</p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image096.jpg" alt="img"></p>
-<p>群起</p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image098.jpg" alt="img"></p>
-<p>查看8088端口</p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image100.jpg" alt="img"></p>
-<p>端口50070查看节点状态</p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img02/clip_image102.jpg" alt="img"></p>
-<p>Config Files Download</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>files</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a href="http://pan.xly23333.xyz/d/BaiduDisk/Code/Hadoop实训/core-site.xml?sign=SCzYgPz0CDQa_oHIOgbzBM7DSuw0sCz5FGfkJMpNUR8=:0">core-site.xml</a></td>
-</tr>
-<tr>
-<td><a href="http://pan.xly23333.xyz/d/BaiduDisk/Code/Hadoop实训/hdfs-site.xml?sign=NxjIG02bUmdftBJhzDaVPW8mvCpWN9G9QtUzo9gmJUg=:0">hdfs-site.xml</a></td>
-</tr>
-<tr>
-<td><a href="http://pan.xly23333.xyz/d/BaiduDisk/Code/Hadoop实训/mapred-site.xml?sign=nz2buXFqZBKnGqOowprKsLiXBTLPe6GMDIuS4zUQJb0=:0">mapred-site.xml</a></td>
-</tr>
-<tr>
-<td><a href="http://pan.xly23333.xyz/d/BaiduDisk/Code/Hadoop实训/yarn-site.xml?sign=LhmInckEWHo_0ZEXa-3FQJB3fjOcQZu5gexEHDt4BuM=:0">yarn-site.xml</a></td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>​    </p>
-]]></content>
-      <categories>
-        <category>Coding</category>
-      </categories>
-      <tags>
-        <tag>Hadoop</tag>
-        <tag>CentOS</tag>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>数模M03-Kmeans聚类论文可使用部分</title>
     <url>/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E8%81%9A%E7%B1%BB%E5%88%86%E6%9E%90/M03-KmeansPaper/</url>
     <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
@@ -383,6 +388,323 @@ SSE = \sum_{i=1}^k\sum_{p\in C_i}|p-m_i|^2</script><p>其中$C_i$是第i个类�
         <tag>Kmeans</tag>
         <tag>Kmeans++</tag>
         <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数模M04-插值</title>
+    <url>/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E9%A2%84%E6%B5%8B%E6%A8%A1%E5%9E%8B/M04-%E6%8F%92%E5%80%BC/</url>
+    <content><![CDATA[<h1 id="插值"><a href="#插值" class="headerlink" title="插值"></a>插值</h1><h2 id="一、插值定义"><a href="#一、插值定义" class="headerlink" title="一、插值定义"></a>一、插值定义</h2><p>数据处理问题：在平面上给定一组离散点列，要求一条曲线把这些点依次连接起来，称之为插值</p>
+<p><strong>注意！</strong>此部分出现了大量不同的有关矩阵的函数运算方法，不同的运算方法之间对行标和列标的对应不同，最好在使用之前用<code>size()</code>方法看清相应的大小和对应关系，再进行操作！</p>
+<h2 id="二、常见插值方法"><a href="#二、常见插值方法" class="headerlink" title="二、常见插值方法"></a>二、常见插值方法</h2><p>已知$n+1$个点$(x_i,y_i)\ (i=0,1,…,n)$，下面求各种插值函数</p>
+<h3 id="（一）分段线性插值"><a href="#（一）分段线性插值" class="headerlink" title="（一）分段线性插值"></a>（一）分段线性插值</h3><p>将两个相邻的节点用直线连接起来，如此形成的一条折线就是分段线性插值函数，记作$I_n(x)$，它满足$I_n(x_i)=y_i$，且$I_n(x)$在每一个小区间$[x_i,x{\small i+1}]$上是线性函数   $(i=0,1,…,n)$</p>
+<p>$I_n(x)$可以表示为$I_n(x)\sum\limits^n{\small i=0}y_il_i(x)$，其中</p>
+<script type="math/tex; mode=display">
+l_i(x)=\begin{cases}
+\dfrac{x-x_{i-1}}{x_i-x_{i-1}},\quad x\in[x_{i-1},x_i]\ (i\ne 0)\\\\
+\dfrac{x-x_{i+1}}{x_i-x_{i+1}},\quad x\in[x_i,x_{i+1}]\ (i\ne n)\\\\
+\quad\ \ \ 0\quad\quad\,,\quad \rm Others
+\end{cases}</script><p>$I_n(x)$有较好的收敛性，即对于$x\in[a,b]$，有</p>
+<script type="math/tex; mode=display">
+\lim_{n\to\infty}I_n(x) = f(x)</script><p>用$I_n(x)$计算x点的插值时，只用到x左右的两个节点，计算量与节点个数n无关。但n越大，分段越多，插值误差越小。实际上用函数表做插值计算时，分段线性插值就足够了，如：数学、物理重用的特殊函数表，数理统计中用的概率分布表等等</p>
+<h3 id="（二）拉格朗日插值多项式"><a href="#（二）拉格朗日插值多项式" class="headerlink" title="（二）拉格朗日插值多项式"></a>（二）拉格朗日插值多项式</h3><p>拉格朗日插值的基函数为</p>
+<script type="math/tex; mode=display">
+\begin{align}
+l_i(x) &= \dfrac{(x-x_0)\cdots(x-x_{i-1})(x-x_{i+1})\cdots(x-x_n)}{(x_i-x_0)\cdots(x_i-x_{i-1})(x_i-x_{i+1})\cdots(x_i-x_n)}\\\\
+&={\prod^n_{j=0}}\limits_{j\ne i}\frac{x-x_j}{x_i-x_j}\quad(i=0,1,\cdots,n)
+\end{align}</script><p>其中$l_i(x)$是n次多项式，满足</p>
+<script type="math/tex; mode=display">
+l_i(x_j)=
+\begin{cases}
+0\ ,\quad j \ne i\\
+1\ ,\quad j = i
+\end{cases}</script><blockquote>
+<p>i,j相同时，$l_i(x)$式上下一致，结果为1</p>
+<p>i,j不同时，$l_i(x)$中一定存在$(x_j-x{\small ?})=0$，结果为0</p>
+</blockquote>
+<p>拉格朗日插值函数：</p>
+<script type="math/tex; mode=display">
+L_n(x) = \sum_{i=0}^n y_il_i(x)=\sum_{i=0}^ny_i\left({\prod^n_{j=0}}\limits_{j\ne i}\dfrac{x-x_j}{x_i-x_j}\right)\quad(i=0,1,\cdots,n)</script><h3 id="（三）样条插值"><a href="#（三）样条插值" class="headerlink" title="（三）样条插值"></a>（三）样条插值</h3><p>部分问题对所得插值函数的光滑性有较高的要求，不仅要连续，而且要有连续的曲率</p>
+<p>样条（Spline）原指富有弹性的细木条或金属条。利用将已知点连接成一条光滑曲线（称为样条曲线），并使连接点处具有连续的曲率，三次样条插值就是如此抽象出来的</p>
+<p>数学上将具有一定光滑性的分段多项式称为样条函数。具体来说，给定区间[a,b]的一个分划</p>
+<script type="math/tex; mode=display">
+\Delta:a=x_0<x_1<\cdots<x_{n-1}<x_n=b</script><p>如果函数S(x)满足</p>
+<ul>
+<li>在每一个小区间$[x_i,x{\small i+1}]\ (i = 0,1,\cdots,n-1)$上S(x)是m次多项式</li>
+<li>S(x)在$[a,b]$上具有m-1阶连续导数</li>
+</ul>
+<p>则称S(x)为关于分划$\Delta$的m次样条函数，其图形为m次样条曲线。显然，折现是依次样条曲线</p>
+<h2 id="三、MATLAB插值工具箱-notebook-with-decorative-cover"><a href="#三、MATLAB插值工具箱-notebook-with-decorative-cover" class="headerlink" title="三、MATLAB插值工具箱:notebook_with_decorative_cover:"></a>三、MATLAB插值工具箱:notebook_with_decorative_cover:</h2><h3 id="（一）一维插值函数-interp1"><a href="#（一）一维插值函数-interp1" class="headerlink" title="（一）一维插值函数 interp1()"></a>（一）一维插值函数 interp1()</h3><p>Code : <code>&lt;ValName&gt; = interp1(x0, y0, x, &lt;method&gt;)</code></p>
+<p>其中<code>&lt;method&gt;</code>指插值的方法，默认为线性插值(‘linear’)，其可选值有：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>&lt; method &gt;</th>
+<th>Description</th>
+<th>Sp</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>‘linear’</td>
+<td>线性插值</td>
+<td>None</td>
+</tr>
+<tr>
+<td>‘nearest’</td>
+<td>最近项目插值</td>
+<td>None</td>
+</tr>
+<tr>
+<td>‘spline’</td>
+<td>立方(三次)样条插值</td>
+<td>保证函数平滑</td>
+</tr>
+<tr>
+<td>‘cubic’</td>
+<td>立方(三次)插值</td>
+<td>保持函数凸凹性</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>其中所有的插值方法都要求x0是单调的</p>
+<p>当x0为等距的时候可以使用快速插值法</p>
+<blockquote>
+<p>method格式：<code>&#39;*linear&#39;</code> , <code>&#39;*nearest&#39;</code> , <code>&#39;*spline&#39;</code> , <code>&#39;*cubic&#39;</code></p>
+</blockquote>
+<h3 id="（二）一维三次样条插值"><a href="#（二）一维三次样条插值" class="headerlink" title="（二）一维三次样条插值"></a>（二）一维三次样条插值</h3><p>CodeStyle01 : <code>&lt;ValName&gt; = interp1(x0, y0, x, &#39;spline&#39;)</code></p>
+<p>CodeStyle02 : <code>&lt;ValName&gt; = spline(x0, y0, x)</code></p>
+<p><em>Recommand </em>: <strong>csape()</strong></p>
+<p>CodeStyle03 : <code>pp = csape(x0, y0, &lt;conds&gt;)</code></p>
+<p>​                         <code>&lt;ValName&gt; = fnval(pp, x)</code></p>
+<p>CodeStyle04 : <code>pp = csape(x0, y0, &lt;conds&gt;, &lt;valconds&gt;)</code></p>
+<p>​                         <code>&lt;ValName&gt; = fnval(pp, x)</code></p>
+<p>提倡使用函数csape，其返回值是pp形式，为了求出插值点的函数值，需要调用函数fnval</p>
+<p><code>pp = csape(x0, y0)</code>使用默认的边界条件（Lagrange边界条件）</p>
+<p><code>&lt;conds&gt;</code>为指定插值的边界条件，可选值如下</p>
+<blockquote>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>&lt; conds &gt;</th>
+<th>Description</th>
+<th>&lt; valconds &gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>‘complete’</td>
+<td>边界为一阶导数</td>
+<td>需提供</td>
+</tr>
+<tr>
+<td>‘not-a-knot’</td>
+<td>非扭结条件</td>
+<td></td>
+</tr>
+<tr>
+<td>‘periodic’</td>
+<td>周期条件</td>
+<td></td>
+</tr>
+<tr>
+<td>‘second’</td>
+<td>边界为二阶导数(缺省值为[0,0])</td>
+<td>需提供</td>
+</tr>
+<tr>
+<td>‘variational’</td>
+<td>设置边界的二阶导数值为[0,0]</td>
+<td>对于一些特殊的边界条件，可以通过conds的一个1$\times$2矩阵来表示，conds元素的取值为0,1,2</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong><em>Eg:</em></strong> <code>conds = [2,1]</code> 左边界是二阶导数，右边界是一阶导数，相应的值由valconds给出</p>
+<p><code>&lt;valconds&gt;</code>为<code>&lt;conds&gt;</code>方法所需的值，若不填写则按照缺省情况处理</p>
+</blockquote>
+<p><a href="# Eg5.1  机床加工">Eg5.1  机床加工</a></p>
+<h3 id="（三）二维插值"><a href="#（三）二维插值" class="headerlink" title="（三）二维插值"></a>（三）二维插值</h3><h4 id="1-插值节点为网格节点"><a href="#1-插值节点为网格节点" class="headerlink" title="1. 插值节点为网格节点"></a>1. 插值节点为网格节点</h4><p>已知m$\times$n个节点：$(x_i,y_j,z{\small ij})\ (i = 1,2,\cdots,m;\ j=1,2,\cdots,n)$，</p>
+<p>且$x_1&lt;\cdots&lt;x_m;\ y_1&lt;\cdots&lt;y_n$</p>
+<p>求点$(x, y)$处的插值</p>
+<h5 id="（1）二维插值函数"><a href="#（1）二维插值函数" class="headerlink" title="（1）二维插值函数"></a>（1）二维插值函数</h5><p>Code : <code>&lt;ValName&gt; = interp2(x0, y0, z0, x, y, &lt;method&gt;)</code></p>
+<p>其中<code>&lt;method&gt;</code>指插值的方法，同一维的参数相同</p>
+<p><strong>x0,y0</strong> 分别为<strong>m</strong>维和<strong>n</strong>维向量，表示节点，z0为 n$\times$m 维度矩阵，表示节点的值，x,y为一维数组，指插值点</p>
+<p>x与y应当是方向不同的向量，即一个是行向量，一个是列向量（y需要转置）</p>
+<p>输出内容为矩阵，Row=y的维数，Col=x的维数，表示得到的插值</p>
+<h5 id="（2）二维三次样条插值"><a href="#（2）二维三次样条插值" class="headerlink" title="（2）二维三次样条插值"></a>（2）二维三次样条插值</h5><p>Code : <code>pp = csape(&#123;x0, y0&#125;, z0, conds, valconds)</code></p>
+<p>​            <code>&lt;ValName&gt; = fnval(pp, &#123;x, y&#125;)</code></p>
+<p>对其内容的解释同上</p>
+<h5 id="（3）显示相应的三维网格图"><a href="#（3）显示相应的三维网格图" class="headerlink" title="（3）显示相应的三维网格图"></a>（3）显示相应的三维网格图</h5><p>Code : <code>mesh(y,x,z)</code></p>
+<p>mesh函数的x为列，y为行，需要将xy反写</p>
+<p><a href="# Eg5.3 丘陵曲面最高点">Eg5.3 丘陵曲面最高点</a></p>
+<h4 id="2-插值节点为散乱节点"><a href="#2-插值节点为散乱节点" class="headerlink" title="2. 插值节点为散乱节点"></a>2. 插值节点为散乱节点</h4><p>已知n个节点$(x_i,y_i,z_i)\ (i=1,2,\cdots,n)$，求点$(x,y)$处的插值z</p>
+<p>Code：<code>&lt;ValName&gt; = griddata(x, y, z, XI, YI)</code></p>
+<p>其中x、y、z均为n维向量，指明所给出数据的横坐标、纵坐标和竖坐标 </p>
+<p>向量XI、YI是给定的网格点的横坐标和纵坐标</p>
+<p>返回值<code>&lt;ValName&gt;</code>为网格(XI, YI)处的函数值，但是<strong>行为YI，列为XI</strong>，进行mesh的时候不需要反转XY</p>
+<p>XI与YI应当是方向不同的向量，一行一列（YI需要转置）</p>
+<blockquote>
+<p>MATLAB中插值时，外插值是不确定的，可以使用混合插值的方法，把不确定的插值换成最近点的插值结果</p>
+<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line">ZI1=griddata(x,y,z,XI,YI&#x27;,<span class="string">&#x27;cubic&#x27;</span>); <span class="comment">%立方插值</span></span><br><span class="line">ZI2=griddata(x,y,z,XI,YI&#x27;,<span class="string">&#x27;nearest&#x27;</span>); <span class="comment">%最近点插值</span></span><br><span class="line">ZI = ZI1; <span class="comment">%</span></span><br><span class="line">ZI(<span class="built_in">isnan</span>(ZI1)) = ZI2(<span class="built_in">isnan</span>(ZI1));</span><br></pre></td></tr></table></figure>
+</blockquote>
+<hr>
+<h2 id="四、实战例题"><a href="#四、实战例题" class="headerlink" title="四、实战例题"></a>四、实战例题</h2><h4 id="Eg5-1-机床加工"><a href="#Eg5-1-机床加工" class="headerlink" title="Eg5.1  机床加工"></a>Eg5.1  机床加工</h4><blockquote>
+<p>待加工零件的外形根据工艺要求由一组数据$(x,y)$给出（在平面情况下），用程控铣床加工时每一刀只能沿$x$方向和$y$方向走非常小的一步，这就需要从已知数据得到加工所要求的步长很小的$(x,y)$坐标。<br>Data中给出的$x,y$数据位于机翼断面的下轮廓线上，假设需要得到$x$坐标每改变0.1时的$y$坐标。试完成加工所需数据，画出曲线，并求出$x=0$处的曲线斜率和$13\le x\le15$范围内y的最小值。要求用分段线性和三次样条两种插值方法计算。</p>
+</blockquote>
+<p>Data：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">x</th>
+<th style="text-align:center">0</th>
+<th style="text-align:center">3</th>
+<th style="text-align:center">5</th>
+<th style="text-align:center">7</th>
+<th style="text-align:center">9</th>
+<th style="text-align:center">11</th>
+<th style="text-align:center">12</th>
+<th style="text-align:center">13</th>
+<th style="text-align:center">14</th>
+<th style="text-align:center">15</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>y</strong></td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">1.2</td>
+<td style="text-align:center">1.7</td>
+<td style="text-align:center">2.0</td>
+<td style="text-align:center">2.1</td>
+<td style="text-align:center">2.0</td>
+<td style="text-align:center">1.8</td>
+<td style="text-align:center">1.2</td>
+<td style="text-align:center">1.0</td>
+<td style="text-align:center">1.6</td>
+</tr>
+</tbody>
+</table>
+</div>
+<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line">clear</span><br><span class="line">clc</span><br><span class="line"><span class="comment">%% Data:</span></span><br><span class="line">x0 = [<span class="number">0</span> <span class="number">3</span> <span class="number">5</span> <span class="number">7</span> <span class="number">9</span> <span class="number">11</span> <span class="number">12</span> <span class="number">13</span> <span class="number">14</span> <span class="number">15</span>];</span><br><span class="line">y0 = [<span class="number">0</span> <span class="number">1.2</span> <span class="number">1.7</span> <span class="number">2.0</span> <span class="number">2.1</span> <span class="number">2.0</span> <span class="number">1.8</span> <span class="number">1.2</span> <span class="number">1.0</span> <span class="number">1.6</span>];</span><br><span class="line">x = [<span class="built_in">min</span>(x0):<span class="number">0.1</span>:<span class="built_in">max</span>(x0)];</span><br><span class="line"><span class="comment">%% Linear</span></span><br><span class="line">y_linear = interp1(x0, y0, x);</span><br><span class="line"><span class="comment">%% Spline</span></span><br><span class="line">y_spline = interp1(x0, y0, x, <span class="string">&#x27;spline&#x27;</span>);</span><br><span class="line">pp_lagrange = csape(x0, y0);</span><br><span class="line">y_spline_lagrange = fnval(pp_lagrange, x);</span><br><span class="line">pp_second = csape(x0, y0, <span class="string">&#x27;second&#x27;</span>);</span><br><span class="line">y_spline_second = fnval(pp_second, x);</span><br><span class="line"><span class="comment">%% DispFigure</span></span><br><span class="line"><span class="comment">% linear</span></span><br><span class="line"><span class="built_in">figure</span>(<span class="string">&#x27;Position&#x27;</span>, [<span class="number">800</span>,<span class="number">100</span>,<span class="number">1000</span>,<span class="number">800</span>]);</span><br><span class="line">subplot(<span class="number">2</span>,<span class="number">2</span>,<span class="number">1</span>)</span><br><span class="line"><span class="built_in">plot</span>(x,y_linear, <span class="string">&#x27;r&#x27;</span>,x0, y0,<span class="string">&#x27;bp&#x27;</span>)</span><br><span class="line">title(<span class="string">&#x27;Interp1-Linear&#x27;</span>)</span><br><span class="line"><span class="comment">% spline</span></span><br><span class="line">subplot(<span class="number">2</span>,<span class="number">2</span>,<span class="number">2</span>)</span><br><span class="line"><span class="built_in">plot</span>(x,y_spline, <span class="string">&#x27;r&#x27;</span>,x0, y0,<span class="string">&#x27;bp&#x27;</span>)</span><br><span class="line">title(<span class="string">&#x27;Interp1-Spline&#x27;</span>)</span><br><span class="line">subplot(<span class="number">2</span>,<span class="number">2</span>,<span class="number">3</span>)</span><br><span class="line"><span class="built_in">plot</span>(x,y_spline_lagrange, <span class="string">&#x27;r&#x27;</span>,x0, y0,<span class="string">&#x27;bp&#x27;</span>)</span><br><span class="line">title(<span class="string">&#x27;Csape-Lagrange&#x27;</span>)</span><br><span class="line">subplot(<span class="number">2</span>,<span class="number">2</span>,<span class="number">4</span>)</span><br><span class="line"><span class="built_in">plot</span>(x,y_spline_second, <span class="string">&#x27;r&#x27;</span>,x0, y0,<span class="string">&#x27;bp&#x27;</span>)</span><br><span class="line">title(<span class="string">&#x27;Csape-Second&#x27;</span>)</span><br><span class="line"><span class="comment">%% Other Tasks</span></span><br><span class="line"><span class="comment">% 求x=0处的斜率</span></span><br><span class="line">dx = diff(x); <span class="comment">% diff逐差函数</span></span><br><span class="line">dy = diff(y_spline_lagrange);</span><br><span class="line">dy_dx = dy./dx;</span><br><span class="line">dy_dx_0 = dy_dx(<span class="number">1</span>);</span><br><span class="line"><span class="comment">% 求13~15范围内y的最小值</span></span><br><span class="line">ymin = <span class="built_in">min</span>(y_spline_lagrange(<span class="number">131</span>:<span class="number">151</span>)); <span class="comment">% 找出ymin</span></span><br><span class="line">yloc = <span class="built_in">find</span>(y_spline_lagrange == ymin); <span class="comment">% find ymin的index</span></span><br><span class="line">xloc = x(yloc); <span class="comment">% 用ymin的index定位xloc</span></span><br><span class="line"><span class="built_in">disp</span>([<span class="string">&#x27;k(0) = &#x27;</span> num2str(dy_dx_0)])</span><br><span class="line"><span class="built_in">disp</span>([<span class="string">&#x27;xloc: &#x27;</span> num2str(xloc)])</span><br><span class="line"><span class="built_in">disp</span>([<span class="string">&#x27;ymin: &#x27;</span> num2str(ymin)])</span><br></pre></td></tr></table></figure>
+<p><strong><em>output</em></strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">k(0) = 0.49716</span><br><span class="line">xloc: 13.8</span><br><span class="line">ymin: 0.98511</span><br></pre></td></tr></table></figure>
+<p><strong><em>Pic</em></strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img01/eg51output.jpg" alt="eg51output"></p>
+<h4 id="Eg5-2-求速度曲线的位移"><a href="#Eg5-2-求速度曲线的位移" class="headerlink" title="Eg5.2 求速度曲线的位移"></a>Eg5.2 求速度曲线的位移</h4><blockquote>
+<p>已知速度曲线$v(t)$上的四个数据点如下表，用三次样条插值求位移</p>
+<script type="math/tex; mode=display">
+S = \int_{0.15}^{0.18}v(t)\,{\rm d}t</script></blockquote>
+<p>Data:</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>$t$</th>
+<th>0.15</th>
+<th>0.16</th>
+<th>0.17</th>
+<th>0.18</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>$v(t)$</strong></td>
+<td>3.5</td>
+<td>1.5</td>
+<td>2.5</td>
+<td>2.8</td>
+</tr>
+</tbody>
+</table>
+</div>
+<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line">clear</span><br><span class="line">clc</span><br><span class="line"><span class="comment">%% DataLoad</span></span><br><span class="line">t0 = <span class="number">0.15</span>:<span class="number">0.01</span>:<span class="number">0.18</span>;</span><br><span class="line">v0 = [<span class="number">3.5</span>,<span class="number">1.5</span>,<span class="number">2.5</span>,<span class="number">2.8</span>];</span><br><span class="line"><span class="comment">%% Spline</span></span><br><span class="line">pp = csape(t0, v0); <span class="comment">% 使用默认边界条件Lagrange</span></span><br><span class="line">format long g <span class="comment">% 设置长小数格式</span></span><br><span class="line">xs = pp.coefs <span class="comment">% 显示每个区间上三次多项式的系数</span></span><br><span class="line">s = integral(@(t)ppval(pp,t),<span class="number">0.15</span>,<span class="number">0.18</span>) <span class="comment">% 求数值积分</span></span><br><span class="line">    <span class="comment">% @(t) 为匿名函数的书写格式 </span></span><br><span class="line">    <span class="comment">% integral(fx,xmin,ymin) 求数值积分</span></span><br><span class="line">        <span class="comment">% 使用全局自适应积分和默认误差容限在 xmin 至 xmax 间以数值形式为函数</span></span><br><span class="line">    <span class="comment">% ppval(pp,xq)计算分段多项式:查询点 xq 处计算分段多项式 pp</span></span><br><span class="line">format <span class="comment">% 恢复短小数小时格式</span></span><br></pre></td></tr></table></figure>
+<p><strong><em>output</em></strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">xs =     -616666.666666667                     33500         -473.333333333334                       3.5</span><br><span class="line">         -616666.666666667                     15000          11.6666666666671                       1.5</span><br><span class="line">         -616666.666666668         -3499.99999999999          126.666666666667                       2.5</span><br><span class="line">s =0.068625</span><br></pre></td></tr></table></figure>
+<h4 id="Eg5-3-丘陵曲面最高点"><a href="#Eg5-3-丘陵曲面最高点" class="headerlink" title="Eg5.3 丘陵曲面最高点"></a>Eg5.3 丘陵曲面最高点</h4><blockquote>
+<p>在一丘陵地带测量高程，x和y方向每隔100米测一个点，得高程如表，试插值一曲面，确定合适的模型，并由此找出最高点和该点的高程</p>
+</blockquote>
+<p>Data:</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">y\x</th>
+<th style="text-align:center">100</th>
+<th style="text-align:center">200</th>
+<th style="text-align:center">300</th>
+<th style="text-align:center">400</th>
+<th style="text-align:center">500</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>100</strong></td>
+<td style="text-align:center">636</td>
+<td style="text-align:center">697</td>
+<td style="text-align:center">624</td>
+<td style="text-align:center">478</td>
+<td style="text-align:center">450</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>200</strong></td>
+<td style="text-align:center">698</td>
+<td style="text-align:center">712</td>
+<td style="text-align:center">630</td>
+<td style="text-align:center">478</td>
+<td style="text-align:center">420</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>300</strong></td>
+<td style="text-align:center">680</td>
+<td style="text-align:center">674</td>
+<td style="text-align:center">598</td>
+<td style="text-align:center">412</td>
+<td style="text-align:center">400</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>400</strong></td>
+<td style="text-align:center">662</td>
+<td style="text-align:center">626</td>
+<td style="text-align:center">552</td>
+<td style="text-align:center">334</td>
+<td style="text-align:center">310</td>
+</tr>
+</tbody>
+</table>
+</div>
+<blockquote>
+<p>注意此处直接列写矩阵，则xy与正常的对应相反</p>
+</blockquote>
+<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line">clear</span><br><span class="line">clc</span><br><span class="line"><span class="comment">%% DataLoad</span></span><br><span class="line">x0 = <span class="number">100</span>:<span class="number">100</span>:<span class="number">500</span>;</span><br><span class="line">y0 = <span class="number">100</span>:<span class="number">100</span>:<span class="number">400</span>;</span><br><span class="line">z0 = [<span class="number">636</span> <span class="number">697</span> <span class="number">624</span> <span class="number">478</span> <span class="number">450</span></span><br><span class="line">      <span class="number">698</span> <span class="number">712</span> <span class="number">630</span> <span class="number">478</span> <span class="number">420</span></span><br><span class="line">      <span class="number">680</span> <span class="number">674</span> <span class="number">598</span> <span class="number">412</span> <span class="number">400</span></span><br><span class="line">      <span class="number">662</span> <span class="number">626</span> <span class="number">552</span> <span class="number">334</span> <span class="number">310</span>]&#x27;;</span><br><span class="line"><span class="comment">% 此处的z0两坐标方向交叉，需要转置</span></span><br><span class="line">step = <span class="number">5</span>;</span><br><span class="line">x = <span class="number">100</span>:step:<span class="number">500</span>;</span><br><span class="line">y = <span class="number">100</span>:step:<span class="number">400</span>;</span><br><span class="line"><span class="comment">%% interp</span></span><br><span class="line"><span class="comment">% interp2要求矩阵和向量交叉对应，且y为列向量</span></span><br><span class="line">z1 = interp2(x0,y0,z0&#x27;,x,y&#x27;);</span><br><span class="line">z1 = z1&#x27;; <span class="comment">% 转置z1回正常的对应</span></span><br><span class="line"><span class="comment">% csape正常进行</span></span><br><span class="line">pp = csape(&#123;x0,y0&#125;,z0);</span><br><span class="line">z2 = fnval(pp,&#123;x,y&#125;);</span><br><span class="line"><span class="comment">%% DispMesh</span></span><br><span class="line"><span class="comment">% mesh函数的x为列，y为行，需要将xy反写</span></span><br><span class="line"><span class="built_in">figure</span>(<span class="string">&#x27;Position&#x27;</span>,[<span class="number">500</span>,<span class="number">300</span>,<span class="number">1000</span>,<span class="number">600</span>])</span><br><span class="line">subplot(<span class="number">1</span>,<span class="number">2</span>,<span class="number">1</span>)</span><br><span class="line">mesh(y,x,z1) </span><br><span class="line">title(<span class="string">&#x27;Interp1-Linear&#x27;</span>,<span class="string">&#x27;FontSize&#x27;</span>,<span class="number">20</span>)</span><br><span class="line">subplot(<span class="number">1</span>,<span class="number">2</span>,<span class="number">2</span>)</span><br><span class="line">mesh(y,x,z2)</span><br><span class="line">title(<span class="string">&#x27;Spline&#x27;</span>,<span class="string">&#x27;FontSize&#x27;</span>,<span class="number">20</span>)</span><br><span class="line"><span class="comment">%% MAXValue</span></span><br><span class="line"><span class="comment">% interp-Linear</span></span><br><span class="line">[maxls1,xlocls1] = <span class="built_in">max</span>(z1); <span class="comment">% 按列取max</span></span><br><span class="line">[vmax1,yloc1] = <span class="built_in">max</span>(maxls1); <span class="comment">% 按行取max</span></span><br><span class="line">info1 = [<span class="string">&quot;interp-Linear&quot;</span>,x(xlocls1(yloc1)),y(yloc1),vmax1]; </span><br><span class="line">    <span class="comment">% 行loc索引列ls的loc,并用loc索引相应的x,y的值</span></span><br><span class="line"><span class="comment">% Spline</span></span><br><span class="line">[maxls2,xlocls2] = <span class="built_in">max</span>(z2);</span><br><span class="line">[vmax2,yloc2] = <span class="built_in">max</span>(maxls2);</span><br><span class="line">info2 = [<span class="string">&quot;Spline&quot;</span>,x(xlocls2(yloc2)),y(yloc2),vmax2]; </span><br><span class="line">info = [info1;info2];</span><br><span class="line"><span class="comment">% 更好的位置索引方法</span></span><br><span class="line">[<span class="built_in">i</span>,<span class="built_in">j</span>]=<span class="built_in">find</span>(z2==<span class="built_in">max</span>(<span class="built_in">max</span>(z2)));  <span class="comment">%找最高点的地址</span></span><br><span class="line">xm=x(<span class="built_in">i</span>),ym=y(<span class="built_in">j</span>),zm=z2(<span class="built_in">i</span>,<span class="built_in">j</span>);  <span class="comment">%求最高点的坐标 </span></span><br><span class="line">[zm,xm,ym]</span><br><span class="line"><span class="comment">%% DispMAX</span></span><br><span class="line"><span class="built_in">disp</span>([<span class="string">&#x27;Step:&#x27;</span> num2str(step)])</span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span>:<span class="number">2</span></span><br><span class="line">    <span class="built_in">disp</span>([<span class="string">&#x27;Type:&#x27;</span> num2str(info(<span class="built_in">i</span>,<span class="number">1</span>))]) </span><br><span class="line">    <span class="built_in">disp</span>([<span class="string">&#x27;max = &#x27;</span> num2str(info(<span class="built_in">i</span>,<span class="number">4</span>)) ...</span><br><span class="line">        <span class="string">&#x27;    x = &#x27;</span> num2str(info(<span class="built_in">i</span>,<span class="number">2</span>)) ...</span><br><span class="line">        <span class="string">&#x27;    y = &#x27;</span> num2str(info(<span class="built_in">i</span>,<span class="number">3</span>))])</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p><strong><em>output</em></strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">  720.7217  165.0000  175.0000</span><br><span class="line">Step:5</span><br><span class="line">Type:interp-Linear</span><br><span class="line">max = 712    x = 200    y = 200</span><br><span class="line">Type:Spline</span><br><span class="line">max = 720.7217    x = 165    y = 175</span><br></pre></td></tr></table></figure>
+<p><strong><em>Pic</em></strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img01/eg53output.jpg" alt="eg53output"></p>
+<h4 id="Eg5-4-海底图像"><a href="#Eg5-4-海底图像" class="headerlink" title="Eg5.4 海底图像"></a>Eg5.4 海底图像</h4><blockquote>
+<p>在某海域测得一些点（x,y）处的水深z由表5.4给出，在适当的矩形区域内画出海底曲面的图形。</p>
+</blockquote>
+<p>Data：</p>
+<blockquote>
+<p>x=[129,140,103.5,88,185.5,195,105,157.5,107.5,77,81,162,162,117.5];</p>
+<p>y=[7.5,141.5,23,147,22.5,137.5,85.5,-6.5,-81,3,56.5,-66.5,84,-33.5];</p>
+<p>z=-[4,8,6,8,6,8,8,9,9,8,8,9,4,9];</p>
+</blockquote>
+<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line">clear</span><br><span class="line">clc</span><br><span class="line"><span class="comment">%% DataLoad</span></span><br><span class="line">x=[<span class="number">129</span>,<span class="number">140</span>,<span class="number">103.5</span>,<span class="number">88</span>,<span class="number">185.5</span>,<span class="number">195</span>,<span class="number">105</span>,<span class="number">157.5</span>,<span class="number">107.5</span>,<span class="number">77</span>,<span class="number">81</span>,<span class="number">162</span>,<span class="number">162</span>,<span class="number">117.5</span>];</span><br><span class="line">y=[<span class="number">7.5</span>,<span class="number">141.5</span>,<span class="number">23</span>,<span class="number">147</span>,<span class="number">22.5</span>,<span class="number">137.5</span>,<span class="number">85.5</span>,<span class="number">-6.5</span>,<span class="number">-81</span>,<span class="number">3</span>,<span class="number">56.5</span>,<span class="number">-66.5</span>,<span class="number">84</span>,<span class="number">-33.5</span>];</span><br><span class="line">z=-[<span class="number">4</span>,<span class="number">8</span>,<span class="number">6</span>,<span class="number">8</span>,<span class="number">6</span>,<span class="number">8</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">9</span>,<span class="number">8</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">4</span>,<span class="number">9</span>];</span><br><span class="line">step = <span class="number">1</span>;</span><br><span class="line">XI = <span class="built_in">min</span>(x):step:<span class="built_in">max</span>(x)</span><br><span class="line">YI = <span class="built_in">min</span>(y):step:<span class="built_in">max</span>(y)</span><br><span class="line"><span class="comment">%% grid</span></span><br><span class="line">ZI1=griddata(x,y,z,XI,YI&#x27;,<span class="string">&#x27;cubic&#x27;</span>); <span class="comment">%立方插值</span></span><br><span class="line">ZI2=griddata(x,y,z,XI,YI&#x27;,<span class="string">&#x27;nearest&#x27;</span>); <span class="comment">%最近点插值</span></span><br><span class="line">ZI = ZI1; <span class="comment">% 设置ZI初始值为ZI1</span></span><br><span class="line">ZI(<span class="built_in">isnan</span>(ZI1)) = ZI2(<span class="built_in">isnan</span>(ZI1)); <span class="comment">% 用ZI2填充ZI1外插值(为NaN)的部分</span></span><br><span class="line"><span class="built_in">figure</span></span><br><span class="line">mesh(XI,YI,ZI)</span><br><span class="line"><span class="built_in">hold</span> on</span><br><span class="line"><span class="built_in">plot3</span>(x,y,z,<span class="string">&#x27;or&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p><strong><em>Pic</em></strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img01/eg54output.jpg" alt="eg54output"></p>
+]]></content>
+      <categories>
+        <category>数学建模</category>
+        <category>预测模型</category>
+      </categories>
+      <tags>
+        <tag>MATLAB</tag>
+        <tag>预测</tag>
+        <tag>插值</tag>
       </tags>
   </entry>
   <entry>
@@ -477,121 +799,6 @@ A = (R^{\rm T}R)^{-1}R^{\rm T}Y</script><h5 id="（3）函数-r-k-x-的选择"><
         <tag>MATLAB</tag>
         <tag>预测</tag>
         <tag>拟合</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>智能医疗导诊系统官网</title>
-    <url>/Software/MedV2/</url>
-    <content><![CDATA[<h1 id="智能医疗导诊系统"><a href="#智能医疗导诊系统" class="headerlink" title="智能医疗导诊系统"></a>智能医疗导诊系统</h1><p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img01/Grp1.png" style="zoom: 25%;" /></p>
-<hr>
-<h3 id="最新版下载链接"><a href="#最新版下载链接" class="headerlink" title="最新版下载链接"></a>最新版下载链接</h3><p>123网盘不限速下载连接：<a href="https://www.123pan.com/s/kopSVv-9oc4H.html">点击此处开始下载</a></p>
-<p>百度网盘下载连接：<a href="https://pan.baidu.com/s/1zZUerTOkBZ1kl_1mGRsSLA?pwd=gyh1">点击此处开始下载</a></p>
-<p>阶段性测试用账密：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">testadmin1 <span class="number">111111</span></span><br><span class="line">testadmin2 <span class="number">222222</span></span><br><span class="line">testadmin3 <span class="number">333333</span></span><br></pre></td></tr></table></figure>
-<hr>
-<h3 id="宣传视频"><a href="#宣传视频" class="headerlink" title="宣传视频"></a>宣传视频</h3><iframe src="//player.bilibili.com/player.html?aid=1953509801&bvid=BV1bC411n7HF&cid=1521402258&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
-
-<h3 id="系统概述"><a href="#系统概述" class="headerlink" title="系统概述"></a>系统概述</h3><p>欢迎使用智能医疗导诊系统 !</p>
-<p>本系统致力于通过当今社会的各项AI技术，<br>以LLMs为主建立一个智能化的医疗预导诊系统，<br>以求在快速化发展的时代建立一个更快的医疗预服务体验。</p>
-<p>智能医疗导诊系统基于先进的人工智能技术，旨在提升医疗服务效能并优化患者的就医经历。此系统结合了大语言模型(LLMs)、语音转文本(ASR)、光学字符识别(OCR)技术，通过对开源大语言模型的定向化微调，实现症状精确识别、智能疾病诊断和科室推荐，并模拟输出相应的初步导诊报告。</p>
-<h3 id="系统功能"><a href="#系统功能" class="headerlink" title="系统功能"></a>系统功能</h3><ul>
-<li><strong>基于微调<em>LLMs</em>的智能医疗诊断</strong>：通过调用租赁服务器上的微调MED大语言模型，精确的为您判断相应的医学专业病症名词和推荐的诊疗科室。</li>
-<li><strong><em>OCR</em>病历识别</strong>：用户可使用扫描其他来源的病例或手写材料，通过光学字符识别转化为导诊文本信息。</li>
-<li><strong>二维码导诊记录</strong>：支持通过扫描二维码快速导入患者既往的诊疗记录。</li>
-<li><strong><em>ASR</em>语音输入</strong>：用户可通过自然语言口述其病情，系统即时将语音转换为结构化医疗信息。</li>
-<li><strong>导诊报告自动生成</strong>：系统能够自动生成详尽的导诊报告，并为其生成可分享的导诊二维码，简化医疗信息传递与查询过程。</li>
-<li><strong>模拟数据库可预约科室</strong>：通过模拟生成的数据库，并结合当前导诊的真实时间，输出相应时间段可以预约的科室和医生。</li>
-</ul>
-<h3 id="安装指南"><a href="#安装指南" class="headerlink" title="安装指南"></a>安装指南</h3><p>智能医疗导诊系统提供易于安装的执行文件，用户可以通过以下步骤在个人电脑上进行安装：</p>
-<ol>
-<li>从 <a href="https://www.XLY23333.xyz/Software/MedV2/">官方网站</a> 下载最新的压缩包。</li>
-<li>解压文件包，双击包内的<code>智能医疗导诊系统.exe</code>文件，即可使用。</li>
-</ol>
-<h3 id="快速开始指南"><a href="#快速开始指南" class="headerlink" title="快速开始指南"></a>快速开始指南</h3><ol>
-<li><strong>启动系统</strong>：打开应用程序，通过 <a href="https://www.XLY23333.xyz/Software/MedV2/">官方网站</a> 的测试账密进入主界面。</li>
-<li><strong>数据输入</strong>：<ul>
-<li>直接在输入框中输入病症内容 </li>
-<li>点击<kbd>CAM</kbd>，进入CAM界面<ul>
-<li>选择<kbd>OCR 病历识别</kbd>进行文字光学字符识别 或<kbd>QR Code 二维码识别</kbd>进行二维码识别</li>
-<li>OCR将自动使用模糊推理，并导入病症框</li>
-<li>二维码加载后自动显示上次的导诊信息并显示可约科室</li>
-</ul>
-</li>
-<li>点击<kbd>ASR</kbd>，进入ASR界面<ul>
-<li>使用<kbd>Start</kbd>开始录音</li>
-<li>使用<kbd>END</kbd>结束录音并进行模糊推理</li>
-<li>使用<kbd>导入数据</kbd>最终数据导入病症框</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><strong>查看诊断结果</strong>：提交信息后，系统将显示初步诊断结果和推荐科室，并通过当前时间返回模拟数据库当中的模拟可约诊室。</li>
-<li><strong>导诊报告</strong>：用户可以点击<kbd>Print</kbd>模拟打印导诊报告和二维码。</li>
-<li><strong>清除记录</strong>：点击<kbd>clear</kbd>可以清除已有的记录</li>
-<li><strong>设置</strong>：通过右下角的<kbd>Setting</kbd>按键</li>
-</ol>
-<h3 id="技术支持"><a href="#技术支持" class="headerlink" title="技术支持"></a>技术支持</h3><p>若在使用过程中遇到任何技术问题，或需要帮助、加入开发团队、授权开源代码，可以通过以下方式联系我们的技术支持团队：</p>
-<ul>
-<li><strong>电子邮箱</strong>：XLY23333@126.com</li>
-<li><strong>联系电话</strong>：176-1565-7737</li>
-</ul>
-<h3 id="更新日志"><a href="#更新日志" class="headerlink" title="更新日志"></a>更新日志</h3><h4 id="V1-Demo"><a href="#V1-Demo" class="headerlink" title="V1 Demo"></a>V1 Demo</h4><blockquote>
-<p>Update date: 2024-03-09</p>
-</blockquote>
-<ul>
-<li>初步创建了主窗口界面</li>
-<li>通过API调用实现了最基本的导诊逻辑功能<ul>
-<li>软件使用的API为测试用，有一定的限额，Key的购买将会在 <a href="https://www.XLY23333.xyz/Software/MedV2/">官方网站</a> 放入第三方友情链接</li>
-</ul>
-</li>
-<li>初步建立了底层逻辑结构</li>
-</ul>
-<h4 id="V2-Demo"><a href="#V2-Demo" class="headerlink" title="V2 Demo"></a>V2 Demo</h4><blockquote>
-<p>Update date: 2024-03-10</p>
-</blockquote>
-<ul>
-<li>更新UI界面，增设Camera和ASR界面</li>
-<li>接入硬件Camera处理和PyAudio音频录制接口</li>
-<li>随进度更新底层逻辑结构</li>
-</ul>
-<h4 id="V3-Demo"><a href="#V3-Demo" class="headerlink" title="V3 Demo"></a>V3 Demo</h4><blockquote>
-<p>Update date: 2024-03-24</p>
-</blockquote>
-<ul>
-<li>更新UI界面，新增设置(Setting)页面</li>
-<li>随进度更新底层逻辑结构</li>
-</ul>
-<h4 id="V1-BETA"><a href="#V1-BETA" class="headerlink" title="V1 BETA"></a>V1 BETA</h4><blockquote>
-<p>Update date: 2024-04-19</p>
-</blockquote>
-<ul>
-<li><em>第一个发布版本</em></li>
-<li>接入微调大语言模型MED</li>
-<li>建立服务器备用API通道</li>
-<li>随进度更新底层逻辑结构</li>
-</ul>
-<h4 id="V2-Latest"><a href="#V2-Latest" class="headerlink" title="V2 [Latest]"></a>V2 <u>[Latest]</u></h4><blockquote>
-<p>Update date: 2024-04-25</p>
-</blockquote>
-<ul>
-<li>更新全新的UI界面</li>
-<li>重新调整底层代码结构，建立Python功能包<em>Medpkg</em>，规范化源码</li>
-<li>尝试接入本地音频解码器<ul>
-<li>音频解码器可能因为安装不成功而提示转码错误，可通过手动下载解码器并设置环境变量后使用</li>
-</ul>
-</li>
-</ul>
-<h3 id="第三方API购买"><a href="#第三方API购买" class="headerlink" title="第三方API购买"></a>第三方API购买</h3><p>软件提供了一个有限的API-KEY用于测试，如需长期使用可以购买第三方API-KEY并通过调整Setting使用</p>
-<p>链接：<a href="https://buyca.top/">点击进入</a></p>
-<h3 id="致谢"><a href="#致谢" class="headerlink" title="致谢"></a>致谢</h3><p>感谢所有参与项目开发和测试的团队成员，感谢该项目建立过程当中提供帮助的老师和同学，以及为项目提供数据支持和反馈的所有用户和合作伙伴。</p>
-<hr>
-<center><time>2024/04/25</time> <team>MEDGS-AI Team</team></center>]]></content>
-      <categories>
-        <category>Software</category>
-      </categories>
-      <tags>
-        <tag>Python</tag>
-        <tag>Software</tag>
       </tags>
   </entry>
   <entry>
@@ -965,168 +1172,6 @@ y=\frac{\beta_4x_2-\dfrac{x_3}{\beta_5}}{1+\beta_1x_1+\beta_2x_2+\beta_3x_3}</sc
       </tags>
   </entry>
   <entry>
-    <title>正则表达式快速入门</title>
-    <url>/Coding/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/</url>
-    <content><![CDATA[<h1 id="正则表达式快速入门"><a href="#正则表达式快速入门" class="headerlink" title="正则表达式快速入门"></a>正则表达式快速入门</h1><blockquote>
-<p>学习源视频：<a href="https://www.bilibili.com/video/BV1da4y1p7iZ/?spm_id_from=333.337.search-card.all.click&amp;vd_source=1437b1798845fbcba4cf09d5a889e546">奇乐编程学院-[Bilibili]</a><br>Note：<a href="https://www.xly23333.xyz">XLY23333-[Blog]</a><br>NoteBy：Typora[Markdown] + $\rm\LaTeX$ Themes by:<a href="https://github.com/Keldos-Li/typora-latex-theme">Keldos-Li-[Github]</a></p>
-</blockquote>
-<hr>
-<h2 id="限定符-Quantifiers"><a href="#限定符-Quantifiers" class="headerlink" title="限定符 [Quantifiers]"></a>限定符 [Quantifiers]</h2><h3 id="单个字符的限定"><a href="#单个字符的限定" class="headerlink" title="单个字符的限定"></a>单个字符的限定</h3><div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">$\quad$限定符$\quad$</th>
-<th style="text-align:left">Description</th>
-<th style="text-align:center">$\quad$Eg$\quad$</th>
-<th style="text-align:left">Egmeans</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center"><code>?</code></td>
-<td style="text-align:left">?前字符出现<strong>0</strong>或1次(?前字符<strong>可有可无</strong>)</td>
-<td style="text-align:center"><code>used?</code></td>
-<td style="text-align:left">查找所有use和used</td>
-</tr>
-<tr>
-<td style="text-align:center"><code>*</code></td>
-<td style="text-align:left">*前字符出现<strong>0</strong>或<strong>多次</strong>(*前字符<strong>可有多次可无</strong>)</td>
-<td style="text-align:center"><code>ab?c</code></td>
-<td style="text-align:left">可查找abc,ac,abbbc等</td>
-</tr>
-<tr>
-<td style="text-align:center"><code>+</code></td>
-<td style="text-align:left">+前字符出现<strong>1</strong>或<strong>多次</strong>(+前字符<strong>可有一次或多次</strong>)</td>
-<td style="text-align:center"><code>ab+c</code></td>
-<td style="text-align:left">可查找abc,abbbc等</td>
-</tr>
-<tr>
-<td style="text-align:center"><code>&#123;&lt;num&gt;&#125;</code></td>
-<td style="text-align:left">指定{…}前字符<strong>出现次数</strong>为<code>&lt;num&gt;</code>次</td>
-<td style="text-align:center"><code>ab&#123;2&#125;c</code></td>
-<td style="text-align:left">可查找abbc等</td>
-</tr>
-<tr>
-<td style="text-align:center"><code>&#123;&lt;min&gt;,&lt;max&gt;&#125;</code></td>
-<td style="text-align:left">指定{…}前字符<strong>出现次数范围</strong>,可以<strong>缺省<code>max</code>值</strong></td>
-<td style="text-align:center"><code>ab&#123;3,&#125;c</code></td>
-<td style="text-align:left">可查找abbbbc,abbbc等</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="多个字符的限定"><a href="#多个字符的限定" class="headerlink" title="多个字符的限定"></a>多个字符的限定</h3><p>可以使用<code>()</code>将多个字符括起,随后操作同上方的单个字符限定</p>
-<p><strong><em>Eg:</em></strong><code>a(bc)&#123;1,2&#125;d</code>可以搜索 ‘abcd’ 和 ‘abcbcd’</p>
-<h2 id="或运算符-OR-Operation"><a href="#或运算符-OR-Operation" class="headerlink" title="或运算符 [OR Operation]"></a>或运算符 [OR Operation]</h2><p>同时匹配所有出现的情况,只要有就匹配</p>
-<p>Code: <code>(&lt;word1&gt;|&lt;words2&gt;|&lt;words3&gt;|...)</code></p>
-<p>使用<code>()</code>将或运算内容括起,用<code>|</code>将内容隔开,则括号中所有的内容执行或运算,均可以被查找到</p>
-<p><strong><em>Eg:</em></strong><code>a (cat|dog)</code>可以搜索 ‘a cat’ 和 ‘a dog’ [注意:a后方的空格也算作检索内容]</p>
-<h2 id="字符类-Character-Classes"><a href="#字符类-Character-Classes" class="headerlink" title="字符类 [Character Classes]"></a>字符类 [Character Classes]</h2><p>匹配由指定字符所构成的内容,无需完全匹配,拥有其中之一即可</p>
-<p>Code: <code>[&lt;char1&gt;&lt;char2&gt;...]</code>并列查找由他们构成的内容</p>
-<p>​           <code>[&lt;char1&gt;-&lt;char2&gt;]</code> 定义查找范围<code>&lt;char1&gt;-&lt;char2&gt;</code></p>
-<p>​            <code>[^&lt;char&gt;]</code>查找除了方括号的其他内容</p>
-<p><strong><em>Eg</em></strong>: <code>[^\nA-Za-z]+</code> 查找所有的数字(非换行符,非大写字母,非小写字母)</p>
-<h2 id="元字符-Meta-Characters"><a href="#元字符-Meta-Characters" class="headerlink" title="元字符 [Meta-Characters]"></a>元字符 [Meta-Characters]</h2><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>$\quad$Meta-Char$\quad$</th>
-<th style="text-align:left">$\quad$Description$\quad$</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>\d</code></td>
-<td style="text-align:left"><strong>数字</strong>字符</td>
-</tr>
-<tr>
-<td><code>\w</code></td>
-<td style="text-align:left"><strong>单词</strong>字符(英文字母+数字+下划线)</td>
-</tr>
-<tr>
-<td><code>\s</code></td>
-<td style="text-align:left"><strong>空白</strong>符(TAB+换行符)</td>
-</tr>
-<tr>
-<td><code>\D</code></td>
-<td style="text-align:left"><strong>非数字</strong>字符</td>
-</tr>
-<tr>
-<td><code>\W</code></td>
-<td style="text-align:left"><strong>非单词</strong>字符</td>
-</tr>
-<tr>
-<td><code>\S</code></td>
-<td style="text-align:left"><strong>非空白</strong>符</td>
-</tr>
-<tr>
-<td><code>.</code></td>
-<td style="text-align:left"><strong>任意</strong>字符(<strong>不包含换行符</strong>)</td>
-</tr>
-<tr>
-<td><code>^&lt;char&gt;</code></td>
-<td style="text-align:left">匹配<strong>行首</strong>的<code>&lt;char&gt;</code></td>
-</tr>
-<tr>
-<td><code>&lt;char&gt;$</code></td>
-<td style="text-align:left">匹配<strong>行尾</strong>的<code>&lt;char&gt;</code></td>
-</tr>
-<tr>
-<td><code>\b&lt;chars&gt;\b</code></td>
-<td style="text-align:left">规定该位置为<strong>单词边界</strong>,<strong>防止对超量的截取匹配</strong></td>
-</tr>
-<tr>
-<td><code>\B&lt;chars&gt;\B</code></td>
-<td style="text-align:left">规定该位置为<strong>非单词边界</strong></td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>如果要使用<code>.</code>则可以通过转义后的<code>\.</code>进行匹配</p>
-<h2 id="贪婪与懒惰匹配-Greedy-vs-Lazy-Match"><a href="#贪婪与懒惰匹配-Greedy-vs-Lazy-Match" class="headerlink" title="贪婪与懒惰匹配 [Greedy vs Lazy Match]"></a>贪婪与懒惰匹配 [Greedy vs Lazy Match]</h2><p>假设对一下的html内容,需要匹配<code>&lt;center&gt;</code>和<code>&lt;/center&gt;&gt;</code></p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">center</span>&gt;</span>TEXT<span class="tag">&lt;/<span class="name">center</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>如果使用<code>&lt;.+&gt;</code>,由于<code>&gt;</code>和<code>&lt;</code>同样属于<code>.</code>,所以将匹配整行的全部代码</p>
-<p>可以将代码更改为<code>&lt;.+?&gt;</code>由贪婪模式匹配为<strong>懒惰匹配</strong>,从而精确匹配</p>
-<p>也可以在不切换模式的情况下,改用<code>&lt;[^&lt;&gt;]+&gt;</code>去掉可能出现的<code>&gt;</code>和<code>&lt;</code>查找</p>
-<h2 id="实战练习"><a href="#实战练习" class="headerlink" title="实战练习"></a>实战练习</h2><h3 id="匹配16进制的颜色值"><a href="#匹配16进制的颜色值" class="headerlink" title="匹配16进制的颜色值"></a>匹配16进制的颜色值</h3><p>颜色值#开头,为十六进制(由0~9,a~f,A~F构成),共6位字符</p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img01/eg1.png" style="zoom:40%"></p>
-<h3 id="IPv4-地址匹配"><a href="#IPv4-地址匹配" class="headerlink" title="IPv4 地址匹配"></a>IPv4 地址匹配</h3><p>IPv4由四段数字组成,中间由符号.隔开,且数字的范围为0~255</p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img01/eg2.png" style="zoom:50%"></p>
-]]></content>
-      <categories>
-        <category>Coding</category>
-      </categories>
-      <tags>
-        <tag>Python</tag>
-        <tag>正则表达式</tag>
-        <tag>Search</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>非公开链接传送Gather</title>
-    <url>/URL/%E9%9D%9E%E5%85%AC%E5%BC%80%E9%93%BE%E6%8E%A5%E4%BC%A0%E9%80%81Gather/</url>
-    <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
-  <script id="hbeData" type="hbeData" data-hmacdigest="25d905d0277335b5e6b872590b9538cb6395304c174faf23f99d54e188c89d7e">2d0cc57e0ca0d95b94a86d2858934c236a929973a1341844210faac8bd7bf73c011b5ad40b23a60d4629d561c061a8d90c6cd17f948a014811b5358f1cd13cc69ec60ed77ef384685c68c58676b9cd84f19ce67f2ef07f32db57fa395db46a039032aecffdeeeeb6b0badf82d72e3d737bd5efa29396e702fcca920633f20510fab60595f368a14b37fd1be161531a31f35387da9262ed7cbaab5b2f8959ecefbe8abf6f55ab498fead13e854fa4fb65d7a3b4f599c909b799fe0901bbecf8bc82e3d787db5a6aa7bf151a32681f13d1fc878424cc39f1fe1a80f4b3ae96d748828d19c5cdda330f819c425431e1ebc40622ab28f4c824d958869d6c587493ca64fa823bdae7024bf8ad225cddda1994df387b57887d7b6a9200378e57f633733f35a6559e30f960e1f694fcedd1e99a9b19d64843194331c2455c547e291ba77953cee1ca6a9c68ba45b2a01a755e2ae9604a30c33a8b9602f027f15df2ca23382acf95af1d72f6e5ec6943f59d838b75d79ed47b2ced66fe4ad2ffad828804155c57e2289eb8fa054808d9a0bebb239c7bee3d241e677010093696f392af14c88d1cdba9db67bea10dd2df1bdfb589ce954cc6c6ce736d07eb84146b03c4588ac3520e637cf440005b1fe72f67ed8e1ed9a87d258e842c5ab01123b64ff4383344a580e5a28529b2c226e6fce558eecaf35742ce6b382ffd7a73bf8c39be9cde1a5b144eb36bbb2ceea4ca83346fdb8898a6b0d3e8e031c148c61f56412550792e5a3b6034abfb960e44a98b0811c96fb3e3d117e48f989e741d3bd5ac4be19bb913b70f42f57e3d29f4e7db85a58761684531d4ca396b48da99ab912da7aea2c5d4ed486c5ecdc96f2df53207e34e727bc79cc840713197c3ecb6e4073ec2e1956793edc4ccea5669db6067dc5ac37d46e2aa97719052f916eeeecf8f6ed61a5a80c9cbc60835c45cc7ee66f3c23570330246cf578c3e4653157a459265e3f485e41887ad192aa12cd790ce4d61427315b47fdfdbf8d02df8dc4675f347b60126eabb25e6cdd99e821b12b34876485e7f82e8cf32e545458c65a0d9217f1fec62763d0ec2407f4e64b27f10870cb766f135b89e4a3701ef746bf8af7730a1d01c176d5ec2b84c925ef9bbc6afc195dcdf9916d6cca33d87f88108d230a8773649e8b7e710746a7ddc6d954cac4dba6903a4fdf559c4583d46dcef6c732b9384a740ec53a149b104169fa01ea7a0df7730138e33f67241cb93462ee71a27cda49ed8afa9f8f989071d7e19d872e25a1ad387ab2d5ff8651334d680ed8711b81b8869ce373cedea618606f2659b262a71e7b11afefbfd9c4e3a16b9290326b9edafa737d1b59b2b0dfd523a83c01f315eb7c36a669c21b103a78395c4da83d44a77001afdc26bb8d7be64639c66aa1e19335fdf36348804a6c95478e004c39410d8d0033e934640f31d862c4b652b321654b71225928ffe11ae4d23274bed6188f27ef2a13ea7cc9b863505c1adcac1238f9acf8f1bbae3a9187c207428f11bb38fac630f359a9f8ce743aabfa5da402c5fa010e3802dce4d0a0ca89126a0f88ebd38f438aa28ce317554bddd3f2271c6482d8d656bdaa80f52381f0544a6c9faff9be20c405f7956afab44c9666ebd14876b04b67c592255d8e3db8f1c37fdc377bb528a3f5814cd4a11068660421ef6ff67b40fd3d46ed97c308601dc2a46c41cef8768d669127e256fcf59e3a338910662e946855fd1b0fdaf7a297e84c561431e57f609217f1bb16302d288d451b1a15c39f396d38d874fc9513413fd79b389ae94fcdb5673f9a439dce8315ad703aa5a28d86b8df345755d98e70d76d4a2961ee988240918d765286274658b6010ee9af2d799de0e5ab73ad491a8751d286994392c144de83d5c6b5c404cb73cd386daa57118520c58b09605eeb6ad3f451d75f33d71de7097b4c7d09bb2d9ac41873722a2ac3136236fa0d8c638679a9808e17e287611a87677e56bb3ff5083a70b12c647c88401947c6e4382796cf581ec57ea567b6636a84e22f448d03ce7fd36a7b8835ad5cf8236f0fcf2e0b881483cc530b0f78bce144c95a1a239933563b3c76005ce717c767d2ac6b3636457b4c5ee798ac410856558cdd609a94c822f1bbdf75b416a54965a0b58327de97f2c2aede0de4c9cf00ceccfc37a55aad3c55a48455fe65e38eac8a2d0d50b33592c649c16801bfcf4660b7dd4c94a491131ff63080ec4a2dbe7017f9dd7de21cadde8abd2f4c6ca195a63f2cab61d1ef170d87f5d8c1ed73c09a571ca8906a76552b088402c3dfeebd0e48abca3b395b8f95b55f6e34ed670a8b10ff71599fe47714710dd21a74b55b4525f042d936f04fec459b75b14a97779d6015a4d64f656339eafcee70543f6c894d7da6cdf0e41e3b0ff5156412a1c3ddf04f4b1449fd33f0db8d5ef65e5fbc4bfa07534669f28457f5a2c0e94013394b940ce05a2f089e05f1edee2e759ee1e74790fb47ee28f197271958804d6586ac8c85bb7065792fd68a4d517f579b2a148eaf0f88d9fc59876eb8e3825583ac7892afd430df04238a58c1143c60bcae3e2ca294452737edc10ae54400051d43b268bfc561d0ea1bb37b90ba7ebfea0e2cf6b50d914aa1ad84cc3446886c349a9bc8f3ae601c44d09b00641db3853d754d88f62db1ae06266451c9272e92177ea01d4b224d766b9935ca9c5a2dfe73a1328e6da5e6d249795fcd5072672cc15a5e87317462ae96506af42b4f9a90b06c781e982e403fa14a4ba4c989ebd9c4c0d5176a150d63fbeffd6bde361b346a74fd6c6d2bacff7f637f991fec4240fe950224c1ae0492302eba1d9a7a101a78180ff54201b60719af63f7f14b33aab584aae34c6faa3144c1049ee34a3a77010c892e81a60fd8ab197278d172c410236be02c16569b7133effe6fe69944c35a77ced061a6e91aeeaf64879b7b693da579d55da4474c8eb15f8d67e49635c4969e8500fe6f96e91252f7a0076eb8291fcac9ea6379410e0f94c358d7d73617d2febec22409e22e4facc9ad3c9ed3a347cdf07996d4f628fbbe1891d1e491cbf868bb39cfc77c666d819678ae737c6b3eb1abe2f109d688ba86a4f5b4d9715035bb4bad5af84b173d9b387a39a1d9f4524f31a0df14cf69064ea72ed26ae2768c13add054001d159aacccbeb2d46e1f26a092ffbe4a07e049c7b9c42d56b2d3cbcfcfdc4d9c9b7fdb675304760f2e05abb9dff10c318c38f1dc94758d5bf7a24a80c9bd446f0aa5894f68a9972e8b543af4b545baf0b54b1ba4130fc7fa8839b93656135f9ec6013c9</script>
-  <div class="hbe hbe-content">
-    <div class="hbe hbe-input hbe-input-default">
-      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
-      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
-        <span class="hbe hbe-input-label-content hbe-input-label-content-default">This blog post requires a password to view.</span>
-      </label>
-    </div>
-  </div>
-</div>
-<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
-      <categories>
-        <category>URL</category>
-      </categories>
-      <tags>
-        <tag>链接</tag>
-        <tag>工具</tag>
-        <tag>软体</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>TestDoc</title>
     <url>/test/b01-test/</url>
     <content><![CDATA[<h3 id="TestDoc"><a href="#TestDoc" class="headerlink" title="TestDoc"></a>TestDoc</h3><p>这是一篇测试文章，选用的内容为数学建模插值的内容：</p>
@@ -1447,320 +1492,280 @@ S = \int_{0.15}^{0.18}v(t)\,{\rm d}t</script></blockquote>
       </tags>
   </entry>
   <entry>
-    <title>数模M04-插值</title>
-    <url>/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/%E9%A2%84%E6%B5%8B%E6%A8%A1%E5%9E%8B/M04-%E6%8F%92%E5%80%BC/</url>
-    <content><![CDATA[<h1 id="插值"><a href="#插值" class="headerlink" title="插值"></a>插值</h1><h2 id="一、插值定义"><a href="#一、插值定义" class="headerlink" title="一、插值定义"></a>一、插值定义</h2><p>数据处理问题：在平面上给定一组离散点列，要求一条曲线把这些点依次连接起来，称之为插值</p>
-<p><strong>注意！</strong>此部分出现了大量不同的有关矩阵的函数运算方法，不同的运算方法之间对行标和列标的对应不同，最好在使用之前用<code>size()</code>方法看清相应的大小和对应关系，再进行操作！</p>
-<h2 id="二、常见插值方法"><a href="#二、常见插值方法" class="headerlink" title="二、常见插值方法"></a>二、常见插值方法</h2><p>已知$n+1$个点$(x_i,y_i)\ (i=0,1,…,n)$，下面求各种插值函数</p>
-<h3 id="（一）分段线性插值"><a href="#（一）分段线性插值" class="headerlink" title="（一）分段线性插值"></a>（一）分段线性插值</h3><p>将两个相邻的节点用直线连接起来，如此形成的一条折线就是分段线性插值函数，记作$I_n(x)$，它满足$I_n(x_i)=y_i$，且$I_n(x)$在每一个小区间$[x_i,x{\small i+1}]$上是线性函数   $(i=0,1,…,n)$</p>
-<p>$I_n(x)$可以表示为$I_n(x)\sum\limits^n{\small i=0}y_il_i(x)$，其中</p>
-<script type="math/tex; mode=display">
-l_i(x)=\begin{cases}
-\dfrac{x-x_{i-1}}{x_i-x_{i-1}},\quad x\in[x_{i-1},x_i]\ (i\ne 0)\\\\
-\dfrac{x-x_{i+1}}{x_i-x_{i+1}},\quad x\in[x_i,x_{i+1}]\ (i\ne n)\\\\
-\quad\ \ \ 0\quad\quad\,,\quad \rm Others
-\end{cases}</script><p>$I_n(x)$有较好的收敛性，即对于$x\in[a,b]$，有</p>
-<script type="math/tex; mode=display">
-\lim_{n\to\infty}I_n(x) = f(x)</script><p>用$I_n(x)$计算x点的插值时，只用到x左右的两个节点，计算量与节点个数n无关。但n越大，分段越多，插值误差越小。实际上用函数表做插值计算时，分段线性插值就足够了，如：数学、物理重用的特殊函数表，数理统计中用的概率分布表等等</p>
-<h3 id="（二）拉格朗日插值多项式"><a href="#（二）拉格朗日插值多项式" class="headerlink" title="（二）拉格朗日插值多项式"></a>（二）拉格朗日插值多项式</h3><p>拉格朗日插值的基函数为</p>
-<script type="math/tex; mode=display">
-\begin{align}
-l_i(x) &= \dfrac{(x-x_0)\cdots(x-x_{i-1})(x-x_{i+1})\cdots(x-x_n)}{(x_i-x_0)\cdots(x_i-x_{i-1})(x_i-x_{i+1})\cdots(x_i-x_n)}\\\\
-&={\prod^n_{j=0}}\limits_{j\ne i}\frac{x-x_j}{x_i-x_j}\quad(i=0,1,\cdots,n)
-\end{align}</script><p>其中$l_i(x)$是n次多项式，满足</p>
-<script type="math/tex; mode=display">
-l_i(x_j)=
-\begin{cases}
-0\ ,\quad j \ne i\\
-1\ ,\quad j = i
-\end{cases}</script><blockquote>
-<p>i,j相同时，$l_i(x)$式上下一致，结果为1</p>
-<p>i,j不同时，$l_i(x)$中一定存在$(x_j-x{\small ?})=0$，结果为0</p>
-</blockquote>
-<p>拉格朗日插值函数：</p>
-<script type="math/tex; mode=display">
-L_n(x) = \sum_{i=0}^n y_il_i(x)=\sum_{i=0}^ny_i\left({\prod^n_{j=0}}\limits_{j\ne i}\dfrac{x-x_j}{x_i-x_j}\right)\quad(i=0,1,\cdots,n)</script><h3 id="（三）样条插值"><a href="#（三）样条插值" class="headerlink" title="（三）样条插值"></a>（三）样条插值</h3><p>部分问题对所得插值函数的光滑性有较高的要求，不仅要连续，而且要有连续的曲率</p>
-<p>样条（Spline）原指富有弹性的细木条或金属条。利用将已知点连接成一条光滑曲线（称为样条曲线），并使连接点处具有连续的曲率，三次样条插值就是如此抽象出来的</p>
-<p>数学上将具有一定光滑性的分段多项式称为样条函数。具体来说，给定区间[a,b]的一个分划</p>
-<script type="math/tex; mode=display">
-\Delta:a=x_0<x_1<\cdots<x_{n-1}<x_n=b</script><p>如果函数S(x)满足</p>
-<ul>
-<li>在每一个小区间$[x_i,x{\small i+1}]\ (i = 0,1,\cdots,n-1)$上S(x)是m次多项式</li>
-<li>S(x)在$[a,b]$上具有m-1阶连续导数</li>
-</ul>
-<p>则称S(x)为关于分划$\Delta$的m次样条函数，其图形为m次样条曲线。显然，折现是依次样条曲线</p>
-<h2 id="三、MATLAB插值工具箱-notebook-with-decorative-cover"><a href="#三、MATLAB插值工具箱-notebook-with-decorative-cover" class="headerlink" title="三、MATLAB插值工具箱:notebook_with_decorative_cover:"></a>三、MATLAB插值工具箱:notebook_with_decorative_cover:</h2><h3 id="（一）一维插值函数-interp1"><a href="#（一）一维插值函数-interp1" class="headerlink" title="（一）一维插值函数 interp1()"></a>（一）一维插值函数 interp1()</h3><p>Code : <code>&lt;ValName&gt; = interp1(x0, y0, x, &lt;method&gt;)</code></p>
-<p>其中<code>&lt;method&gt;</code>指插值的方法，默认为线性插值(‘linear’)，其可选值有：</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>&lt; method &gt;</th>
-<th>Description</th>
-<th>Sp</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>‘linear’</td>
-<td>线性插值</td>
-<td>None</td>
-</tr>
-<tr>
-<td>‘nearest’</td>
-<td>最近项目插值</td>
-<td>None</td>
-</tr>
-<tr>
-<td>‘spline’</td>
-<td>立方(三次)样条插值</td>
-<td>保证函数平滑</td>
-</tr>
-<tr>
-<td>‘cubic’</td>
-<td>立方(三次)插值</td>
-<td>保持函数凸凹性</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>其中所有的插值方法都要求x0是单调的</p>
-<p>当x0为等距的时候可以使用快速插值法</p>
-<blockquote>
-<p>method格式：<code>&#39;*linear&#39;</code> , <code>&#39;*nearest&#39;</code> , <code>&#39;*spline&#39;</code> , <code>&#39;*cubic&#39;</code></p>
-</blockquote>
-<h3 id="（二）一维三次样条插值"><a href="#（二）一维三次样条插值" class="headerlink" title="（二）一维三次样条插值"></a>（二）一维三次样条插值</h3><p>CodeStyle01 : <code>&lt;ValName&gt; = interp1(x0, y0, x, &#39;spline&#39;)</code></p>
-<p>CodeStyle02 : <code>&lt;ValName&gt; = spline(x0, y0, x)</code></p>
-<p><em>Recommand </em>: <strong>csape()</strong></p>
-<p>CodeStyle03 : <code>pp = csape(x0, y0, &lt;conds&gt;)</code></p>
-<p>​                         <code>&lt;ValName&gt; = fnval(pp, x)</code></p>
-<p>CodeStyle04 : <code>pp = csape(x0, y0, &lt;conds&gt;, &lt;valconds&gt;)</code></p>
-<p>​                         <code>&lt;ValName&gt; = fnval(pp, x)</code></p>
-<p>提倡使用函数csape，其返回值是pp形式，为了求出插值点的函数值，需要调用函数fnval</p>
-<p><code>pp = csape(x0, y0)</code>使用默认的边界条件（Lagrange边界条件）</p>
-<p><code>&lt;conds&gt;</code>为指定插值的边界条件，可选值如下</p>
-<blockquote>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>&lt; conds &gt;</th>
-<th>Description</th>
-<th>&lt; valconds &gt;</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>‘complete’</td>
-<td>边界为一阶导数</td>
-<td>需提供</td>
-</tr>
-<tr>
-<td>‘not-a-knot’</td>
-<td>非扭结条件</td>
-<td></td>
-</tr>
-<tr>
-<td>‘periodic’</td>
-<td>周期条件</td>
-<td></td>
-</tr>
-<tr>
-<td>‘second’</td>
-<td>边界为二阶导数(缺省值为[0,0])</td>
-<td>需提供</td>
-</tr>
-<tr>
-<td>‘variational’</td>
-<td>设置边界的二阶导数值为[0,0]</td>
-<td>对于一些特殊的边界条件，可以通过conds的一个1$\times$2矩阵来表示，conds元素的取值为0,1,2</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p><strong><em>Eg:</em></strong> <code>conds = [2,1]</code> 左边界是二阶导数，右边界是一阶导数，相应的值由valconds给出</p>
-<p><code>&lt;valconds&gt;</code>为<code>&lt;conds&gt;</code>方法所需的值，若不填写则按照缺省情况处理</p>
-</blockquote>
-<p><a href="# Eg5.1  机床加工">Eg5.1  机床加工</a></p>
-<h3 id="（三）二维插值"><a href="#（三）二维插值" class="headerlink" title="（三）二维插值"></a>（三）二维插值</h3><h4 id="1-插值节点为网格节点"><a href="#1-插值节点为网格节点" class="headerlink" title="1. 插值节点为网格节点"></a>1. 插值节点为网格节点</h4><p>已知m$\times$n个节点：$(x_i,y_j,z{\small ij})\ (i = 1,2,\cdots,m;\ j=1,2,\cdots,n)$，</p>
-<p>且$x_1&lt;\cdots&lt;x_m;\ y_1&lt;\cdots&lt;y_n$</p>
-<p>求点$(x, y)$处的插值</p>
-<h5 id="（1）二维插值函数"><a href="#（1）二维插值函数" class="headerlink" title="（1）二维插值函数"></a>（1）二维插值函数</h5><p>Code : <code>&lt;ValName&gt; = interp2(x0, y0, z0, x, y, &lt;method&gt;)</code></p>
-<p>其中<code>&lt;method&gt;</code>指插值的方法，同一维的参数相同</p>
-<p><strong>x0,y0</strong> 分别为<strong>m</strong>维和<strong>n</strong>维向量，表示节点，z0为 n$\times$m 维度矩阵，表示节点的值，x,y为一维数组，指插值点</p>
-<p>x与y应当是方向不同的向量，即一个是行向量，一个是列向量（y需要转置）</p>
-<p>输出内容为矩阵，Row=y的维数，Col=x的维数，表示得到的插值</p>
-<h5 id="（2）二维三次样条插值"><a href="#（2）二维三次样条插值" class="headerlink" title="（2）二维三次样条插值"></a>（2）二维三次样条插值</h5><p>Code : <code>pp = csape(&#123;x0, y0&#125;, z0, conds, valconds)</code></p>
-<p>​            <code>&lt;ValName&gt; = fnval(pp, &#123;x, y&#125;)</code></p>
-<p>对其内容的解释同上</p>
-<h5 id="（3）显示相应的三维网格图"><a href="#（3）显示相应的三维网格图" class="headerlink" title="（3）显示相应的三维网格图"></a>（3）显示相应的三维网格图</h5><p>Code : <code>mesh(y,x,z)</code></p>
-<p>mesh函数的x为列，y为行，需要将xy反写</p>
-<p><a href="# Eg5.3 丘陵曲面最高点">Eg5.3 丘陵曲面最高点</a></p>
-<h4 id="2-插值节点为散乱节点"><a href="#2-插值节点为散乱节点" class="headerlink" title="2. 插值节点为散乱节点"></a>2. 插值节点为散乱节点</h4><p>已知n个节点$(x_i,y_i,z_i)\ (i=1,2,\cdots,n)$，求点$(x,y)$处的插值z</p>
-<p>Code：<code>&lt;ValName&gt; = griddata(x, y, z, XI, YI)</code></p>
-<p>其中x、y、z均为n维向量，指明所给出数据的横坐标、纵坐标和竖坐标 </p>
-<p>向量XI、YI是给定的网格点的横坐标和纵坐标</p>
-<p>返回值<code>&lt;ValName&gt;</code>为网格(XI, YI)处的函数值，但是<strong>行为YI，列为XI</strong>，进行mesh的时候不需要反转XY</p>
-<p>XI与YI应当是方向不同的向量，一行一列（YI需要转置）</p>
-<blockquote>
-<p>MATLAB中插值时，外插值是不确定的，可以使用混合插值的方法，把不确定的插值换成最近点的插值结果</p>
-<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line">ZI1=griddata(x,y,z,XI,YI&#x27;,<span class="string">&#x27;cubic&#x27;</span>); <span class="comment">%立方插值</span></span><br><span class="line">ZI2=griddata(x,y,z,XI,YI&#x27;,<span class="string">&#x27;nearest&#x27;</span>); <span class="comment">%最近点插值</span></span><br><span class="line">ZI = ZI1; <span class="comment">%</span></span><br><span class="line">ZI(<span class="built_in">isnan</span>(ZI1)) = ZI2(<span class="built_in">isnan</span>(ZI1));</span><br></pre></td></tr></table></figure>
-</blockquote>
+    <title>智能医疗导诊系统官网</title>
+    <url>/Software/MedV2/</url>
+    <content><![CDATA[<h1 id="智能医疗导诊系统"><a href="#智能医疗导诊系统" class="headerlink" title="智能医疗导诊系统"></a>智能医疗导诊系统</h1><p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img01/Grp1.png" style="zoom: 25%;" /></p>
 <hr>
-<h2 id="四、实战例题"><a href="#四、实战例题" class="headerlink" title="四、实战例题"></a>四、实战例题</h2><h4 id="Eg5-1-机床加工"><a href="#Eg5-1-机床加工" class="headerlink" title="Eg5.1  机床加工"></a>Eg5.1  机床加工</h4><blockquote>
-<p>待加工零件的外形根据工艺要求由一组数据$(x,y)$给出（在平面情况下），用程控铣床加工时每一刀只能沿$x$方向和$y$方向走非常小的一步，这就需要从已知数据得到加工所要求的步长很小的$(x,y)$坐标。<br>Data中给出的$x,y$数据位于机翼断面的下轮廓线上，假设需要得到$x$坐标每改变0.1时的$y$坐标。试完成加工所需数据，画出曲线，并求出$x=0$处的曲线斜率和$13\le x\le15$范围内y的最小值。要求用分段线性和三次样条两种插值方法计算。</p>
+<h3 id="最新版下载链接"><a href="#最新版下载链接" class="headerlink" title="最新版下载链接"></a>最新版下载链接</h3><p>123网盘不限速下载连接：<a href="https://www.123pan.com/s/kopSVv-9oc4H.html">点击此处开始下载</a></p>
+<p>百度网盘下载连接：<a href="https://pan.baidu.com/s/1zZUerTOkBZ1kl_1mGRsSLA?pwd=gyh1">点击此处开始下载</a></p>
+<p>阶段性测试用账密：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">testadmin1 <span class="number">111111</span></span><br><span class="line">testadmin2 <span class="number">222222</span></span><br><span class="line">testadmin3 <span class="number">333333</span></span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="宣传视频"><a href="#宣传视频" class="headerlink" title="宣传视频"></a>宣传视频</h3><iframe src="//player.bilibili.com/player.html?aid=1953509801&bvid=BV1bC411n7HF&cid=1521402258&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+
+<h3 id="系统概述"><a href="#系统概述" class="headerlink" title="系统概述"></a>系统概述</h3><p>欢迎使用智能医疗导诊系统 !</p>
+<p>本系统致力于通过当今社会的各项AI技术，<br>以LLMs为主建立一个智能化的医疗预导诊系统，<br>以求在快速化发展的时代建立一个更快的医疗预服务体验。</p>
+<p>智能医疗导诊系统基于先进的人工智能技术，旨在提升医疗服务效能并优化患者的就医经历。此系统结合了大语言模型(LLMs)、语音转文本(ASR)、光学字符识别(OCR)技术，通过对开源大语言模型的定向化微调，实现症状精确识别、智能疾病诊断和科室推荐，并模拟输出相应的初步导诊报告。</p>
+<h3 id="系统功能"><a href="#系统功能" class="headerlink" title="系统功能"></a>系统功能</h3><ul>
+<li><strong>基于微调<em>LLMs</em>的智能医疗诊断</strong>：通过调用租赁服务器上的微调MED大语言模型，精确的为您判断相应的医学专业病症名词和推荐的诊疗科室。</li>
+<li><strong><em>OCR</em>病历识别</strong>：用户可使用扫描其他来源的病例或手写材料，通过光学字符识别转化为导诊文本信息。</li>
+<li><strong>二维码导诊记录</strong>：支持通过扫描二维码快速导入患者既往的诊疗记录。</li>
+<li><strong><em>ASR</em>语音输入</strong>：用户可通过自然语言口述其病情，系统即时将语音转换为结构化医疗信息。</li>
+<li><strong>导诊报告自动生成</strong>：系统能够自动生成详尽的导诊报告，并为其生成可分享的导诊二维码，简化医疗信息传递与查询过程。</li>
+<li><strong>模拟数据库可预约科室</strong>：通过模拟生成的数据库，并结合当前导诊的真实时间，输出相应时间段可以预约的科室和医生。</li>
+</ul>
+<h3 id="安装指南"><a href="#安装指南" class="headerlink" title="安装指南"></a>安装指南</h3><p>智能医疗导诊系统提供易于安装的执行文件，用户可以通过以下步骤在个人电脑上进行安装：</p>
+<ol>
+<li>从 <a href="https://www.XLY23333.xyz/Software/MedV2/">官方网站</a> 下载最新的压缩包。</li>
+<li>解压文件包，双击包内的<code>智能医疗导诊系统.exe</code>文件，即可使用。</li>
+</ol>
+<h3 id="快速开始指南"><a href="#快速开始指南" class="headerlink" title="快速开始指南"></a>快速开始指南</h3><ol>
+<li><strong>启动系统</strong>：打开应用程序，通过 <a href="https://www.XLY23333.xyz/Software/MedV2/">官方网站</a> 的测试账密进入主界面。</li>
+<li><strong>数据输入</strong>：<ul>
+<li>直接在输入框中输入病症内容 </li>
+<li>点击<kbd>CAM</kbd>，进入CAM界面<ul>
+<li>选择<kbd>OCR 病历识别</kbd>进行文字光学字符识别 或<kbd>QR Code 二维码识别</kbd>进行二维码识别</li>
+<li>OCR将自动使用模糊推理，并导入病症框</li>
+<li>二维码加载后自动显示上次的导诊信息并显示可约科室</li>
+</ul>
+</li>
+<li>点击<kbd>ASR</kbd>，进入ASR界面<ul>
+<li>使用<kbd>Start</kbd>开始录音</li>
+<li>使用<kbd>END</kbd>结束录音并进行模糊推理</li>
+<li>使用<kbd>导入数据</kbd>最终数据导入病症框</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>查看诊断结果</strong>：提交信息后，系统将显示初步诊断结果和推荐科室，并通过当前时间返回模拟数据库当中的模拟可约诊室。</li>
+<li><strong>导诊报告</strong>：用户可以点击<kbd>Print</kbd>模拟打印导诊报告和二维码。</li>
+<li><strong>清除记录</strong>：点击<kbd>clear</kbd>可以清除已有的记录</li>
+<li><strong>设置</strong>：通过右下角的<kbd>Setting</kbd>按键</li>
+</ol>
+<h3 id="技术支持"><a href="#技术支持" class="headerlink" title="技术支持"></a>技术支持</h3><p>若在使用过程中遇到任何技术问题，或需要帮助、加入开发团队、授权开源代码，可以通过以下方式联系我们的技术支持团队：</p>
+<ul>
+<li><strong>电子邮箱</strong>：XLY23333@126.com</li>
+<li><strong>联系电话</strong>：176-1565-7737</li>
+</ul>
+<h3 id="更新日志"><a href="#更新日志" class="headerlink" title="更新日志"></a>更新日志</h3><h4 id="V1-Demo"><a href="#V1-Demo" class="headerlink" title="V1 Demo"></a>V1 Demo</h4><blockquote>
+<p>Update date: 2024-03-09</p>
 </blockquote>
-<p>Data：</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">x</th>
-<th style="text-align:center">0</th>
-<th style="text-align:center">3</th>
-<th style="text-align:center">5</th>
-<th style="text-align:center">7</th>
-<th style="text-align:center">9</th>
-<th style="text-align:center">11</th>
-<th style="text-align:center">12</th>
-<th style="text-align:center">13</th>
-<th style="text-align:center">14</th>
-<th style="text-align:center">15</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center"><strong>y</strong></td>
-<td style="text-align:center">0</td>
-<td style="text-align:center">1.2</td>
-<td style="text-align:center">1.7</td>
-<td style="text-align:center">2.0</td>
-<td style="text-align:center">2.1</td>
-<td style="text-align:center">2.0</td>
-<td style="text-align:center">1.8</td>
-<td style="text-align:center">1.2</td>
-<td style="text-align:center">1.0</td>
-<td style="text-align:center">1.6</td>
-</tr>
-</tbody>
-</table>
-</div>
-<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line">clear</span><br><span class="line">clc</span><br><span class="line"><span class="comment">%% Data:</span></span><br><span class="line">x0 = [<span class="number">0</span> <span class="number">3</span> <span class="number">5</span> <span class="number">7</span> <span class="number">9</span> <span class="number">11</span> <span class="number">12</span> <span class="number">13</span> <span class="number">14</span> <span class="number">15</span>];</span><br><span class="line">y0 = [<span class="number">0</span> <span class="number">1.2</span> <span class="number">1.7</span> <span class="number">2.0</span> <span class="number">2.1</span> <span class="number">2.0</span> <span class="number">1.8</span> <span class="number">1.2</span> <span class="number">1.0</span> <span class="number">1.6</span>];</span><br><span class="line">x = [<span class="built_in">min</span>(x0):<span class="number">0.1</span>:<span class="built_in">max</span>(x0)];</span><br><span class="line"><span class="comment">%% Linear</span></span><br><span class="line">y_linear = interp1(x0, y0, x);</span><br><span class="line"><span class="comment">%% Spline</span></span><br><span class="line">y_spline = interp1(x0, y0, x, <span class="string">&#x27;spline&#x27;</span>);</span><br><span class="line">pp_lagrange = csape(x0, y0);</span><br><span class="line">y_spline_lagrange = fnval(pp_lagrange, x);</span><br><span class="line">pp_second = csape(x0, y0, <span class="string">&#x27;second&#x27;</span>);</span><br><span class="line">y_spline_second = fnval(pp_second, x);</span><br><span class="line"><span class="comment">%% DispFigure</span></span><br><span class="line"><span class="comment">% linear</span></span><br><span class="line"><span class="built_in">figure</span>(<span class="string">&#x27;Position&#x27;</span>, [<span class="number">800</span>,<span class="number">100</span>,<span class="number">1000</span>,<span class="number">800</span>]);</span><br><span class="line">subplot(<span class="number">2</span>,<span class="number">2</span>,<span class="number">1</span>)</span><br><span class="line"><span class="built_in">plot</span>(x,y_linear, <span class="string">&#x27;r&#x27;</span>,x0, y0,<span class="string">&#x27;bp&#x27;</span>)</span><br><span class="line">title(<span class="string">&#x27;Interp1-Linear&#x27;</span>)</span><br><span class="line"><span class="comment">% spline</span></span><br><span class="line">subplot(<span class="number">2</span>,<span class="number">2</span>,<span class="number">2</span>)</span><br><span class="line"><span class="built_in">plot</span>(x,y_spline, <span class="string">&#x27;r&#x27;</span>,x0, y0,<span class="string">&#x27;bp&#x27;</span>)</span><br><span class="line">title(<span class="string">&#x27;Interp1-Spline&#x27;</span>)</span><br><span class="line">subplot(<span class="number">2</span>,<span class="number">2</span>,<span class="number">3</span>)</span><br><span class="line"><span class="built_in">plot</span>(x,y_spline_lagrange, <span class="string">&#x27;r&#x27;</span>,x0, y0,<span class="string">&#x27;bp&#x27;</span>)</span><br><span class="line">title(<span class="string">&#x27;Csape-Lagrange&#x27;</span>)</span><br><span class="line">subplot(<span class="number">2</span>,<span class="number">2</span>,<span class="number">4</span>)</span><br><span class="line"><span class="built_in">plot</span>(x,y_spline_second, <span class="string">&#x27;r&#x27;</span>,x0, y0,<span class="string">&#x27;bp&#x27;</span>)</span><br><span class="line">title(<span class="string">&#x27;Csape-Second&#x27;</span>)</span><br><span class="line"><span class="comment">%% Other Tasks</span></span><br><span class="line"><span class="comment">% 求x=0处的斜率</span></span><br><span class="line">dx = diff(x); <span class="comment">% diff逐差函数</span></span><br><span class="line">dy = diff(y_spline_lagrange);</span><br><span class="line">dy_dx = dy./dx;</span><br><span class="line">dy_dx_0 = dy_dx(<span class="number">1</span>);</span><br><span class="line"><span class="comment">% 求13~15范围内y的最小值</span></span><br><span class="line">ymin = <span class="built_in">min</span>(y_spline_lagrange(<span class="number">131</span>:<span class="number">151</span>)); <span class="comment">% 找出ymin</span></span><br><span class="line">yloc = <span class="built_in">find</span>(y_spline_lagrange == ymin); <span class="comment">% find ymin的index</span></span><br><span class="line">xloc = x(yloc); <span class="comment">% 用ymin的index定位xloc</span></span><br><span class="line"><span class="built_in">disp</span>([<span class="string">&#x27;k(0) = &#x27;</span> num2str(dy_dx_0)])</span><br><span class="line"><span class="built_in">disp</span>([<span class="string">&#x27;xloc: &#x27;</span> num2str(xloc)])</span><br><span class="line"><span class="built_in">disp</span>([<span class="string">&#x27;ymin: &#x27;</span> num2str(ymin)])</span><br></pre></td></tr></table></figure>
-<p><strong><em>output</em></strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">k(0) = 0.49716</span><br><span class="line">xloc: 13.8</span><br><span class="line">ymin: 0.98511</span><br></pre></td></tr></table></figure>
-<p><strong><em>Pic</em></strong></p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img01/eg51output.jpg" alt="eg51output"></p>
-<h4 id="Eg5-2-求速度曲线的位移"><a href="#Eg5-2-求速度曲线的位移" class="headerlink" title="Eg5.2 求速度曲线的位移"></a>Eg5.2 求速度曲线的位移</h4><blockquote>
-<p>已知速度曲线$v(t)$上的四个数据点如下表，用三次样条插值求位移</p>
-<script type="math/tex; mode=display">
-S = \int_{0.15}^{0.18}v(t)\,{\rm d}t</script></blockquote>
-<p>Data:</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>$t$</th>
-<th>0.15</th>
-<th>0.16</th>
-<th>0.17</th>
-<th>0.18</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>$v(t)$</strong></td>
-<td>3.5</td>
-<td>1.5</td>
-<td>2.5</td>
-<td>2.8</td>
-</tr>
-</tbody>
-</table>
-</div>
-<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line">clear</span><br><span class="line">clc</span><br><span class="line"><span class="comment">%% DataLoad</span></span><br><span class="line">t0 = <span class="number">0.15</span>:<span class="number">0.01</span>:<span class="number">0.18</span>;</span><br><span class="line">v0 = [<span class="number">3.5</span>,<span class="number">1.5</span>,<span class="number">2.5</span>,<span class="number">2.8</span>];</span><br><span class="line"><span class="comment">%% Spline</span></span><br><span class="line">pp = csape(t0, v0); <span class="comment">% 使用默认边界条件Lagrange</span></span><br><span class="line">format long g <span class="comment">% 设置长小数格式</span></span><br><span class="line">xs = pp.coefs <span class="comment">% 显示每个区间上三次多项式的系数</span></span><br><span class="line">s = integral(@(t)ppval(pp,t),<span class="number">0.15</span>,<span class="number">0.18</span>) <span class="comment">% 求数值积分</span></span><br><span class="line">    <span class="comment">% @(t) 为匿名函数的书写格式 </span></span><br><span class="line">    <span class="comment">% integral(fx,xmin,ymin) 求数值积分</span></span><br><span class="line">        <span class="comment">% 使用全局自适应积分和默认误差容限在 xmin 至 xmax 间以数值形式为函数</span></span><br><span class="line">    <span class="comment">% ppval(pp,xq)计算分段多项式:查询点 xq 处计算分段多项式 pp</span></span><br><span class="line">format <span class="comment">% 恢复短小数小时格式</span></span><br></pre></td></tr></table></figure>
-<p><strong><em>output</em></strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">xs =     -616666.666666667                     33500         -473.333333333334                       3.5</span><br><span class="line">         -616666.666666667                     15000          11.6666666666671                       1.5</span><br><span class="line">         -616666.666666668         -3499.99999999999          126.666666666667                       2.5</span><br><span class="line">s =0.068625</span><br></pre></td></tr></table></figure>
-<h4 id="Eg5-3-丘陵曲面最高点"><a href="#Eg5-3-丘陵曲面最高点" class="headerlink" title="Eg5.3 丘陵曲面最高点"></a>Eg5.3 丘陵曲面最高点</h4><blockquote>
-<p>在一丘陵地带测量高程，x和y方向每隔100米测一个点，得高程如表，试插值一曲面，确定合适的模型，并由此找出最高点和该点的高程</p>
+<ul>
+<li>初步创建了主窗口界面</li>
+<li>通过API调用实现了最基本的导诊逻辑功能<ul>
+<li>软件使用的API为测试用，有一定的限额，Key的购买将会在 <a href="https://www.XLY23333.xyz/Software/MedV2/">官方网站</a> 放入第三方友情链接</li>
+</ul>
+</li>
+<li>初步建立了底层逻辑结构</li>
+</ul>
+<h4 id="V2-Demo"><a href="#V2-Demo" class="headerlink" title="V2 Demo"></a>V2 Demo</h4><blockquote>
+<p>Update date: 2024-03-10</p>
 </blockquote>
-<p>Data:</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">y\x</th>
-<th style="text-align:center">100</th>
-<th style="text-align:center">200</th>
-<th style="text-align:center">300</th>
-<th style="text-align:center">400</th>
-<th style="text-align:center">500</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center"><strong>100</strong></td>
-<td style="text-align:center">636</td>
-<td style="text-align:center">697</td>
-<td style="text-align:center">624</td>
-<td style="text-align:center">478</td>
-<td style="text-align:center">450</td>
-</tr>
-<tr>
-<td style="text-align:center"><strong>200</strong></td>
-<td style="text-align:center">698</td>
-<td style="text-align:center">712</td>
-<td style="text-align:center">630</td>
-<td style="text-align:center">478</td>
-<td style="text-align:center">420</td>
-</tr>
-<tr>
-<td style="text-align:center"><strong>300</strong></td>
-<td style="text-align:center">680</td>
-<td style="text-align:center">674</td>
-<td style="text-align:center">598</td>
-<td style="text-align:center">412</td>
-<td style="text-align:center">400</td>
-</tr>
-<tr>
-<td style="text-align:center"><strong>400</strong></td>
-<td style="text-align:center">662</td>
-<td style="text-align:center">626</td>
-<td style="text-align:center">552</td>
-<td style="text-align:center">334</td>
-<td style="text-align:center">310</td>
-</tr>
-</tbody>
-</table>
-</div>
-<blockquote>
-<p>注意此处直接列写矩阵，则xy与正常的对应相反</p>
+<ul>
+<li>更新UI界面，增设Camera和ASR界面</li>
+<li>接入硬件Camera处理和PyAudio音频录制接口</li>
+<li>随进度更新底层逻辑结构</li>
+</ul>
+<h4 id="V3-Demo"><a href="#V3-Demo" class="headerlink" title="V3 Demo"></a>V3 Demo</h4><blockquote>
+<p>Update date: 2024-03-24</p>
 </blockquote>
-<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line">clear</span><br><span class="line">clc</span><br><span class="line"><span class="comment">%% DataLoad</span></span><br><span class="line">x0 = <span class="number">100</span>:<span class="number">100</span>:<span class="number">500</span>;</span><br><span class="line">y0 = <span class="number">100</span>:<span class="number">100</span>:<span class="number">400</span>;</span><br><span class="line">z0 = [<span class="number">636</span> <span class="number">697</span> <span class="number">624</span> <span class="number">478</span> <span class="number">450</span></span><br><span class="line">      <span class="number">698</span> <span class="number">712</span> <span class="number">630</span> <span class="number">478</span> <span class="number">420</span></span><br><span class="line">      <span class="number">680</span> <span class="number">674</span> <span class="number">598</span> <span class="number">412</span> <span class="number">400</span></span><br><span class="line">      <span class="number">662</span> <span class="number">626</span> <span class="number">552</span> <span class="number">334</span> <span class="number">310</span>]&#x27;;</span><br><span class="line"><span class="comment">% 此处的z0两坐标方向交叉，需要转置</span></span><br><span class="line">step = <span class="number">5</span>;</span><br><span class="line">x = <span class="number">100</span>:step:<span class="number">500</span>;</span><br><span class="line">y = <span class="number">100</span>:step:<span class="number">400</span>;</span><br><span class="line"><span class="comment">%% interp</span></span><br><span class="line"><span class="comment">% interp2要求矩阵和向量交叉对应，且y为列向量</span></span><br><span class="line">z1 = interp2(x0,y0,z0&#x27;,x,y&#x27;);</span><br><span class="line">z1 = z1&#x27;; <span class="comment">% 转置z1回正常的对应</span></span><br><span class="line"><span class="comment">% csape正常进行</span></span><br><span class="line">pp = csape(&#123;x0,y0&#125;,z0);</span><br><span class="line">z2 = fnval(pp,&#123;x,y&#125;);</span><br><span class="line"><span class="comment">%% DispMesh</span></span><br><span class="line"><span class="comment">% mesh函数的x为列，y为行，需要将xy反写</span></span><br><span class="line"><span class="built_in">figure</span>(<span class="string">&#x27;Position&#x27;</span>,[<span class="number">500</span>,<span class="number">300</span>,<span class="number">1000</span>,<span class="number">600</span>])</span><br><span class="line">subplot(<span class="number">1</span>,<span class="number">2</span>,<span class="number">1</span>)</span><br><span class="line">mesh(y,x,z1) </span><br><span class="line">title(<span class="string">&#x27;Interp1-Linear&#x27;</span>,<span class="string">&#x27;FontSize&#x27;</span>,<span class="number">20</span>)</span><br><span class="line">subplot(<span class="number">1</span>,<span class="number">2</span>,<span class="number">2</span>)</span><br><span class="line">mesh(y,x,z2)</span><br><span class="line">title(<span class="string">&#x27;Spline&#x27;</span>,<span class="string">&#x27;FontSize&#x27;</span>,<span class="number">20</span>)</span><br><span class="line"><span class="comment">%% MAXValue</span></span><br><span class="line"><span class="comment">% interp-Linear</span></span><br><span class="line">[maxls1,xlocls1] = <span class="built_in">max</span>(z1); <span class="comment">% 按列取max</span></span><br><span class="line">[vmax1,yloc1] = <span class="built_in">max</span>(maxls1); <span class="comment">% 按行取max</span></span><br><span class="line">info1 = [<span class="string">&quot;interp-Linear&quot;</span>,x(xlocls1(yloc1)),y(yloc1),vmax1]; </span><br><span class="line">    <span class="comment">% 行loc索引列ls的loc,并用loc索引相应的x,y的值</span></span><br><span class="line"><span class="comment">% Spline</span></span><br><span class="line">[maxls2,xlocls2] = <span class="built_in">max</span>(z2);</span><br><span class="line">[vmax2,yloc2] = <span class="built_in">max</span>(maxls2);</span><br><span class="line">info2 = [<span class="string">&quot;Spline&quot;</span>,x(xlocls2(yloc2)),y(yloc2),vmax2]; </span><br><span class="line">info = [info1;info2];</span><br><span class="line"><span class="comment">% 更好的位置索引方法</span></span><br><span class="line">[<span class="built_in">i</span>,<span class="built_in">j</span>]=<span class="built_in">find</span>(z2==<span class="built_in">max</span>(<span class="built_in">max</span>(z2)));  <span class="comment">%找最高点的地址</span></span><br><span class="line">xm=x(<span class="built_in">i</span>),ym=y(<span class="built_in">j</span>),zm=z2(<span class="built_in">i</span>,<span class="built_in">j</span>);  <span class="comment">%求最高点的坐标 </span></span><br><span class="line">[zm,xm,ym]</span><br><span class="line"><span class="comment">%% DispMAX</span></span><br><span class="line"><span class="built_in">disp</span>([<span class="string">&#x27;Step:&#x27;</span> num2str(step)])</span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span>:<span class="number">2</span></span><br><span class="line">    <span class="built_in">disp</span>([<span class="string">&#x27;Type:&#x27;</span> num2str(info(<span class="built_in">i</span>,<span class="number">1</span>))]) </span><br><span class="line">    <span class="built_in">disp</span>([<span class="string">&#x27;max = &#x27;</span> num2str(info(<span class="built_in">i</span>,<span class="number">4</span>)) ...</span><br><span class="line">        <span class="string">&#x27;    x = &#x27;</span> num2str(info(<span class="built_in">i</span>,<span class="number">2</span>)) ...</span><br><span class="line">        <span class="string">&#x27;    y = &#x27;</span> num2str(info(<span class="built_in">i</span>,<span class="number">3</span>))])</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-<p><strong><em>output</em></strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">  720.7217  165.0000  175.0000</span><br><span class="line">Step:5</span><br><span class="line">Type:interp-Linear</span><br><span class="line">max = 712    x = 200    y = 200</span><br><span class="line">Type:Spline</span><br><span class="line">max = 720.7217    x = 165    y = 175</span><br></pre></td></tr></table></figure>
-<p><strong><em>Pic</em></strong></p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img01/eg53output.jpg" alt="eg53output"></p>
-<h4 id="Eg5-4-海底图像"><a href="#Eg5-4-海底图像" class="headerlink" title="Eg5.4 海底图像"></a>Eg5.4 海底图像</h4><blockquote>
-<p>在某海域测得一些点（x,y）处的水深z由表5.4给出，在适当的矩形区域内画出海底曲面的图形。</p>
+<ul>
+<li>更新UI界面，新增设置(Setting)页面</li>
+<li>随进度更新底层逻辑结构</li>
+</ul>
+<h4 id="V1-BETA"><a href="#V1-BETA" class="headerlink" title="V1 BETA"></a>V1 BETA</h4><blockquote>
+<p>Update date: 2024-04-19</p>
 </blockquote>
-<p>Data：</p>
-<blockquote>
-<p>x=[129,140,103.5,88,185.5,195,105,157.5,107.5,77,81,162,162,117.5];</p>
-<p>y=[7.5,141.5,23,147,22.5,137.5,85.5,-6.5,-81,3,56.5,-66.5,84,-33.5];</p>
-<p>z=-[4,8,6,8,6,8,8,9,9,8,8,9,4,9];</p>
+<ul>
+<li><em>第一个发布版本</em></li>
+<li>接入微调大语言模型MED</li>
+<li>建立服务器备用API通道</li>
+<li>随进度更新底层逻辑结构</li>
+</ul>
+<h4 id="V2-Latest"><a href="#V2-Latest" class="headerlink" title="V2 [Latest]"></a>V2 <u>[Latest]</u></h4><blockquote>
+<p>Update date: 2024-04-25</p>
 </blockquote>
-<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line">clear</span><br><span class="line">clc</span><br><span class="line"><span class="comment">%% DataLoad</span></span><br><span class="line">x=[<span class="number">129</span>,<span class="number">140</span>,<span class="number">103.5</span>,<span class="number">88</span>,<span class="number">185.5</span>,<span class="number">195</span>,<span class="number">105</span>,<span class="number">157.5</span>,<span class="number">107.5</span>,<span class="number">77</span>,<span class="number">81</span>,<span class="number">162</span>,<span class="number">162</span>,<span class="number">117.5</span>];</span><br><span class="line">y=[<span class="number">7.5</span>,<span class="number">141.5</span>,<span class="number">23</span>,<span class="number">147</span>,<span class="number">22.5</span>,<span class="number">137.5</span>,<span class="number">85.5</span>,<span class="number">-6.5</span>,<span class="number">-81</span>,<span class="number">3</span>,<span class="number">56.5</span>,<span class="number">-66.5</span>,<span class="number">84</span>,<span class="number">-33.5</span>];</span><br><span class="line">z=-[<span class="number">4</span>,<span class="number">8</span>,<span class="number">6</span>,<span class="number">8</span>,<span class="number">6</span>,<span class="number">8</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">9</span>,<span class="number">8</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">4</span>,<span class="number">9</span>];</span><br><span class="line">step = <span class="number">1</span>;</span><br><span class="line">XI = <span class="built_in">min</span>(x):step:<span class="built_in">max</span>(x)</span><br><span class="line">YI = <span class="built_in">min</span>(y):step:<span class="built_in">max</span>(y)</span><br><span class="line"><span class="comment">%% grid</span></span><br><span class="line">ZI1=griddata(x,y,z,XI,YI&#x27;,<span class="string">&#x27;cubic&#x27;</span>); <span class="comment">%立方插值</span></span><br><span class="line">ZI2=griddata(x,y,z,XI,YI&#x27;,<span class="string">&#x27;nearest&#x27;</span>); <span class="comment">%最近点插值</span></span><br><span class="line">ZI = ZI1; <span class="comment">% 设置ZI初始值为ZI1</span></span><br><span class="line">ZI(<span class="built_in">isnan</span>(ZI1)) = ZI2(<span class="built_in">isnan</span>(ZI1)); <span class="comment">% 用ZI2填充ZI1外插值(为NaN)的部分</span></span><br><span class="line"><span class="built_in">figure</span></span><br><span class="line">mesh(XI,YI,ZI)</span><br><span class="line"><span class="built_in">hold</span> on</span><br><span class="line"><span class="built_in">plot3</span>(x,y,z,<span class="string">&#x27;or&#x27;</span>)</span><br></pre></td></tr></table></figure>
-<p><strong><em>Pic</em></strong></p>
-<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img01/eg54output.jpg" alt="eg54output"></p>
-]]></content>
+<ul>
+<li>更新全新的UI界面</li>
+<li>重新调整底层代码结构，建立Python功能包<em>Medpkg</em>，规范化源码</li>
+<li>尝试接入本地音频解码器<ul>
+<li>音频解码器可能因为安装不成功而提示转码错误，可通过手动下载解码器并设置环境变量后使用</li>
+</ul>
+</li>
+</ul>
+<h3 id="第三方API购买"><a href="#第三方API购买" class="headerlink" title="第三方API购买"></a>第三方API购买</h3><p>软件提供了一个有限的API-KEY用于测试，如需长期使用可以购买第三方API-KEY并通过调整Setting使用</p>
+<p>链接：<a href="https://buyca.top/">点击进入</a></p>
+<h3 id="致谢"><a href="#致谢" class="headerlink" title="致谢"></a>致谢</h3><p>感谢所有参与项目开发和测试的团队成员，感谢该项目建立过程当中提供帮助的老师和同学，以及为项目提供数据支持和反馈的所有用户和合作伙伴。</p>
+<hr>
+<center><time>2024/04/25</time> <team>MEDGS-AI Team</team></center>]]></content>
       <categories>
-        <category>数学建模</category>
-        <category>预测模型</category>
+        <category>Software</category>
       </categories>
       <tags>
-        <tag>MATLAB</tag>
-        <tag>预测</tag>
-        <tag>插值</tag>
+        <tag>Python</tag>
+        <tag>Software</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>正则表达式快速入门</title>
+    <url>/Coding/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/</url>
+    <content><![CDATA[<h1 id="正则表达式快速入门"><a href="#正则表达式快速入门" class="headerlink" title="正则表达式快速入门"></a>正则表达式快速入门</h1><blockquote>
+<p>学习源视频：<a href="https://www.bilibili.com/video/BV1da4y1p7iZ/?spm_id_from=333.337.search-card.all.click&amp;vd_source=1437b1798845fbcba4cf09d5a889e546">奇乐编程学院-[Bilibili]</a><br>Note：<a href="https://www.xly23333.xyz">XLY23333-[Blog]</a><br>NoteBy：Typora[Markdown] + $\rm\LaTeX$ Themes by:<a href="https://github.com/Keldos-Li/typora-latex-theme">Keldos-Li-[Github]</a></p>
+</blockquote>
+<hr>
+<h2 id="限定符-Quantifiers"><a href="#限定符-Quantifiers" class="headerlink" title="限定符 [Quantifiers]"></a>限定符 [Quantifiers]</h2><h3 id="单个字符的限定"><a href="#单个字符的限定" class="headerlink" title="单个字符的限定"></a>单个字符的限定</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">$\quad$限定符$\quad$</th>
+<th style="text-align:left">Description</th>
+<th style="text-align:center">$\quad$Eg$\quad$</th>
+<th style="text-align:left">Egmeans</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>?</code></td>
+<td style="text-align:left">?前字符出现<strong>0</strong>或1次(?前字符<strong>可有可无</strong>)</td>
+<td style="text-align:center"><code>used?</code></td>
+<td style="text-align:left">查找所有use和used</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>*</code></td>
+<td style="text-align:left">*前字符出现<strong>0</strong>或<strong>多次</strong>(*前字符<strong>可有多次可无</strong>)</td>
+<td style="text-align:center"><code>ab?c</code></td>
+<td style="text-align:left">可查找abc,ac,abbbc等</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>+</code></td>
+<td style="text-align:left">+前字符出现<strong>1</strong>或<strong>多次</strong>(+前字符<strong>可有一次或多次</strong>)</td>
+<td style="text-align:center"><code>ab+c</code></td>
+<td style="text-align:left">可查找abc,abbbc等</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>&#123;&lt;num&gt;&#125;</code></td>
+<td style="text-align:left">指定{…}前字符<strong>出现次数</strong>为<code>&lt;num&gt;</code>次</td>
+<td style="text-align:center"><code>ab&#123;2&#125;c</code></td>
+<td style="text-align:left">可查找abbc等</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>&#123;&lt;min&gt;,&lt;max&gt;&#125;</code></td>
+<td style="text-align:left">指定{…}前字符<strong>出现次数范围</strong>,可以<strong>缺省<code>max</code>值</strong></td>
+<td style="text-align:center"><code>ab&#123;3,&#125;c</code></td>
+<td style="text-align:left">可查找abbbbc,abbbc等</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="多个字符的限定"><a href="#多个字符的限定" class="headerlink" title="多个字符的限定"></a>多个字符的限定</h3><p>可以使用<code>()</code>将多个字符括起,随后操作同上方的单个字符限定</p>
+<p><strong><em>Eg:</em></strong><code>a(bc)&#123;1,2&#125;d</code>可以搜索 ‘abcd’ 和 ‘abcbcd’</p>
+<h2 id="或运算符-OR-Operation"><a href="#或运算符-OR-Operation" class="headerlink" title="或运算符 [OR Operation]"></a>或运算符 [OR Operation]</h2><p>同时匹配所有出现的情况,只要有就匹配</p>
+<p>Code: <code>(&lt;word1&gt;|&lt;words2&gt;|&lt;words3&gt;|...)</code></p>
+<p>使用<code>()</code>将或运算内容括起,用<code>|</code>将内容隔开,则括号中所有的内容执行或运算,均可以被查找到</p>
+<p><strong><em>Eg:</em></strong><code>a (cat|dog)</code>可以搜索 ‘a cat’ 和 ‘a dog’ [注意:a后方的空格也算作检索内容]</p>
+<h2 id="字符类-Character-Classes"><a href="#字符类-Character-Classes" class="headerlink" title="字符类 [Character Classes]"></a>字符类 [Character Classes]</h2><p>匹配由指定字符所构成的内容,无需完全匹配,拥有其中之一即可</p>
+<p>Code: <code>[&lt;char1&gt;&lt;char2&gt;...]</code>并列查找由他们构成的内容</p>
+<p>​           <code>[&lt;char1&gt;-&lt;char2&gt;]</code> 定义查找范围<code>&lt;char1&gt;-&lt;char2&gt;</code></p>
+<p>​            <code>[^&lt;char&gt;]</code>查找除了方括号的其他内容</p>
+<p><strong><em>Eg</em></strong>: <code>[^\nA-Za-z]+</code> 查找所有的数字(非换行符,非大写字母,非小写字母)</p>
+<h2 id="元字符-Meta-Characters"><a href="#元字符-Meta-Characters" class="headerlink" title="元字符 [Meta-Characters]"></a>元字符 [Meta-Characters]</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>$\quad$Meta-Char$\quad$</th>
+<th style="text-align:left">$\quad$Description$\quad$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>\d</code></td>
+<td style="text-align:left"><strong>数字</strong>字符</td>
+</tr>
+<tr>
+<td><code>\w</code></td>
+<td style="text-align:left"><strong>单词</strong>字符(英文字母+数字+下划线)</td>
+</tr>
+<tr>
+<td><code>\s</code></td>
+<td style="text-align:left"><strong>空白</strong>符(TAB+换行符)</td>
+</tr>
+<tr>
+<td><code>\D</code></td>
+<td style="text-align:left"><strong>非数字</strong>字符</td>
+</tr>
+<tr>
+<td><code>\W</code></td>
+<td style="text-align:left"><strong>非单词</strong>字符</td>
+</tr>
+<tr>
+<td><code>\S</code></td>
+<td style="text-align:left"><strong>非空白</strong>符</td>
+</tr>
+<tr>
+<td><code>.</code></td>
+<td style="text-align:left"><strong>任意</strong>字符(<strong>不包含换行符</strong>)</td>
+</tr>
+<tr>
+<td><code>^&lt;char&gt;</code></td>
+<td style="text-align:left">匹配<strong>行首</strong>的<code>&lt;char&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;char&gt;$</code></td>
+<td style="text-align:left">匹配<strong>行尾</strong>的<code>&lt;char&gt;</code></td>
+</tr>
+<tr>
+<td><code>\b&lt;chars&gt;\b</code></td>
+<td style="text-align:left">规定该位置为<strong>单词边界</strong>,<strong>防止对超量的截取匹配</strong></td>
+</tr>
+<tr>
+<td><code>\B&lt;chars&gt;\B</code></td>
+<td style="text-align:left">规定该位置为<strong>非单词边界</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>如果要使用<code>.</code>则可以通过转义后的<code>\.</code>进行匹配</p>
+<h2 id="贪婪与懒惰匹配-Greedy-vs-Lazy-Match"><a href="#贪婪与懒惰匹配-Greedy-vs-Lazy-Match" class="headerlink" title="贪婪与懒惰匹配 [Greedy vs Lazy Match]"></a>贪婪与懒惰匹配 [Greedy vs Lazy Match]</h2><p>假设对一下的html内容,需要匹配<code>&lt;center&gt;</code>和<code>&lt;/center&gt;&gt;</code></p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">center</span>&gt;</span>TEXT<span class="tag">&lt;/<span class="name">center</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>如果使用<code>&lt;.+&gt;</code>,由于<code>&gt;</code>和<code>&lt;</code>同样属于<code>.</code>,所以将匹配整行的全部代码</p>
+<p>可以将代码更改为<code>&lt;.+?&gt;</code>由贪婪模式匹配为<strong>懒惰匹配</strong>,从而精确匹配</p>
+<p>也可以在不切换模式的情况下,改用<code>&lt;[^&lt;&gt;]+&gt;</code>去掉可能出现的<code>&gt;</code>和<code>&lt;</code>查找</p>
+<h2 id="实战练习"><a href="#实战练习" class="headerlink" title="实战练习"></a>实战练习</h2><h3 id="匹配16进制的颜色值"><a href="#匹配16进制的颜色值" class="headerlink" title="匹配16进制的颜色值"></a>匹配16进制的颜色值</h3><p>颜色值#开头,为十六进制(由0~9,a~f,A~F构成),共6位字符</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img01/eg1.png" style="zoom:40%"></p>
+<h3 id="IPv4-地址匹配"><a href="#IPv4-地址匹配" class="headerlink" title="IPv4 地址匹配"></a>IPv4 地址匹配</h3><p>IPv4由四段数字组成,中间由符号.隔开,且数字的范围为0~255</p>
+<p><img src="https://cdn.jsdelivr.net/gh/XLY23333/picture01/img01/eg2.png" style="zoom:50%"></p>
+]]></content>
+      <categories>
+        <category>Coding</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+        <tag>正则表达式</tag>
+        <tag>Search</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>非公开链接传送Gather</title>
+    <url>/URL/%E9%9D%9E%E5%85%AC%E5%BC%80%E9%93%BE%E6%8E%A5%E4%BC%A0%E9%80%81Gather/</url>
+    <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
+  <script id="hbeData" type="hbeData" data-hmacdigest="25d905d0277335b5e6b872590b9538cb6395304c174faf23f99d54e188c89d7e">2d0cc57e0ca0d95b94a86d2858934c236a929973a1341844210faac8bd7bf73c011b5ad40b23a60d4629d561c061a8d90c6cd17f948a014811b5358f1cd13cc69ec60ed77ef384685c68c58676b9cd84f19ce67f2ef07f32db57fa395db46a039032aecffdeeeeb6b0badf82d72e3d737bd5efa29396e702fcca920633f20510fab60595f368a14b37fd1be161531a31f35387da9262ed7cbaab5b2f8959ecefbe8abf6f55ab498fead13e854fa4fb65d7a3b4f599c909b799fe0901bbecf8bc82e3d787db5a6aa7bf151a32681f13d1fc878424cc39f1fe1a80f4b3ae96d748828d19c5cdda330f819c425431e1ebc40622ab28f4c824d958869d6c587493ca64fa823bdae7024bf8ad225cddda1994df387b57887d7b6a9200378e57f633733f35a6559e30f960e1f694fcedd1e99a9b19d64843194331c2455c547e291ba77953cee1ca6a9c68ba45b2a01a755e2ae9604a30c33a8b9602f027f15df2ca23382acf95af1d72f6e5ec6943f59d838b75d79ed47b2ced66fe4ad2ffad828804155c57e2289eb8fa054808d9a0bebb239c7bee3d241e677010093696f392af14c88d1cdba9db67bea10dd2df1bdfb589ce954cc6c6ce736d07eb84146b03c4588ac3520e637cf440005b1fe72f67ed8e1ed9a87d258e842c5ab01123b64ff4383344a580e5a28529b2c226e6fce558eecaf35742ce6b382ffd7a73bf8c39be9cde1a5b144eb36bbb2ceea4ca83346fdb8898a6b0d3e8e031c148c61f56412550792e5a3b6034abfb960e44a98b0811c96fb3e3d117e48f989e741d3bd5ac4be19bb913b70f42f57e3d29f4e7db85a58761684531d4ca396b48da99ab912da7aea2c5d4ed486c5ecdc96f2df53207e34e727bc79cc840713197c3ecb6e4073ec2e1956793edc4ccea5669db6067dc5ac37d46e2aa97719052f916eeeecf8f6ed61a5a80c9cbc60835c45cc7ee66f3c23570330246cf578c3e4653157a459265e3f485e41887ad192aa12cd790ce4d61427315b47fdfdbf8d02df8dc4675f347b60126eabb25e6cdd99e821b12b34876485e7f82e8cf32e545458c65a0d9217f1fec62763d0ec2407f4e64b27f10870cb766f135b89e4a3701ef746bf8af7730a1d01c176d5ec2b84c925ef9bbc6afc195dcdf9916d6cca33d87f88108d230a8773649e8b7e710746a7ddc6d954cac4dba6903a4fdf559c4583d46dcef6c732b9384a740ec53a149b104169fa01ea7a0df7730138e33f67241cb93462ee71a27cda49ed8afa9f8f989071d7e19d872e25a1ad387ab2d5ff8651334d680ed8711b81b8869ce373cedea618606f2659b262a71e7b11afefbfd9c4e3a16b9290326b9edafa737d1b59b2b0dfd523a83c01f315eb7c36a669c21b103a78395c4da83d44a77001afdc26bb8d7be64639c66aa1e19335fdf36348804a6c95478e004c39410d8d0033e934640f31d862c4b652b321654b71225928ffe11ae4d23274bed6188f27ef2a13ea7cc9b863505c1adcac1238f9acf8f1bbae3a9187c207428f11bb38fac630f359a9f8ce743aabfa5da402c5fa010e3802dce4d0a0ca89126a0f88ebd38f438aa28ce317554bddd3f2271c6482d8d656bdaa80f52381f0544a6c9faff9be20c405f7956afab44c9666ebd14876b04b67c592255d8e3db8f1c37fdc377bb528a3f5814cd4a11068660421ef6ff67b40fd3d46ed97c308601dc2a46c41cef8768d669127e256fcf59e3a338910662e946855fd1b0fdaf7a297e84c561431e57f609217f1bb16302d288d451b1a15c39f396d38d874fc9513413fd79b389ae94fcdb5673f9a439dce8315ad703aa5a28d86b8df345755d98e70d76d4a2961ee988240918d765286274658b6010ee9af2d799de0e5ab73ad491a8751d286994392c144de83d5c6b5c404cb73cd386daa57118520c58b09605eeb6ad3f451d75f33d71de7097b4c7d09bb2d9ac41873722a2ac3136236fa0d8c638679a9808e17e287611a87677e56bb3ff5083a70b12c647c88401947c6e4382796cf581ec57ea567b6636a84e22f448d03ce7fd36a7b8835ad5cf8236f0fcf2e0b881483cc530b0f78bce144c95a1a239933563b3c76005ce717c767d2ac6b3636457b4c5ee798ac410856558cdd609a94c822f1bbdf75b416a54965a0b58327de97f2c2aede0de4c9cf00ceccfc37a55aad3c55a48455fe65e38eac8a2d0d50b33592c649c16801bfcf4660b7dd4c94a491131ff63080ec4a2dbe7017f9dd7de21cadde8abd2f4c6ca195a63f2cab61d1ef170d87f5d8c1ed73c09a571ca8906a76552b088402c3dfeebd0e48abca3b395b8f95b55f6e34ed670a8b10ff71599fe47714710dd21a74b55b4525f042d936f04fec459b75b14a97779d6015a4d64f656339eafcee70543f6c894d7da6cdf0e41e3b0ff5156412a1c3ddf04f4b1449fd33f0db8d5ef65e5fbc4bfa07534669f28457f5a2c0e94013394b940ce05a2f089e05f1edee2e759ee1e74790fb47ee28f197271958804d6586ac8c85bb7065792fd68a4d517f579b2a148eaf0f88d9fc59876eb8e3825583ac7892afd430df04238a58c1143c60bcae3e2ca294452737edc10ae54400051d43b268bfc561d0ea1bb37b90ba7ebfea0e2cf6b50d914aa1ad84cc3446886c349a9bc8f3ae601c44d09b00641db3853d754d88f62db1ae06266451c9272e92177ea01d4b224d766b9935ca9c5a2dfe73a1328e6da5e6d249795fcd5072672cc15a5e87317462ae96506af42b4f9a90b06c781e982e403fa14a4ba4c989ebd9c4c0d5176a150d63fbeffd6bde361b346a74fd6c6d2bacff7f637f991fec4240fe950224c1ae0492302eba1d9a7a101a78180ff54201b60719af63f7f14b33aab584aae34c6faa3144c1049ee34a3a77010c892e81a60fd8ab197278d172c410236be02c16569b7133effe6fe69944c35a77ced061a6e91aeeaf64879b7b693da579d55da4474c8eb15f8d67e49635c4969e8500fe6f96e91252f7a0076eb8291fcac9ea6379410e0f94c358d7d73617d2febec22409e22e4facc9ad3c9ed3a347cdf07996d4f628fbbe1891d1e491cbf868bb39cfc77c666d819678ae737c6b3eb1abe2f109d688ba86a4f5b4d9715035bb4bad5af84b173d9b387a39a1d9f4524f31a0df14cf69064ea72ed26ae2768c13add054001d159aacccbeb2d46e1f26a092ffbe4a07e049c7b9c42d56b2d3cbcfcfdc4d9c9b7fdb675304760f2e05abb9dff10c318c38f1dc94758d5bf7a24a80c9bd446f0aa5894f68a9972e8b543af4b545baf0b54b1ba4130fc7fa8839b93656135f9ec6013c9</script>
+  <div class="hbe hbe-content">
+    <div class="hbe hbe-input hbe-input-default">
+      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
+      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
+        <span class="hbe hbe-input-label-content hbe-input-label-content-default">This blog post requires a password to view.</span>
+      </label>
+    </div>
+  </div>
+</div>
+<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
+      <categories>
+        <category>URL</category>
+      </categories>
+      <tags>
+        <tag>链接</tag>
+        <tag>工具</tag>
+        <tag>软体</tag>
       </tags>
   </entry>
 </search>
